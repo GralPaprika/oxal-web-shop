@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
-import { IFirebaseService } from './firebase.interface';
+import { IFirebaseService } from '@/database/firebase.interface';
 
 @injectable()
 export class FirebaseService implements IFirebaseService {
