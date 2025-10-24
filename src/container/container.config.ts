@@ -1,12 +1,13 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
 import { TYPES } from '../types/container.types';
+import { IDatabase } from '../database/database.interface';
+import { FirestoreDatabase } from '../database/firestore.database';
 
 // This will be our main DI container
 export const container = new Container();
 
-// We'll configure bindings here as we create services and repositories
-// Example binding (uncomment when you have actual implementations):
-// container.bind<IProductService>(TYPES.ProductService).to(ProductService);
+// Database binding - clients depend on IDatabase interface, not FirestoreDatabase
+container.bind<IDatabase>(TYPES.Database).to(FirestoreDatabase).inSingletonScope();
 
 export { TYPES };
