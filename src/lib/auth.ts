@@ -23,13 +23,14 @@ export async function loginAction(formData: FormData) {
       ...AUTH_CONFIG.COOKIE_SETTINGS,
       maxAge: AUTH_CONFIG.COOKIE_MAX_AGE,
     });
-    
-    redirect(AUTH_CONFIG.ROUTES.DASHBOARD);
   } catch (error) {
     return { 
       error: error instanceof Error ? error.message : 'Login failed' 
     };
   }
+
+  // Redirect outside of try-catch to avoid catching NEXT_REDIRECT
+  redirect(AUTH_CONFIG.ROUTES.DASHBOARD);
 }
 
 export async function logoutAction() {
@@ -60,7 +61,7 @@ export async function checkAuthStatus() {
     const getCurrentUserUseCase = container.get<GetCurrentUserUseCase>(TYPES.GetCurrentUserUseCase);
     const user = await getCurrentUserUseCase.execute();
     return !!user;
-  } catch (error) {
+  } catch {
     // If there's an error getting the user, consider them not authenticated
     return false;
   }
