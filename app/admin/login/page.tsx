@@ -1,12 +1,13 @@
 import { redirect } from 'next/navigation';
 import { checkAuthStatus } from '@/lib/auth';
 import { LoginForm } from '@/components/admin/LoginForm';
+import { AUTH_CONFIG } from '@/config/auth.config';
 
 export default async function AdminLogin() {
   // Check if user is already authenticated
   const isAuthenticated = await checkAuthStatus();
   if (isAuthenticated) {
-    redirect('/admin/dashboard');
+    redirect(AUTH_CONFIG.ROUTES.DASHBOARD);
   }
 
   return (
