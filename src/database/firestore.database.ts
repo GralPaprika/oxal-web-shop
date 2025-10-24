@@ -1,6 +1,5 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { 
-  getFirestore, 
   collection, 
   doc, 
   addDoc, 
@@ -13,13 +12,15 @@ import {
   Firestore 
 } from 'firebase/firestore';
 import { IDatabase } from './database.interface';
+import type { IFirebaseService } from './firebase.interface';
+import { TYPES } from '../types/container.types';
 
 @injectable()
 export class FirestoreDatabase implements IDatabase {
   private db: Firestore;
 
-  constructor() {
-    this.db = getFirestore();
+  constructor(@inject(TYPES.FirebaseService) private firebaseService: IFirebaseService) {
+    this.db = this.firebaseService.getFirestore();
   }
 
   async create<T>(collectionName: string, data: Omit<T, 'id'>): Promise<string> {
