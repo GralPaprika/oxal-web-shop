@@ -6,13 +6,11 @@ import { AdminHeader } from '@/components/admin/AdminHeader';
 import { SectionCard } from '@/components/admin/SectionCard';
 import { UserManagementTable } from '@/components/admin/UserManagementTable';
 import { SettingsActions } from '@/components/admin/SettingsActions';
-import { SectionActions } from '@/components/admin/SectionActions';
 import { AddUserModal } from '@/components/admin/AddUserModal';
-import { getAdminUsers, getAllUsers } from '@/lib/actions/user.actions';
+import { getAllUsers } from '@/lib/actions/user.actions';
 import type { User } from '@/domain/user/user.entity';
 import { 
-  UserIcon,
-  ShieldCheckIcon
+  UserIcon
 } from '@heroicons/react/24/outline';
 
 export default async function AdminSettings() {
@@ -25,31 +23,18 @@ export default async function AdminSettings() {
     redirect(AUTH_CONFIG.ROUTES.LOGIN);
   }
 
-  // Initialize empty arrays for users and admins
+  // Initialize empty array for users
   let admins: User[] = [];
-  let users: User[] = [];
   let hasErrors = false;
   let errorMessage = '';
 
   try {
-    // Fetch real data from Firebase
-    const [adminUsersResult, allUsersResult] = await Promise.all([
-      getAdminUsers(),
-      getAllUsers()
-    ]);
-
-    // Handle admin users result
-    if (adminUsersResult.success) {
-      admins = adminUsersResult.users || [];
-    } else {
-      console.error('Failed to fetch admin users:', adminUsersResult.error);
-      hasErrors = true;
-      errorMessage = adminUsersResult.error || 'Failed to fetch admin users';
-    }
+    // Fetch all users from Firebase
+    const allUsersResult = await getAllUsers();
 
     // Handle all users result
     if (allUsersResult.success) {
-      users = (allUsersResult.users || []).filter((user: User) => user.role === 'cashier');
+      admins = allUsersResult.users || [];
     } else {
       console.error('Failed to fetch users:', allUsersResult.error);
       hasErrors = true;
@@ -73,20 +58,12 @@ export default async function AdminSettings() {
     />
   );
 
-  // Define table columns
-  const adminColumns = [
-    { key: 'admin', label: t('adminManagement.table.admin') },
-    { key: 'role', label: t('adminManagement.table.role') },
-    { key: 'status', label: t('adminManagement.table.status') },
-    { key: 'lastLogin', label: t('adminManagement.table.lastLogin') },
-    { key: 'actions', label: t('adminManagement.table.actions') }
-  ];
-
+  // Define table columns (keep the admin columns structure)
   const userColumns = [
     { key: 'user', label: t('userManagement.table.user') },
+    { key: 'role', label: t('userManagement.table.role') },
     { key: 'status', label: t('userManagement.table.status') },
-    { key: 'registered', label: t('userManagement.table.registered') },
-    { key: 'orders', label: t('userManagement.table.orders') },
+    { key: 'lastLogin', label: t('userManagement.table.lastLogin') },
     { key: 'actions', label: t('userManagement.table.actions') }
   ];
 
@@ -138,50 +115,6 @@ export default async function AdminSettings() {
             </div>
           )}
 
-          {/* Admin Management */}
-          <SectionCard
-            title={t('adminManagement.title')}
-            subtitle={t('adminManagement.subtitle')}
-            icon={ShieldCheckIcon}
-            rightContent={
-              <SectionActions
-                label={t('adminManagement.newAdmin')}
-              />
-            }
-          >
-            {admins.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="text-gray-500 mb-4">
-                  <ShieldCheckIcon className="mx-auto h-12 w-12" />
-                </div>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No admin users found</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  {hasErrors ? 'Unable to load admin users due to an error.' : 'No admin users have been created yet.'}
-                </p>
-                {!hasErrors && (
-                  <div className="mt-6">
-                    <button
-                      type="button"
-                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
-                    >
-                      <ShieldCheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                      Create first admin
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <UserManagementTable
-                columns={adminColumns}
-                data={admins}
-                showRole={true}
-                showLastLogin={true}
-                roleLabels={roleLabels}
-                statusLabels={statusLabels}
-              />
-            )}
-          </SectionCard>
-
           {/* User Management */}
           <SectionCard
             title={t('userManagement.title')}
@@ -191,24 +124,35 @@ export default async function AdminSettings() {
               <AddUserModal />
             }
           >
-            {users.length === 0 ? (
+            {admins.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-500 mb-4">
                   <UserIcon className="mx-auto h-12 w-12" />
                 </div>
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No users found</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  {hasErrors ? 'Unable to load users due to an error.' : 'No users have registered yet.'}
+                  {hasErrors ? 'Unable to load users due to an error.' : 'No users have been created yet.'}
                 </p>
+                {!hasErrors && (
+                  <div className="mt-6">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+                    >
+                      <UserIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                      Create first user
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <UserManagementTable
                 columns={userColumns}
-                data={users}
-                showRegisteredAt={true}
-                showOrders={true}
+                data={admins}
+                showRole={true}
+                showLastLogin={true}
+                roleLabels={roleLabels}
                 statusLabels={statusLabels}
-                ordersLabel={t('userManagement.ordersLabel')}
               />
             )}
           </SectionCard>

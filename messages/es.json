@@ -227,21 +227,9 @@
       "subtitle": "Gestiona administradores, usuarios y configuraciones generales",
       "changePassword": "Cambiar Contraseña",
       "newAdmin": "Nuevo Administrador",
-      "adminManagement": {
-        "title": "Gestión de Administradores",
-        "subtitle": "Administra roles y permisos del personal",
-        "newAdmin": "Nuevo Admin",
-        "table": {
-          "admin": "Administrador",
-          "role": "Rol",
-          "status": "Estado",
-          "lastLogin": "Último Acceso",
-          "actions": "Acciones"
-        }
-      },
       "userManagement": {
         "title": "Gestión de Usuarios",
-        "subtitle": "Administra clientes y usuarios del sistema",
+        "subtitle": "Administra roles y permisos del personal",
         "newUser": "Nuevo Usuario",
         "ordersLabel": "pedidos",
         "form": {
@@ -258,9 +246,9 @@
         },
         "table": {
           "user": "Usuario",
+          "role": "Rol",
           "status": "Estado",
-          "registered": "Registrado",
-          "orders": "Pedidos",
+          "lastLogin": "Último Acceso",
           "actions": "Acciones"
         }
       },
