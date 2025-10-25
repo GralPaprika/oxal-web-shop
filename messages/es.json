@@ -114,5 +114,31 @@
     },
     "cta": "Conoce más sobre nosotros",
     "imageAlt": "Taller de artesanías"
+  },
+  "footer": {
+    "description": "Descubre nuestra colección de productos únicos y elegantes. Calidad excepcional con un toque bohemio para tu estilo de vida.",
+    "social": {
+      "facebook": "Facebook",
+      "instagram": "Instagram",
+      "twitter": "Twitter"
+    },
+    "quickLinks": {
+      "title": "Enlaces rápidos",
+      "about": "Sobre nosotros",
+      "products": "Productos",
+      "contact": "Contacto",
+      "faq": "FAQ"
+    },
+    "customerService": {
+      "title": "Atención al cliente",
+      "shipping": "Envíos",
+      "returns": "Devoluciones",
+      "privacy": "Privacidad",
+      "terms": "Términos"
+    },
+    "copyright": "© 2025 Oxal. Todos los derechos reservados.",
+    "payment": {
+      "accept": "Aceptamos:"
+    }
   }
 }
