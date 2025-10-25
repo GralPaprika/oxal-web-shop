@@ -1,5 +1,4 @@
 import { ButtonHTMLAttributes } from 'react';
-import { colors } from '@/styles/design-tokens';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary' | 'outline';
@@ -19,9 +18,9 @@ export function Button({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors';
   
   const variantClasses = {
-    primary: 'bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500',
-    secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500',
-    outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-indigo-500',
+    primary: 'bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
+    secondary: 'bg-neutral-600 text-white hover:bg-neutral-700 focus:ring-neutral-500',
+    outline: 'border border-neutral-300 bg-white text-text-primary hover:bg-neutral-50 focus:ring-amber-500',
   };
   
   const sizeClasses = {

@@ -27,10 +27,10 @@ export function LoginForm() {
   }
 
   return (
-    <form action={handleSubmit} className="mt-8 space-y-6">
-      <div className="rounded-md shadow-sm -space-y-px">
+    <form action={handleSubmit} className="space-y-6">
+      <div className="space-y-4">
         <div>
-          <label htmlFor="email" className="sr-only">
+          <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
             {t('email')}
           </label>
           <input
@@ -39,12 +39,13 @@ export function LoginForm() {
             type="email"
             autoComplete="email"
             required
-            className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder={t('email')}
+            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors text-text-primary placeholder-text-muted"
+            placeholder="tu@ejemplo.com"
           />
         </div>
+        
         <div>
-          <label htmlFor="password" className="sr-only">
+          <label htmlFor="password" className="block text-sm font-medium text-text-primary mb-2">
             {t('password')}
           </label>
           <input
@@ -53,25 +54,31 @@ export function LoginForm() {
             type="password"
             autoComplete="current-password"
             required
-            className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder={t('password')}
+            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors text-text-primary placeholder-text-muted"
+            placeholder="••••••••"
           />
         </div>
       </div>
 
       {error && (
-        <div className="text-red-600 text-sm text-center">{error}</div>
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
+          {error}
+        </div>
       )}
 
-      <div>
-        <Button
-          type="submit"
-          disabled={isPending}
-          isLoading={isPending}
-          className="w-full"
-        >
-          {isPending ? t('signingIn') : t('signIn')}
-        </Button>
+      <Button
+        type="submit"
+        disabled={isPending}
+        isLoading={isPending}
+        className="w-full py-3 text-base font-semibold"
+      >
+        {isPending ? t('signingIn') : t('signIn')}
+      </Button>
+
+      <div className="text-center">
+        <a href="#" className="text-sm text-amber-600 hover:text-amber-700 transition-colors">
+          {t('forgotPassword')}
+        </a>
       </div>
     </form>
   );

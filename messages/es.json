@@ -30,13 +30,15 @@
   },
   "auth": {
     "login": {
-      "title": "Inicio de Sesión Administrativo",
+      "title": "¡Bienvenido de vuelta!",
+      "subtitle": "Accede a tu panel de control",
       "email": "Correo electrónico",
       "password": "Contraseña",
       "signIn": "Iniciar Sesión",
       "signingIn": "Iniciando sesión...",
       "invalidCredentials": "Credenciales inválidas",
-      "loginFailed": "Error al iniciar sesión"
+      "loginFailed": "Error al iniciar sesión",
+      "forgotPassword": "¿Olvidaste tu contraseña?"
     },
     "dashboard": {
       "title": "Panel de Administración",
