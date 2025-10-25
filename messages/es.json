@@ -1,0 +1,23 @@
+{
+  "auth": {
+    "login": {
+      "title": "Inicio de Sesión Administrativo",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "signIn": "Iniciar Sesión",
+      "signingIn": "Iniciando sesión...",
+      "invalidCredentials": "Credenciales inválidas",
+      "loginFailed": "Error al iniciar sesión"
+    },
+    "dashboard": {
+      "title": "Panel de Administración",
+      "welcome": "Bienvenido al panel de administración. Esta es una ruta protegida.",
+      "logout": "Cerrar Sesión"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito"
+  }
+}

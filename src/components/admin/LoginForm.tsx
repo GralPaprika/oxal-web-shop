@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { loginAction } from '@/lib/auth';
 import { Button } from '@/components/ui/Button';
 
 export function LoginForm() {
+  const t = useTranslations('auth.login');
   const [error, setError] = useState('');
   const [isPending, setIsPending] = useState(false);
 
@@ -17,8 +19,8 @@ export function LoginForm() {
       if (result?.error) {
         setError(result.error);
       }
-    } catch (err) {
-      setError('Login failed');
+    } catch {
+      setError(t('loginFailed'));
     } finally {
       setIsPending(false);
     }
@@ -29,7 +31,7 @@ export function LoginForm() {
       <div className="rounded-md shadow-sm -space-y-px">
         <div>
           <label htmlFor="email" className="sr-only">
-            Email address
+            {t('email')}
           </label>
           <input
             id="email"
@@ -38,12 +40,12 @@ export function LoginForm() {
             autoComplete="email"
             required
             className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Email address"
+            placeholder={t('email')}
           />
         </div>
         <div>
           <label htmlFor="password" className="sr-only">
-            Password
+            {t('password')}
           </label>
           <input
             id="password"
@@ -52,7 +54,7 @@ export function LoginForm() {
             autoComplete="current-password"
             required
             className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-            placeholder="Password"
+            placeholder={t('password')}
           />
         </div>
       </div>
@@ -68,7 +70,7 @@ export function LoginForm() {
           isLoading={isPending}
           className="w-full"
         >
-          Sign in
+          {isPending ? t('signingIn') : t('signIn')}
         </Button>
       </div>
     </form>
