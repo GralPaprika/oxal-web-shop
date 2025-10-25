@@ -221,6 +221,48 @@
         "previous": "Anterior",
         "next": "Siguiente"
       }
+    },
+    "settings": {
+      "title": "Configuración del Sistema",
+      "subtitle": "Gestiona administradores, usuarios y configuraciones generales",
+      "changePassword": "Cambiar Contraseña",
+      "newAdmin": "Nuevo Administrador",
+      "adminManagement": {
+        "title": "Gestión de Administradores",
+        "subtitle": "Administra roles y permisos del personal",
+        "newAdmin": "Nuevo Admin",
+        "table": {
+          "admin": "Administrador",
+          "role": "Rol",
+          "status": "Estado",
+          "lastLogin": "Último Acceso",
+          "actions": "Acciones"
+        }
+      },
+      "userManagement": {
+        "title": "Gestión de Usuarios",
+        "subtitle": "Administra clientes y usuarios del sistema",
+        "newUser": "Nuevo Usuario",
+        "ordersLabel": "pedidos",
+        "table": {
+          "user": "Usuario",
+          "status": "Estado",
+          "registered": "Registrado",
+          "orders": "Pedidos",
+          "actions": "Acciones"
+        }
+      },
+      "roles": {
+        "super_admin": "Super Admin",
+        "admin": "Administrador",
+        "moderator": "Moderador",
+        "customer": "Cliente"
+      },
+      "status": {
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "suspended": "Suspendido"
+      }
     }
   }
 }

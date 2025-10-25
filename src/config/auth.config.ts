@@ -11,6 +11,7 @@ export const AUTH_CONFIG = {
     LOGIN: '/admin/login',
     DASHBOARD: '/admin/dashboard',
     PRODUCTS: '/admin/products',
+    SETTINGS: '/admin/settings',
   },
   
   // Cookie configuration
