@@ -5,6 +5,29 @@
     "offers": "Ofertas",
     "contact": "Contacto"
   },
+  "hero": {
+    "title": {
+      "line1": "Estilo",
+      "line2": "Bohemio",
+      "line3": "Auténtico"
+    },
+    "subtitle": "Descubre nuestra colección única de productos artesanales que combinan elegancia y espíritu libre",
+    "cta": "Explorar colección",
+    "features": {
+      "natural": {
+        "title": "Naturales",
+        "description": "Productos hechos con materiales sostenibles"
+      },
+      "handmade": {
+        "title": "Artesanales", 
+        "description": "Creados a mano por artesanos expertos"
+      },
+      "unique": {
+        "title": "Únicos",
+        "description": "Diseños exclusivos que reflejan tu personalidad"
+      }
+    }
+  },
   "auth": {
     "login": {
       "title": "Inicio de Sesión Administrativo",

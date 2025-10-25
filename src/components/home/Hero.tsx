@@ -1,80 +1,72 @@
 'use client';
 
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export function Hero() {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-primary-300 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-secondary-300 rounded-full blur-3xl"></div>
-      </div>
+  const t = useTranslations('hero');
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+  return (
+    <section 
+      className="relative h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        backgroundImage: 'url(https://images.unsplash.com/photo-1516762689617-e1cffcef479d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="absolute inset-0 bg-black opacity-75"></div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
-          {/* Main heading */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-text-primary mb-6">
-            Estilo
-            <span className="text-primary-600 block">Bohemio</span>
-            Auténtico
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white mb-6">
+            {t('title.line1')}
+            <span className="text-amber-300 block">{t('title.line2')}</span>
+            {t('title.line3')}
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-xl md:text-2xl text-text-secondary max-w-3xl mx-auto mb-8 leading-relaxed">
-            Descubre nuestra colección única de productos artesanales 
-            que combinan elegancia y espíritu libre
+          <p className="text-xl md:text-2xl text-amber-100 max-w-3xl mx-auto mb-8 leading-relaxed">
+            {t('subtitle')}
           </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+          <div className="flex justify-center items-center mb-12">
             <Link
               href="/products"
-              className="bg-primary-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-primary-700 transition-colors shadow-lg"
+              className="bg-amber-900 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-amber-800 transition-colors shadow-lg"
             >
-              Explorar colección
-            </Link>
-            <Link
-              href="/about"
-              className="border-2 border-primary-600 text-primary-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-primary-50 transition-colors"
-            >
-              Nuestra historia
+              {t('cta')}
             </Link>
           </div>
 
-          {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">🌿</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+            <div className="text-center group">
+              <div className="relative mb-6">
+                <span className="text-4xl block mb-2">🌿</span>
+                <div className="w-12 h-0.5 bg-amber-300 mx-auto opacity-60"></div>
               </div>
-              <h3 className="font-semibold text-text-primary mb-2">Naturales</h3>
-              <p className="text-text-secondary">Productos hechos con materiales sostenibles</p>
+              <h3 className="font-semibold text-white mb-3 text-xl">{t('features.natural.title')}</h3>
+              <p className="text-amber-100 text-base leading-relaxed">{t('features.natural.description')}</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">✋</span>
+            <div className="text-center group">
+              <div className="relative mb-6">
+                <span className="text-4xl block mb-2">✋</span>
+                <div className="w-12 h-0.5 bg-amber-300 mx-auto opacity-60"></div>
               </div>
-              <h3 className="font-semibold text-text-primary mb-2">Artesanales</h3>
-              <p className="text-text-secondary">Creados a mano por artesanos expertos</p>
+              <h3 className="font-semibold text-white mb-3 text-xl">{t('features.handmade.title')}</h3>
+              <p className="text-amber-100 text-base leading-relaxed">{t('features.handmade.description')}</p>
             </div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl">💎</span>
+            <div className="text-center group">
+              <div className="relative mb-6">
+                <span className="text-4xl block mb-2">💎</span>
+                <div className="w-12 h-0.5 bg-amber-300 mx-auto opacity-60"></div>
               </div>
-              <h3 className="font-semibold text-text-primary mb-2">Únicos</h3>
-              <p className="text-text-secondary">Diseños exclusivos que reflejan tu personalidad</p>
+              <h3 className="font-semibold text-white mb-3 text-xl">{t('features.unique.title')}</h3>
+              <p className="text-amber-100 text-base leading-relaxed">{t('features.unique.description')}</p>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-primary-600 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-primary-600 rounded-full mt-2"></div>
         </div>
       </div>
     </section>
