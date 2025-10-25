@@ -13,7 +13,7 @@ export function AddUserModal() {
     email: '',
     password: '',
     displayName: '',
-    role: 'user' as 'admin' | 'super_admin' | 'manager' | 'user'
+    role: 'cashier' as 'admin' | 'cashier'
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,7 +30,7 @@ export function AddUserModal() {
           email: '',
           password: '',
           displayName: '',
-          role: 'user'
+          role: 'cashier'
         });
         window.location.reload();
       } else {
@@ -131,14 +131,12 @@ export function AddUserModal() {
               id="role"
               value={formData.role}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => 
-                setFormData(prev => ({ ...prev, role: e.target.value as 'admin' | 'super_admin' | 'manager' | 'user' }))
+                setFormData(prev => ({ ...prev, role: e.target.value as 'admin' | 'cashier' }))
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
-              <option value="user">Usuario</option>
-              <option value="manager">Gerente</option>
+              <option value="cashier">Cajero</option>
               <option value="admin">Administrador</option>
-              <option value="super_admin">Super Administrador</option>
             </select>
           </div>
 

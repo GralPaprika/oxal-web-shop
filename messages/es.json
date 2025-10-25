@@ -253,10 +253,8 @@
         }
       },
       "roles": {
-        "super_admin": "Super Admin",
         "admin": "Administrador",
-        "moderator": "Moderador",
-        "customer": "Cliente"
+        "cashier": "Cajero"
       },
       "status": {
         "active": "Activo",

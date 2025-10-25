@@ -26,7 +26,7 @@ export class FirestoreUserRepository implements IUserRepository {
     return await this.database.getAll<User>(this.COLLECTION_NAME);
   }
 
-  async getUsersByRole(role: 'admin' | 'super_admin' | 'manager' | 'user'): Promise<User[]> {
+  async getUsersByRole(role: 'admin' | 'cashier'): Promise<User[]> {
     return await this.database.query<User>(this.COLLECTION_NAME, 'role', '==', role);
   }
 

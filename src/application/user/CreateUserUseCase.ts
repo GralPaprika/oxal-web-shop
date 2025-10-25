@@ -7,7 +7,7 @@ export interface CreateUserRequest {
   email: string;
   password: string;
   displayName: string;
-  role: 'admin' | 'super_admin' | 'manager' | 'user';
+  role: 'admin' | 'cashier';
 }
 
 export interface CreateUserResponse {

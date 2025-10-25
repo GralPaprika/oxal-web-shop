@@ -2,25 +2,7 @@
 
 import Image from 'next/image';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-
-interface User {
-  id: string;
-  uid: string;
-  email: string;
-  displayName?: string;
-  photoURL?: string;
-  role: 'admin' | 'super_admin' | 'manager' | 'user';
-  status: 'active' | 'inactive' | 'suspended';
-  emailVerified: boolean;
-  createdAt: string;
-  updatedAt: string;
-  lastLoginAt?: string;
-  metadata?: {
-    totalOrders?: number;
-    lastOrderAt?: string;
-    preferences?: Record<string, unknown>;
-  };
-}
+import type { User } from '@/domain/user/user.entity';
 
 interface UserCardProps {
   user: User;
@@ -50,12 +32,10 @@ export function UserCard({
   
   const getRoleBadge = (role: string) => {
     const styles = {
-      super_admin: 'bg-purple-100 text-purple-800 border-purple-200',
       admin: 'bg-blue-100 text-blue-800 border-blue-200',
-      manager: 'bg-green-100 text-green-800 border-green-200',
-      user: 'bg-gray-100 text-gray-800 border-gray-200'
+      cashier: 'bg-gray-100 text-gray-800 border-gray-200'
     };
-    return styles[role as keyof typeof styles] || styles.user;
+    return styles[role as keyof typeof styles] || styles.cashier;
   };
 
   const getStatusBadge = (status: string) => {

@@ -49,7 +49,7 @@ export default async function AdminSettings() {
 
     // Handle all users result
     if (allUsersResult.success) {
-      users = (allUsersResult.users || []).filter((user: User) => user.role === 'user');
+      users = (allUsersResult.users || []).filter((user: User) => user.role === 'cashier');
     } else {
       console.error('Failed to fetch users:', allUsersResult.error);
       hasErrors = true;
@@ -92,10 +92,8 @@ export default async function AdminSettings() {
 
   // Role and status labels
   const roleLabels = {
-    super_admin: t('roles.super_admin'),
     admin: t('roles.admin'),
-    moderator: t('roles.moderator'),
-    customer: t('roles.customer')
+    cashier: t('roles.cashier')
   };
 
   const statusLabels = {

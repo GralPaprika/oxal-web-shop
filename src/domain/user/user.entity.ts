@@ -4,7 +4,7 @@ export interface User {
   email: string;
   displayName?: string;
   photoURL?: string;
-  role: 'admin' | 'super_admin' | 'manager' | 'user';
+  role: 'admin' | 'cashier';
   status: 'active' | 'inactive' | 'suspended';
   emailVerified: boolean;
   createdAt: string;
@@ -22,14 +22,14 @@ export interface CreateUserData {
   email: string;
   displayName?: string;
   photoURL?: string;
-  role?: 'admin' | 'super_admin' | 'manager' | 'user';
+  role?: 'admin' | 'cashier';
   emailVerified?: boolean;
 }
 
 export interface UpdateUserData {
   displayName?: string;
   photoURL?: string;
-  role?: 'admin' | 'super_admin' | 'manager' | 'user';
+  role?: 'admin' | 'cashier';
   status?: 'active' | 'inactive' | 'suspended';
   lastLoginAt?: string;
   metadata?: Partial<User['metadata']>;

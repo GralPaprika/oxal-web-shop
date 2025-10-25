@@ -45,18 +45,12 @@ export async function getAdminUsers(): Promise<{ success: boolean; users?: User[
   try {
     const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
     
-    // Get all admin-type users
-    const [admins, superAdmins, managers] = await Promise.all([
-      getUsersByRoleUseCase.execute('admin'),
-      getUsersByRoleUseCase.execute('super_admin'),
-      getUsersByRoleUseCase.execute('manager')
-    ]);
-    
-    const allAdminUsers = [...admins, ...superAdmins, ...managers];
+    // Get all admin users
+    const admins = await getUsersByRoleUseCase.execute('admin');
     
     return {
       success: true,
-      users: allAdminUsers
+      users: admins
     };
   } catch (error) {
     console.error('Error fetching admin users:', error);
