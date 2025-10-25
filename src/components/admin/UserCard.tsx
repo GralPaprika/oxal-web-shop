@@ -4,15 +4,22 @@ import Image from 'next/image';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 interface User {
-  id: number;
-  name: string;
+  id: string;
+  uid: string;
   email: string;
-  avatar: string;
-  role?: string;
-  status: string;
-  lastLogin?: string;
-  registeredAt?: string;
-  totalOrders?: number;
+  displayName?: string;
+  photoURL?: string;
+  role: 'admin' | 'super_admin' | 'manager' | 'user';
+  status: 'active' | 'inactive' | 'suspended';
+  emailVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastLoginAt?: string;
+  metadata?: {
+    totalOrders?: number;
+    lastOrderAt?: string;
+    preferences?: Record<string, unknown>;
+  };
 }
 
 interface UserCardProps {
@@ -45,10 +52,10 @@ export function UserCard({
     const styles = {
       super_admin: 'bg-purple-100 text-purple-800 border-purple-200',
       admin: 'bg-blue-100 text-blue-800 border-blue-200',
-      moderator: 'bg-green-100 text-green-800 border-green-200',
-      customer: 'bg-gray-100 text-gray-800 border-gray-200'
+      manager: 'bg-green-100 text-green-800 border-green-200',
+      user: 'bg-gray-100 text-gray-800 border-gray-200'
     };
-    return styles[role as keyof typeof styles] || styles.customer;
+    return styles[role as keyof typeof styles] || styles.user;
   };
 
   const getStatusBadge = (status: string) => {
@@ -77,14 +84,14 @@ export function UserCard({
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
           <Image 
-            src={user.avatar} 
-            alt={user.name}
+            src={user.photoURL || '/default-avatar.png'} 
+            alt={user.displayName || user.email}
             width={32}
             height={32}
             className="rounded-full object-cover"
           />
           <div>
-            <p className="font-medium text-text-primary">{user.name}</p>
+            <p className="font-medium text-text-primary">{user.displayName || user.email}</p>
             <p className="text-sm text-text-secondary">{user.email}</p>
           </div>
         </div>
@@ -107,23 +114,23 @@ export function UserCard({
       </td>
 
       {/* Last Login */}
-      {showLastLogin && user.lastLogin && (
+      {showLastLogin && user.lastLoginAt && (
         <td className="px-6 py-4 text-sm text-text-secondary">
-          {formatDate(user.lastLogin)}
+          {formatDate(user.lastLoginAt)}
         </td>
       )}
 
       {/* Registered At */}
-      {showRegisteredAt && user.registeredAt && (
+      {showRegisteredAt && user.createdAt && (
         <td className="px-6 py-4 text-sm text-text-secondary">
-          {formatDate(user.registeredAt)}
+          {formatDate(user.createdAt)}
         </td>
       )}
 
       {/* Orders */}
-      {showOrders && user.totalOrders !== undefined && (
+      {showOrders && user.metadata?.totalOrders !== undefined && (
         <td className="px-6 py-4 text-sm text-text-secondary">
-          {user.totalOrders} {ordersLabel}
+          {user.metadata.totalOrders} {ordersLabel}
         </td>
       )}
 
@@ -134,7 +141,7 @@ export function UserCard({
             <button 
               onClick={() => onEdit(user)}
               className="p-1 text-text-secondary hover:text-amber-600 transition-colors"
-              aria-label={`Edit ${user.name}`}
+              aria-label={`Edit ${user.displayName || user.email}`}
             >
               <PencilIcon className="h-4 w-4" />
             </button>
@@ -143,7 +150,7 @@ export function UserCard({
             <button 
               onClick={() => onDelete(user)}
               className="p-1 text-text-secondary hover:text-red-600 transition-colors"
-              aria-label={`Delete ${user.name}`}
+              aria-label={`Delete ${user.displayName || user.email}`}
             >
               <TrashIcon className="h-4 w-4" />
             </button>

@@ -7,64 +7,13 @@ import { SectionCard } from '@/components/admin/SectionCard';
 import { UserManagementTable } from '@/components/admin/UserManagementTable';
 import { SettingsActions } from '@/components/admin/SettingsActions';
 import { SectionActions } from '@/components/admin/SectionActions';
+import { AddUserModal } from '@/components/admin/AddUserModal';
+import { getAdminUsers, getAllUsers } from '@/lib/actions/user.actions';
+import type { User } from '@/domain/user/user.entity';
 import { 
   UserIcon,
   ShieldCheckIcon
 } from '@heroicons/react/24/outline';
-
-// Mock data - in real app this would come from database
-const mockAdmins = [
-  {
-    id: 1,
-    name: 'Carlos Admin',
-    email: 'carlos@oxal.com',
-    role: 'super_admin',
-    status: 'active',
-    lastLogin: '2025-10-25T10:30:00Z',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face'
-  },
-  {
-    id: 2,
-    name: 'María González',
-    email: 'maria@oxal.com',
-    role: 'admin',
-    status: 'active',
-    lastLogin: '2025-10-24T16:45:00Z',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612345b?w=40&h=40&fit=crop&crop=face'
-  },
-  {
-    id: 3,
-    name: 'Juan Pérez',
-    email: 'juan@oxal.com',
-    role: 'moderator',
-    status: 'inactive',
-    lastLogin: '2025-10-20T09:15:00Z',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face'
-  }
-];
-
-const mockUsers = [
-  {
-    id: 1,
-    name: 'Ana Cliente',
-    email: 'ana@email.com',
-    role: 'customer',
-    status: 'active',
-    registeredAt: '2025-09-15T14:20:00Z',
-    totalOrders: 12,
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=40&h=40&fit=crop&crop=face'
-  },
-  {
-    id: 2,
-    name: 'Pedro Martín',
-    email: 'pedro@email.com',
-    role: 'customer',
-    status: 'active',
-    registeredAt: '2025-08-20T11:30:00Z',
-    totalOrders: 5,
-    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=40&h=40&fit=crop&crop=face'
-  }
-];
 
 export default async function AdminSettings() {
   const t = await getTranslations('admin.settings');
@@ -74,6 +23,42 @@ export default async function AdminSettings() {
   const isAuthenticated = await checkAuthStatus();
   if (!isAuthenticated) {
     redirect(AUTH_CONFIG.ROUTES.LOGIN);
+  }
+
+  // Initialize empty arrays for users and admins
+  let admins: User[] = [];
+  let users: User[] = [];
+  let hasErrors = false;
+  let errorMessage = '';
+
+  try {
+    // Fetch real data from Firebase
+    const [adminUsersResult, allUsersResult] = await Promise.all([
+      getAdminUsers(),
+      getAllUsers()
+    ]);
+
+    // Handle admin users result
+    if (adminUsersResult.success) {
+      admins = adminUsersResult.users || [];
+    } else {
+      console.error('Failed to fetch admin users:', adminUsersResult.error);
+      hasErrors = true;
+      errorMessage = adminUsersResult.error || 'Failed to fetch admin users';
+    }
+
+    // Handle all users result
+    if (allUsersResult.success) {
+      users = (allUsersResult.users || []).filter((user: User) => user.role === 'user');
+    } else {
+      console.error('Failed to fetch users:', allUsersResult.error);
+      hasErrors = true;
+      errorMessage = allUsersResult.error || 'Failed to fetch users';
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    hasErrors = true;
+    errorMessage = 'Failed to connect to database';
   }
 
   const breadcrumbs = [
@@ -138,6 +123,23 @@ export default async function AdminSettings() {
 
         {/* Settings Sections */}
         <div className="space-y-8">
+          {/* Error Display */}
+          {hasErrors && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex">
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">
+                    Error loading user data
+                  </h3>
+                  <div className="mt-2 text-sm text-red-700">
+                    <p>{errorMessage}</p>
+                    <p className="mt-1">Please check your Firebase configuration and ensure Firestore is properly set up.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Admin Management */}
           <SectionCard
             title={t('adminManagement.title')}
@@ -149,14 +151,37 @@ export default async function AdminSettings() {
               />
             }
           >
-            <UserManagementTable
-              columns={adminColumns}
-              data={mockAdmins}
-              showRole={true}
-              showLastLogin={true}
-              roleLabels={roleLabels}
-              statusLabels={statusLabels}
-            />
+            {admins.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-500 mb-4">
+                  <ShieldCheckIcon className="mx-auto h-12 w-12" />
+                </div>
+                <h3 className="mt-2 text-sm font-medium text-gray-900">No admin users found</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  {hasErrors ? 'Unable to load admin users due to an error.' : 'No admin users have been created yet.'}
+                </p>
+                {!hasErrors && (
+                  <div className="mt-6">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+                    >
+                      <ShieldCheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                      Create first admin
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <UserManagementTable
+                columns={adminColumns}
+                data={admins}
+                showRole={true}
+                showLastLogin={true}
+                roleLabels={roleLabels}
+                statusLabels={statusLabels}
+              />
+            )}
           </SectionCard>
 
           {/* User Management */}
@@ -165,20 +190,29 @@ export default async function AdminSettings() {
             subtitle={t('userManagement.subtitle')}
             icon={UserIcon}
             rightContent={
-              <SectionActions
-                label={t('userManagement.newUser')}
-                variant="outline"
-              />
+              <AddUserModal />
             }
           >
-            <UserManagementTable
-              columns={userColumns}
-              data={mockUsers}
-              showRegisteredAt={true}
-              showOrders={true}
-              statusLabels={statusLabels}
-              ordersLabel={t('userManagement.ordersLabel')}
-            />
+            {users.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-500 mb-4">
+                  <UserIcon className="mx-auto h-12 w-12" />
+                </div>
+                <h3 className="mt-2 text-sm font-medium text-gray-900">No users found</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  {hasErrors ? 'Unable to load users due to an error.' : 'No users have registered yet.'}
+                </p>
+              </div>
+            ) : (
+              <UserManagementTable
+                columns={userColumns}
+                data={users}
+                showRegisteredAt={true}
+                showOrders={true}
+                statusLabels={statusLabels}
+                ordersLabel={t('userManagement.ordersLabel')}
+              />
+            )}
           </SectionCard>
         </div>
       </div>

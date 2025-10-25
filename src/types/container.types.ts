@@ -10,5 +10,12 @@ export const TYPES = {
   LogoutUseCase: Symbol.for('LogoutUseCase'),
   GetCurrentUserUseCase: Symbol.for('GetCurrentUserUseCase'),
   
+  // User Management
+  UserRepository: Symbol.for('UserRepository'),
+  GetAllUsersUseCase: Symbol.for('GetAllUsersUseCase'),
+  GetUsersByRoleUseCase: Symbol.for('GetUsersByRoleUseCase'),
+  GetUserByIdUseCase: Symbol.for('GetUserByIdUseCase'),
+  CreateUserUseCase: Symbol.for('CreateUserUseCase'),
+  
   // Add your service identifiers here as needed
 } as const;

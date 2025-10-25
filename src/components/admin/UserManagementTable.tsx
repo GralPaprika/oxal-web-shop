@@ -2,18 +2,7 @@
 
 import { DataTable } from '@/components/admin/DataTable';
 import { UserCard } from '@/components/admin/UserCard';
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role?: string;
-  status: string;
-  lastLogin?: string;
-  registeredAt?: string;
-  totalOrders?: number;
-  avatar: string;
-}
+import type { User } from '@/domain/user/user.entity';
 
 interface UserManagementTableProps {
   data: User[];
