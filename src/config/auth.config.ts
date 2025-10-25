@@ -1,13 +1,16 @@
 // Authentication configuration constants
 export const AUTH_CONFIG = {
-  // Obfuscated cookie name - looks like a generic system identifier
-  SESSION_COOKIE_NAME: '__Host-sl_ctx_97x',
+  // Session cookie name - __Host- prefix requires secure: true, so we'll use different names for dev/prod
+  SESSION_COOKIE_NAME: process.env.NODE_ENV === 'production' 
+    ? '__Host-sl_ctx_97x' 
+    : 'sl_ctx_97x',
   
   // Route constants
   ROUTES: {
     ADMIN_BASE: '/admin',
     LOGIN: '/admin/login',
     DASHBOARD: '/admin/dashboard',
+    PRODUCTS: '/admin/products',
   },
   
   // Cookie configuration

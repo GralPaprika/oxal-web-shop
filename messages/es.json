@@ -43,7 +43,46 @@
     "dashboard": {
       "title": "Panel de Administración",
       "welcome": "Bienvenido al panel de administración. Esta es una ruta protegida.",
-      "logout": "Cerrar Sesión"
+      "logout": "Cerrar Sesión",
+      "welcomeBack": "¡Bienvenido de vuelta!",
+      "subtitle": "Gestiona tu tienda de productos artesanales desde un solo lugar",
+      "stats": {
+        "totalProducts": "Total Productos",
+        "clients": "Clientes",
+        "monthlyOrders": "Pedidos Mes",
+        "sales": "Ventas"
+      },
+      "modules": {
+        "products": {
+          "title": "Productos",
+          "description": "Gestiona tu catálogo de productos artesanales",
+          "stats": "24 productos"
+        },
+        "clients": {
+          "title": "Clientes", 
+          "description": "Administra la base de datos de clientes",
+          "stats": "156 clientes"
+        },
+        "images": {
+          "title": "Imágenes",
+          "description": "Gestiona las imágenes de la página principal",
+          "stats": "12 imágenes"
+        },
+        "sales": {
+          "title": "Ventas",
+          "description": "Reportes y estadísticas de ventas",
+          "stats": "89 pedidos"
+        },
+        "orders": {
+          "title": "Pedidos",
+          "description": "Gestiona pedidos y entregas",
+          "stats": "23 pendientes"
+        },
+        "settings": {
+          "title": "Configuración",
+          "description": "Ajustes generales del sistema"
+        }
+      }
     }
   },
   "common": {
@@ -141,6 +180,47 @@
     "copyright": "© 2025 Oxal. Todos los derechos reservados.",
     "payment": {
       "accept": "Aceptamos:"
+    }
+  },
+  "admin": {
+    "common": {
+      "breadcrumbs": {
+        "dashboard": "Panel de Control",
+        "products": "Productos",
+        "clients": "Clientes",
+        "orders": "Pedidos",
+        "images": "Imágenes",
+        "settings": "Configuración"
+      }
+    },
+    "products": {
+      "title": "Gestión de Productos",
+      "subtitle": "Administra tu inventario y catálogo de productos artesanales",
+      "newProduct": "Nuevo Producto",
+      "searchPlaceholder": "Buscar productos...",
+      "filters": "Filtros",
+      "allCategories": "Todas las categorías",
+      "table": {
+        "product": "Producto",
+        "code": "Código",
+        "price": "Precio",
+        "stock": "Stock",
+        "status": "Estado",
+        "actions": "Acciones"
+      },
+      "stockStatus": {
+        "outOfStock": "Sin stock",
+        "lowStock": "Stock bajo",
+        "inStock": "En stock"
+      },
+      "units": "unidades",
+      "pagination": {
+        "showing": "Mostrando",
+        "of": "de",
+        "products": "productos",
+        "previous": "Anterior",
+        "next": "Siguiente"
+      }
     }
   }
 }
