@@ -250,6 +250,14 @@
           "status": "Estado",
           "lastLogin": "Último Acceso",
           "actions": "Acciones"
+        },
+        "errors": {
+          "loadingTitle": "Error al cargar datos de usuarios",
+          "checkFirebase": "Por favor verifica tu configuración de Firebase y asegúrate de que Firestore esté configurado correctamente.",
+          "noUsersFound": "No se encontraron usuarios",
+          "unableToLoad": "No se pudieron cargar los usuarios debido a un error.",
+          "noUsersCreated": "Aún no se han creado usuarios.",
+          "createFirstUser": "Crear primer usuario"
         }
       },
       "roles": {

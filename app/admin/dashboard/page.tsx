@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { logoutAction } from '@/lib/auth';
-import { AdminHeader } from '@/components/admin/AdminHeader';
+import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { 
@@ -82,7 +82,7 @@ export default async function AdminDashboard() {
   return (
     <div className="min-h-screen bg-background-secondary">
       {/* Header */}
-      <AdminHeader 
+      <UsersHeader 
         breadcrumbs={breadcrumbs}
         rightContent={rightContent}
       />

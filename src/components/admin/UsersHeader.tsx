@@ -15,7 +15,7 @@ interface AdminHeaderProps {
   rightContent?: ReactNode;
 }
 
-export function AdminHeader({ 
+export function UsersHeader({ 
   breadcrumbs, 
   showBackButton = false, 
   backButtonHref = '/admin/dashboard',

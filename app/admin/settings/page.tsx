@@ -2,10 +2,9 @@ import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { checkAuthStatus } from '@/lib/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { AdminHeader } from '@/components/admin/AdminHeader';
+import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import { SectionCard } from '@/components/admin/SectionCard';
 import { UserManagementTable } from '@/components/admin/UserManagementTable';
-import { SettingsActions } from '@/components/admin/SettingsActions';
 import { AddUserModal } from '@/components/admin/AddUserModal';
 import { getAllUsers } from '@/lib/actions/user.actions';
 import type { User } from '@/domain/user/user.entity';
@@ -24,7 +23,7 @@ export default async function AdminSettings() {
   }
 
   // Initialize empty array for users
-  let admins: User[] = [];
+  let users: User[] = [];
   let hasErrors = false;
   let errorMessage = '';
 
@@ -34,7 +33,7 @@ export default async function AdminSettings() {
 
     // Handle all users result
     if (allUsersResult.success) {
-      admins = allUsersResult.users || [];
+      users = allUsersResult.users || [];
     } else {
       console.error('Failed to fetch users:', allUsersResult.error);
       hasErrors = true;
@@ -50,13 +49,6 @@ export default async function AdminSettings() {
     { label: breadcrumbsT('dashboard'), href: '/admin/dashboard' },
     { label: breadcrumbsT('settings'), current: true }
   ];
-
-  const rightContent = (
-    <SettingsActions
-      changePasswordLabel={t('changePassword')}
-      newAdminLabel={t('newAdmin')}
-    />
-  );
 
   // Define table columns (keep the admin columns structure)
   const userColumns = [
@@ -82,10 +74,9 @@ export default async function AdminSettings() {
   return (
     <div className="min-h-screen bg-background-secondary">
       {/* Header */}
-      <AdminHeader 
+      <UsersHeader 
         breadcrumbs={breadcrumbs}
         showBackButton={true}
-        rightContent={rightContent}
       />
 
       {/* Main Content */}
@@ -104,11 +95,11 @@ export default async function AdminSettings() {
               <div className="flex">
                 <div className="ml-3">
                   <h3 className="text-sm font-medium text-red-800">
-                    Error loading user data
+                    {t('userManagement.errors.loadingTitle')}
                   </h3>
                   <div className="mt-2 text-sm text-red-700">
                     <p>{errorMessage}</p>
-                    <p className="mt-1">Please check your Firebase configuration and ensure Firestore is properly set up.</p>
+                    <p className="mt-1">{t('userManagement.errors.checkFirebase')}</p>
                   </div>
                 </div>
               </div>
@@ -124,14 +115,14 @@ export default async function AdminSettings() {
               <AddUserModal />
             }
           >
-            {admins.length === 0 ? (
+            {users.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-gray-500 mb-4">
                   <UserIcon className="mx-auto h-12 w-12" />
                 </div>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">No users found</h3>
+                <h3 className="mt-2 text-sm font-medium text-gray-900">{t('userManagement.errors.noUsersFound')}</h3>
                 <p className="mt-1 text-sm text-gray-500">
-                  {hasErrors ? 'Unable to load users due to an error.' : 'No users have been created yet.'}
+                  {hasErrors ? t('userManagement.errors.unableToLoad') : t('userManagement.errors.noUsersCreated')}
                 </p>
                 {!hasErrors && (
                   <div className="mt-6">
@@ -140,7 +131,7 @@ export default async function AdminSettings() {
                       className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
                     >
                       <UserIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                      Create first user
+                      {t('userManagement.errors.createFirstUser')}
                     </button>
                   </div>
                 )}
@@ -148,7 +139,7 @@ export default async function AdminSettings() {
             ) : (
               <UserManagementTable
                 columns={userColumns}
-                data={admins}
+                data={users}
                 showRole={true}
                 showLastLogin={true}
                 roleLabels={roleLabels}

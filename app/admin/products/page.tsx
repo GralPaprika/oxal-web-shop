@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { checkAuthStatus } from '@/lib/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { AdminHeader } from '@/components/admin/AdminHeader';
+import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import Image from 'next/image';
 import { 
   PlusIcon, 
@@ -98,7 +98,7 @@ export default async function AdminProducts() {
   return (
     <div className="min-h-screen bg-background-secondary">
       {/* Header */}
-      <AdminHeader 
+      <UsersHeader 
         breadcrumbs={breadcrumbs}
         showBackButton={true}
         rightContent={rightContent}
