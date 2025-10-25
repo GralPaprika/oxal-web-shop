@@ -1,4 +1,10 @@
 {
+  "navigation": {
+    "products": "Productos",
+    "categories": "Categorías", 
+    "offers": "Ofertas",
+    "contact": "Contacto"
+  },
   "auth": {
     "login": {
       "title": "Inicio de Sesión Administrativo",
