@@ -244,6 +244,18 @@
         "subtitle": "Administra clientes y usuarios del sistema",
         "newUser": "Nuevo Usuario",
         "ordersLabel": "pedidos",
+        "form": {
+          "email": "Email",
+          "displayName": "Nombre Completo",
+          "password": "Contraseña",
+          "role": "Rol",
+          "emailPlaceholder": "usuario@ejemplo.com",
+          "displayNamePlaceholder": "Nombre completo",
+          "passwordPlaceholder": "Mínimo 6 caracteres",
+          "cancel": "Cancelar",
+          "create": "Crear Usuario",
+          "creating": "Creando..."
+        },
         "table": {
           "user": "Usuario",
           "status": "Estado",

@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { createUser } from '@/lib/actions/create-user.actions';
 
 export function AddUserModal() {
+  const t = useTranslations('admin.settings');
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +49,7 @@ export function AddUserModal() {
     return (
       <Button onClick={() => setOpen(true)}>
         <PlusIcon className="w-4 h-4 mr-2" />
-        Agregar Usuario
+        {t('userManagement.newUser')}
       </Button>
     );
   }
@@ -56,7 +58,7 @@ export function AddUserModal() {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Agregar Nuevo Usuario</h2>
+          <h2 className="text-xl font-semibold text-gray-900">{t('userManagement.newUser')}</h2>
           <button
             onClick={() => setOpen(false)}
             className="text-gray-400 hover:text-gray-600"
@@ -74,7 +76,7 @@ export function AddUserModal() {
           
           <div className="space-y-2">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-              Email
+              {t('userManagement.form.email')}
             </label>
             <input
               id="email"
@@ -84,14 +86,14 @@ export function AddUserModal() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                 setFormData(prev => ({ ...prev, email: e.target.value }))
               }
-              placeholder="usuario@ejemplo.com"
+              placeholder={t('userManagement.form.emailPlaceholder')}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
           </div>
 
           <div className="space-y-2">
             <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
-              Nombre Completo
+              {t('userManagement.form.displayName')}
             </label>
             <input
               id="displayName"
@@ -100,14 +102,14 @@ export function AddUserModal() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                 setFormData(prev => ({ ...prev, displayName: e.target.value }))
               }
-              placeholder="Nombre completo"
+              placeholder={t('userManagement.form.displayNamePlaceholder')}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
           </div>
 
           <div className="space-y-2">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Contraseña
+              {t('userManagement.form.password')}
             </label>
             <input
               id="password"
@@ -118,14 +120,14 @@ export function AddUserModal() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
                 setFormData(prev => ({ ...prev, password: e.target.value }))
               }
-              placeholder="Mínimo 6 caracteres"
+              placeholder={t('userManagement.form.passwordPlaceholder')}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             />
           </div>
 
           <div className="space-y-2">
             <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-              Rol
+              {t('userManagement.form.role')}
             </label>
             <select
               id="role"
@@ -135,8 +137,8 @@ export function AddUserModal() {
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             >
-              <option value="cashier">Cajero</option>
-              <option value="admin">Administrador</option>
+              <option value="cashier">{t('roles.cashier')}</option>
+              <option value="admin">{t('roles.admin')}</option>
             </select>
           </div>
 
@@ -147,10 +149,10 @@ export function AddUserModal() {
               disabled={loading}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 disabled:opacity-50"
             >
-              Cancelar
+              {t('userManagement.form.cancel')}
             </button>
             <Button type="submit" disabled={loading}>
-              {loading ? 'Creando...' : 'Crear Usuario'}
+              {loading ? t('userManagement.form.creating') : t('userManagement.form.create')}
             </Button>
           </div>
         </form>
