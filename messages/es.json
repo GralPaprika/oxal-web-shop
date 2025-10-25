@@ -91,5 +91,28 @@
       "email": "Envíanos un email",
       "phone": "Llámanos"
     }
+  },
+  "about": {
+    "title": "Nuestra historia",
+    "paragraph1": "Nacimos con la misión de conectar el espíritu bohemio con la elegancia moderna. Cada producto en nuestra colección cuenta una historia única, creada por artesanos apasionados que ponen su corazón en cada detalle.",
+    "paragraph2": "Creemos en la belleza de lo auténtico, en la magia de lo hecho a mano y en el poder transformador de los objetos que nos rodean. Nuestro compromiso es traerte piezas que no solo embellezcan tu espacio, sino que también alimenten tu alma.",
+    "quality": {
+      "title": "Calidad garantizada",
+      "description": "Productos seleccionados con los más altos estándares"
+    },
+    "fairTrade": {
+      "title": "Comercio justo",
+      "description": "Apoyamos a comunidades artesanales"
+    },
+    "sustainability": {
+      "title": "Sostenibilidad",
+      "description": "Materiales eco-friendly y procesos responsables"
+    },
+    "uniqueDesign": {
+      "title": "Diseño único",
+      "description": "Piezas exclusivas que no encontrarás en otro lugar"
+    },
+    "cta": "Conoce más sobre nosotros",
+    "imageAlt": "Taller de artesanías"
   }
 }
