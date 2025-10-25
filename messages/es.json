@@ -48,5 +48,14 @@
     "loading": "Cargando...",
     "error": "Error",
     "success": "Éxito"
+  },
+  "categories": {
+    "title": "Productos",
+    "subtitle": "Descubre nuestras categorías de productos únicos y artesanales",
+    "categories": {
+      "ropa": "Ropa",
+      "joyeria": "Joyería",
+      "accesorios": "Accesorios"
+    }
   }
 }

@@ -2,100 +2,75 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 const categories = [
   {
     id: 1,
-    name: 'Joyería',
-    description: 'Piezas únicas y elegantes',
-    image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&h=500&fit=crop',
-    href: '/categories/jewelry',
+    name: 'ropa',
+    image: 'https://www.tonkettitrading.com.au/cdn/shop/files/DSC08594.jpg?v=1725238478',
+    href: '/categories/ropa',
   },
   {
     id: 2,
-    name: 'Decoración',
-    description: 'Para tu hogar bohemio',
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop',
-    href: '/categories/decor',
+    name: 'joyeria',
+    image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+    href: '/categories/joyeria',
   },
   {
     id: 3,
-    name: 'Textiles',
-    description: 'Telas y accesorios',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=500&fit=crop',
-    href: '/categories/textiles',
-  },
-  {
-    id: 4,
-    name: 'Bienestar',
-    description: 'Cuidado natural',
-    image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500&h=500&fit=crop',
-    href: '/categories/wellness',
+    name: 'accesorios',
+    image: 'https://m.media-amazon.com/images/I/91liVv+emhS._AC_UY1000_.jpg',
+    href: '/categories/accesorios',
   },
 ];
 
 export function FeaturedCategories() {
+  const t = useTranslations('categories');
+
   return (
-    <section className="py-16 bg-background-primary">
+    <section className="py-16 bg-background-secondary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary mb-4">
-            Explora por categorías
+            {t('title')}
           </h2>
           <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-            Encuentra exactamente lo que buscas en nuestra selección cuidadosamente curada
+            {t('subtitle')}
           </p>
         </div>
 
         {/* Categories grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
           {categories.map((category) => (
             <Link
               key={category.id}
               href={category.href}
-              className="group relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+              className="group flex flex-col items-center"
             >
-              {/* Image */}
-              <div className="aspect-square overflow-hidden">
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  width={500}
-                  height={500}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                />
-              </div>
-
-              {/* Content overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end">
-                <div className="p-6 text-white">
-                  <h3 className="text-xl font-semibold mb-1">{category.name}</h3>
-                  <p className="text-sm opacity-90">{category.description}</p>
+              {/* Circular category image */}
+              <div className="relative w-56 h-56 md:w-80 md:h-80 mb-4">
+                <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
+                  <Image
+                    src={category.image}
+                    alt={t(`categories.${category.name}`)}
+                    width={400}
+                    height={400}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
+                
+                {/* Overlay */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
 
-              {/* Hover effect */}
-              <div className="absolute inset-0 bg-primary-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <span className="bg-white text-primary-600 px-4 py-2 rounded-full font-semibold shadow-lg">
-                  Ver más
-                </span>
-              </div>
+              {/* Category name */}
+              <h3 className="text-xl font-semibold text-text-primary text-center group-hover:text-primary-600 transition-colors duration-300">
+                {t(`categories.${category.name}`)}
+              </h3>
             </Link>
           ))}
-        </div>
-
-        {/* CTA */}
-        <div className="text-center mt-12">
-          <Link
-            href="/categories"
-            className="inline-flex items-center text-primary-600 hover:text-primary-700 font-semibold transition-colors"
-          >
-            Ver todas las categorías
-            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
         </div>
       </div>
     </section>
