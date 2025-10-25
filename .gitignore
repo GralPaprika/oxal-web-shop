@@ -49,3 +49,6 @@ next-env.d.ts
 # IDEs and editors
 .vscode/
 .idea/
+
+# Custom ignores
+demo/

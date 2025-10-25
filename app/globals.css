@@ -1,26 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;600;700&family=Playfair+Display:wght@400;700&family=Caveat:wght@400;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* Base colors - Amber/Brown theme (easily changeable) */
+  --color-primary-50: 255 251 235;    /* amber-50 */
+  --color-primary-100: 254 243 199;   /* amber-100 */
+  --color-primary-200: 253 230 138;   /* amber-200 */
+  --color-primary-300: 252 211 77;    /* amber-300 */
+  --color-primary-400: 251 191 36;    /* amber-400 */
+  --color-primary-500: 245 158 11;    /* amber-500 */
+  --color-primary-600: 217 119 6;     /* amber-600 */
+  --color-primary-700: 180 83 9;      /* amber-700 */
+  --color-primary-800: 146 64 14;     /* amber-800 */
+  --color-primary-900: 120 53 15;     /* amber-900 */
+  --color-primary-950: 69 26 3;       /* amber-950 */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Secondary colors - Purple theme */
+  --color-secondary-50: 250 245 255;   /* purple-50 */
+  --color-secondary-100: 243 232 255;
+  --color-secondary-200: 233 213 255;
+  --color-secondary-300: 196 181 253;
+  --color-secondary-400: 167 139 250;
+  --color-secondary-500: 139 92 246;
+  --color-secondary-600: 124 58 237;
+  --color-secondary-700: 109 40 217;
+  --color-secondary-800: 91 33 182;
+  --color-secondary-900: 76 29 149;
+  --color-secondary-950: 46 16 101;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Background colors */
+  --color-bg-primary: 250 249 245;     /* Warm off-white */
+  --color-bg-secondary: 255 255 255;   /* Pure white */
+  --color-bg-tertiary: 255 251 235;    /* Very light amber */
+
+  /* Text colors */
+  --color-text-primary: 90 74 66;      /* Dark brown */
+  --color-text-secondary: 120 113 108; /* Medium brown */
+  --color-text-muted: 156 163 175;     /* Light gray */
+
+  /* Font variables */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Quicksand', sans-serif;
+  --font-accent: 'Caveat', cursive;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  background-color: rgb(var(--color-bg-primary));
+  color: rgb(var(--color-text-primary));
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-accent {
+  font-family: var(--font-accent);
 }
