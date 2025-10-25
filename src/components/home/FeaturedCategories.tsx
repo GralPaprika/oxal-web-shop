@@ -31,7 +31,6 @@ export function FeaturedCategories() {
   return (
     <section className="py-16 bg-background-secondary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary mb-4">
             {t('title')}
@@ -40,8 +39,6 @@ export function FeaturedCategories() {
             {t('subtitle')}
           </p>
         </div>
-
-        {/* Categories grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
           {categories.map((category) => (
             <Link
@@ -49,7 +46,6 @@ export function FeaturedCategories() {
               href={category.href}
               className="group flex flex-col items-center"
             >
-              {/* Circular category image */}
               <div className="relative w-56 h-56 md:w-80 md:h-80 mb-4">
                 <div className="w-full h-full rounded-full overflow-hidden shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-105">
                   <Image
@@ -60,12 +56,8 @@ export function FeaturedCategories() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
-                {/* Overlay */}
                 <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-
-              {/* Category name */}
               <h3 className="text-xl font-semibold text-text-primary text-center group-hover:text-primary-600 transition-colors duration-300">
                 {t(`categories.${category.name}`)}
               </h3>

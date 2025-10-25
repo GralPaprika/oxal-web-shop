@@ -76,7 +76,6 @@ export function FeaturedProducts() {
   return (
     <section className="py-16 bg-background-secondary">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary mb-4">
             Productos destacados
@@ -86,14 +85,12 @@ export function FeaturedProducts() {
           </p>
         </div>
 
-        {/* Products grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
             <div
               key={product.id}
               className="group bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
-              {/* Product image */}
               <div className="relative aspect-square overflow-hidden">
                 <Image
                   src={product.image}
@@ -103,7 +100,6 @@ export function FeaturedProducts() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 
-                {/* Badge */}
                 {product.badge && (
                   <span className={`absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full ${
                     product.badge === 'Oferta' ? 'bg-red-100 text-red-800' :
@@ -114,7 +110,6 @@ export function FeaturedProducts() {
                   </span>
                 )}
 
-                {/* Quick add to cart */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <button className="bg-white text-primary-600 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-primary-50 transition-colors">
                     Agregar al carrito
@@ -122,13 +117,11 @@ export function FeaturedProducts() {
                 </div>
               </div>
 
-              {/* Product info */}
               <div className="p-4">
                 <h3 className="font-semibold text-text-primary mb-2 line-clamp-2">
                   {product.name}
                 </h3>
                 
-                {/* Rating */}
                 <div className="flex items-center mb-2">
                   <div className="flex">
                     {renderStars(product.rating)}
@@ -138,7 +131,6 @@ export function FeaturedProducts() {
                   </span>
                 </div>
 
-                {/* Price */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <span className="text-lg font-bold text-primary-600">
@@ -156,11 +148,10 @@ export function FeaturedProducts() {
           ))}
         </div>
 
-        {/* CTA */}
         <div className="text-center mt-12">
           <Link
             href="/products"
-            className="bg-primary-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-primary-700 transition-colors shadow-lg"
+            className="bg-amber-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-amber-700 transition-colors shadow-lg inline-block"
           >
             Ver todos los productos
           </Link>

@@ -57,5 +57,39 @@
       "joyeria": "Joyería",
       "accesorios": "Accesorios"
     }
+  },
+  "features": {
+    "title": "¿Por qué elegirnos?",
+    "subtitle": "Nos comprometemos a brindarte la mejor experiencia de compra con productos únicos y servicio excepcional",
+    "shipping": {
+      "title": "Envío gratuito",
+      "description": "En pedidos superiores a $200. Envíos rápidos y seguros en Colima."
+    },
+    "returns": {
+      "title": "Devoluciones fáciles",
+      "description": "30 días para devolver tu compra sin preguntas. Tu satisfacción es lo primero."
+    },
+    "payment": {
+      "title": "Pago seguro",
+      "description": "Múltiples métodos de pago con encriptación SSL. Compra con total confianza."
+    },
+    "support": {
+      "title": "Atención personalizada",
+      "description": "Nuestro equipo está aquí para ayudarte. Contacto directo y respuesta rápida."
+    },
+    "sustainable": {
+      "title": "Productos sostenibles",
+      "description": "Comprometidos con el medio ambiente. Materiales eco-friendly y empaques reciclables."
+    },
+    "quality": {
+      "title": "Calidad premium",
+      "description": "Productos cuidadosamente seleccionados. Artesanía de la más alta calidad."
+    },
+    "cta": {
+      "title": "¿Tienes alguna pregunta?",
+      "subtitle": "Nuestro equipo de atención al cliente está aquí para ayudarte con cualquier consulta",
+      "email": "Envíanos un email",
+      "phone": "Llámanos"
+    }
   }
 }

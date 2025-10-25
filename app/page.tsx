@@ -4,7 +4,6 @@ import { FeaturedCategories } from '@/components/home/FeaturedCategories';
 import { FeaturedProducts } from '@/components/home/FeaturedProducts';
 import { AboutSection } from '@/components/home/AboutSection';
 import { Features } from '@/components/home/Features';
-import { Newsletter } from '@/components/home/Newsletter';
 import { Footer } from '@/components/layout/Footer';
 
 export default async function Home() {
@@ -16,7 +15,6 @@ export default async function Home() {
       <FeaturedProducts />
       <AboutSection />
       <Features />
-      <Newsletter />
       <Footer />
     </div>
   );
