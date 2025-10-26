@@ -6,7 +6,13 @@ import { Button } from '@/components/ui/Button';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { createUser } from '@/lib/actions/create-user.actions';
 
-export function AddUserModal() {
+export function AddUserModal({ 
+  trigger,
+  children 
+}: { 
+  trigger?: React.ReactNode;
+  children?: React.ReactNode;
+} = {}) {
   const t = useTranslations('admin.settings');
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -47,16 +53,20 @@ export function AddUserModal() {
 
   if (!open) {
     return (
-      <Button onClick={() => setOpen(true)}>
-        <PlusIcon className="w-4 h-4 mr-2" />
-        {t('userManagement.newUser')}
-      </Button>
+      <div onClick={() => setOpen(true)} style={{ display: 'inline-block' }}>
+        {trigger || children || (
+          <Button>
+            <PlusIcon className="w-4 h-4 mr-2" />
+            {t('userManagement.newUser')}
+          </Button>
+        )}
+      </div>
     );
   }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto text-left" style={{ textAlign: 'left' }}>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-900">{t('userManagement.newUser')}</h2>
           <button
@@ -67,7 +77,7 @@ export function AddUserModal() {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 text-left" style={{ textAlign: 'left' }}>
           {error && (
             <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg">
               {error}
@@ -75,7 +85,7 @@ export function AddUserModal() {
           )}
           
           <div className="space-y-2">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-left">
               {t('userManagement.form.email')}
             </label>
             <input
@@ -92,7 +102,7 @@ export function AddUserModal() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="displayName" className="block text-sm font-medium text-gray-700 text-left">
               {t('userManagement.form.displayName')}
             </label>
             <input
@@ -108,7 +118,7 @@ export function AddUserModal() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-left">
               {t('userManagement.form.password')}
             </label>
             <input
@@ -126,7 +136,7 @@ export function AddUserModal() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="role" className="block text-sm font-medium text-gray-700 text-left">
               {t('userManagement.form.role')}
             </label>
             <select
