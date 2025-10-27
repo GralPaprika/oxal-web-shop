@@ -119,7 +119,6 @@ export const updateUser = withAdminAuth(async (currentUser: User, userData: {
   role?: 'admin' | 'cashier';
   status?: 'active' | 'inactive' | 'suspended';
 }): Promise<{ success: boolean; user?: User; error?: string }> => {
-  // Self-protection logic (business rules)
   if (currentUser.id === userData.id && userData.role && userData.role !== 'admin') {
     return {
       success: false,
