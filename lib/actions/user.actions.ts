@@ -163,3 +163,13 @@ export const deleteUser = withAdminAuth(async (currentUser: User, userId: string
   const deleteUserUseCase = container.get<DeleteUserUseCase>(TYPES.DeleteUserUseCase);
   return await deleteUserUseCase.execute(userId);
 });
+
+// BULK IMPORT USERS
+export const bulkImportUsers = withAdminAuthOnly(async (): Promise<{ success: boolean; imported?: number; errors?: string[]; error?: string }> => {
+  // Note: User import is more complex because it involves Firebase Auth
+  // For now, we'll return a placeholder that indicates this needs special handling
+  return { 
+    success: false, 
+    error: 'User bulk import requires special handling for Firebase Auth integration. Manual implementation needed.' 
+  };
+});

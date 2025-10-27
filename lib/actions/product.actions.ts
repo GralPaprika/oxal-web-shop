@@ -6,6 +6,7 @@ import { CreateProductUseCase } from '@/application/usecases/product/CreateProdu
 import { UpdateProductUseCase } from '@/application/usecases/product/UpdateProductUseCase';
 import { DeleteProductUseCase } from '@/application/usecases/product/DeleteProductUseCase';
 import { GetCategoriesUseCase } from '@/application/usecases/product/GetCategoriesUseCase';
+import { CreateCategoryUseCase, CreateCategoryData } from '@/application/usecases/product/CreateCategoryUseCase';
 import { TYPES } from '@/types/container.types';
 import type { Product, ProductListOptions, CreateProductData, UpdateProductData, ProductCategory } from '@/domain/product/product.entity';
 import type { User } from '@/domain/user/user.entity';
@@ -122,3 +123,65 @@ export async function getAllCategories(): Promise<{ success: boolean; categories
     };
   }
 }
+
+// BULK IMPORT PRODUCTS
+export const bulkImportProducts = withAdminAuthOnly(async (products: CreateProductData[]): Promise<{ success: boolean; imported?: number; errors?: string[]; error?: string }> => {
+  try {
+    const createProductUseCase = container.get<CreateProductUseCase>(TYPES.CreateProductUseCase);
+    const errors: string[] = [];
+    let imported = 0;
+
+    for (const product of products) {
+      try {
+        await createProductUseCase.execute(product);
+        imported++;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        errors.push(`Product "${product.name}": ${errorMessage}`);
+      }
+    }
+
+    return { 
+      success: true, 
+      imported, 
+      errors: errors.length > 0 ? errors : undefined 
+    };
+  } catch (error) {
+    console.error('Error in bulk import products:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Bulk import failed' 
+    };
+  }
+});
+
+// BULK IMPORT CATEGORIES
+export const bulkImportCategories = withAdminAuthOnly(async (categories: CreateCategoryData[]): Promise<{ success: boolean; imported?: number; errors?: string[]; error?: string }> => {
+  try {
+    const createCategoryUseCase = container.get<CreateCategoryUseCase>(TYPES.CreateCategoryUseCase);
+    const errors: string[] = [];
+    let imported = 0;
+
+    for (const category of categories) {
+      try {
+        await createCategoryUseCase.execute(category);
+        imported++;
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        errors.push(`Category "${category.name}": ${errorMessage}`);
+      }
+    }
+
+    return { 
+      success: true, 
+      imported, 
+      errors: errors.length > 0 ? errors : undefined 
+    };
+  } catch (error) {
+    console.error('Error in bulk import categories:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Bulk import failed' 
+    };
+  }
+});

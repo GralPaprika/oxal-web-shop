@@ -155,6 +155,39 @@ export class FirestoreProductRepository implements IProductRepository {
     }
   }
 
+  async createCategory(data: Omit<ProductCategory, 'id'>): Promise<ProductCategory> {
+    try {
+      const id = await this.database.create<ProductCategory>(this.CATEGORIES_COLLECTION, data);
+      return { id, ...data };
+    } catch (error) {
+      console.error('Error creating category:', error);
+      throw new Error('Failed to create category');
+    }
+  }
+
+  async updateCategory(id: string, data: Partial<ProductCategory>): Promise<ProductCategory> {
+    try {
+      await this.database.update<ProductCategory>(this.CATEGORIES_COLLECTION, id, data);
+      const updatedCategory = await this.database.getById<ProductCategory>(this.CATEGORIES_COLLECTION, id);
+      if (!updatedCategory) {
+        throw new Error('Category not found after update');
+      }
+      return updatedCategory;
+    } catch (error) {
+      console.error(`Error updating category ${id}:`, error);
+      throw new Error('Failed to update category');
+    }
+  }
+
+  async deleteCategory(id: string): Promise<void> {
+    try {
+      await this.database.delete(this.CATEGORIES_COLLECTION, id);
+    } catch (error) {
+      console.error(`Error deleting category ${id}:`, error);
+      throw new Error('Failed to delete category');
+    }
+  }
+
   async getProductCount(options?: ProductListOptions): Promise<number> {
     try {
       let products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);

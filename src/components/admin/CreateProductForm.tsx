@@ -3,13 +3,12 @@
 import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { CreateProductData, ProductCategory } from '@/src/domain/product/product.entity';
 import { createProduct, getAllCategories } from '@/lib/actions/product.actions';
 import { Button } from '@/components/ui/Button';
+import { ImageUploadGrid } from '@/src/components/admin/ImageUploadGrid';
 import { 
-  PhotoIcon,
   PlusIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
@@ -51,7 +50,6 @@ export function CreateProductForm() {
   });
 
   const [images, setImages] = useState<ProductImage[]>([]);
-  const [newImageUrl, setNewImageUrl] = useState('');
   const [newTag, setNewTag] = useState('');
   const [newMaterial, setNewMaterial] = useState('');
   const [error, setError] = useState<string>('');
@@ -130,31 +128,6 @@ export function CreateProductForm() {
         setError(t('error.failed'));
       }
     });
-  };
-
-  const addImage = () => {
-    if (!newImageUrl.trim()) return;
-    
-    const newImage: ProductImage = {
-      url: newImageUrl.trim(),
-      alt: formData.name,
-      order: images.length,
-      isPrimary: images.length === 0,
-    };
-    
-    setImages([...images, newImage]);
-    setNewImageUrl('');
-  };
-
-  const removeImage = (index: number) => {
-    const updatedImages = images.filter((_, i) => i !== index);
-    // Update order and primary status
-    const reorderedImages = updatedImages.map((img, i) => ({
-      ...img,
-      order: i,
-      isPrimary: i === 0,
-    }));
-    setImages(reorderedImages);
   };
 
   const addTag = () => {
@@ -316,69 +289,18 @@ export function CreateProductForm() {
       </div>
 
       {/* Images */}
-      <div>
-        <label className="block text-sm font-medium text-text-primary mb-4">
-          {t('form.images')}
-        </label>
-        
-        <div className="space-y-4">
-          {/* Add Image Input */}
-          <div className="flex gap-2">
-            <input
-              type="url"
-              value={newImageUrl}
-              onChange={(e) => setNewImageUrl(e.target.value)}
-              className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-              placeholder={t('form.imageUrlPlaceholder')}
-            />
-            <Button
-              type="button"
-              onClick={addImage}
-              variant="outline"
-              className="flex items-center gap-2"
-            >
-              <PlusIcon className="h-4 w-4" />
-              {t('form.addImage')}
-            </Button>
-          </div>
-
-          {/* Images List */}
-          {images.length > 0 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {images.map((image, index) => (
-                <div key={index} className="relative group border border-neutral-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-text-muted">
-                      {image.isPrimary ? t('form.primaryImage') : `${t('form.image')} ${index + 1}`}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <XMarkIcon className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <div className="aspect-square bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden">
-                    {image.url ? (
-                      <Image
-                        src={image.url}
-                        alt={image.alt || formData.name}
-                        width={200}
-                        height={200}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    ) : (
-                      <PhotoIcon className="h-8 w-8 text-neutral-400" />
-                    )}
-                  </div>
-                  <p className="text-xs text-text-muted mt-2 truncate">{image.url}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      <ImageUploadGrid
+        images={images}
+        onImagesChange={setImages}
+        productName={formData.name}
+        translations={{
+          primaryImage: t('form.primaryImage'),
+          image: t('form.image'),
+          dragDropHint: t('form.dragDropHint'),
+          reorderHint: t('form.reorderHint'),
+          clickToUpload: t('form.clickToUpload')
+        }}
+      />
 
       {/* Tags */}
       <div>

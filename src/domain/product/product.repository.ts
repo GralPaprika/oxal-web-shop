@@ -18,6 +18,9 @@ export interface IProductRepository {
   // Category operations
   getAllCategories(): Promise<ProductCategory[]>;
   getCategoryById(id: string): Promise<ProductCategory | null>;
+  createCategory(data: Omit<ProductCategory, 'id'>): Promise<ProductCategory>;
+  updateCategory(id: string, data: Partial<ProductCategory>): Promise<ProductCategory>;
+  deleteCategory(id: string): Promise<void>;
   
   // Utility operations
   getProductCount(options?: ProductListOptions): Promise<number>;
