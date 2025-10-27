@@ -2,9 +2,9 @@
 
 import { container } from '@/container/container.config';
 import { GetAllUsersUseCase, GetUsersByRoleUseCase } from '@/application/usecases/user/GetUsersUseCase';
-import { UpdateUserUseCase } from '@/application/user/UpdateUserUseCase';
-import { CreateUserUseCase, CreateUserRequest } from '@/application/user/CreateUserUseCase';
-import { DeleteUserUseCase } from '@/application/user/DeleteUserUseCase';
+import { UpdateUserUseCase } from '@/application/usecases/user/UpdateUserUseCase';
+import { CreateUserUseCase, CreateUserRequest } from '@/application/usecases/user/CreateUserUseCase';
+import { DeleteUserUseCase } from '@/application/usecases/user/DeleteUserUseCase';
 import { TYPES } from '@/types/container.types';
 import type { User } from '@/domain/user/user.entity';
 import { checkAuthStatus, getCurrentUser } from '@/lib/auth';

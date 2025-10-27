@@ -15,9 +15,9 @@ import { GetCurrentUserUseCase } from '@/application/usecases/auth/GetCurrentUse
 import type { IUserRepository } from '@/domain/user/user.repository';
 import { FirestoreUserRepository } from '@/infrastructure/user/FirestoreUserRepository';
 import { GetAllUsersUseCase, GetUsersByRoleUseCase, GetUserByIdUseCase } from '@/application/usecases/user/GetUsersUseCase';
-import { CreateUserUseCase } from '@/application/user/CreateUserUseCase';
-import { UpdateUserUseCase } from '@/application/user/UpdateUserUseCase';
-import { DeleteUserUseCase } from '@/application/user/DeleteUserUseCase';
+import { CreateUserUseCase } from '@/application/usecases/user/CreateUserUseCase';
+import { UpdateUserUseCase } from '@/application/usecases/user/UpdateUserUseCase';
+import { DeleteUserUseCase } from '@/application/usecases/user/DeleteUserUseCase';
 
 // This will be our main DI container
 export const container = new Container();
