@@ -1,6 +1,4 @@
-import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { checkAuthStatus } from '@/lib/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import Image from 'next/image';
@@ -67,15 +65,11 @@ const mockProducts = [
   },
 ];
 
-export default async function AdminProducts() {
+async function AdminProductsPage() {
   const t = await getTranslations('admin.products');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
   
-  // Check authentication status - same as dashboard would have
-  const isAuthenticated = await checkAuthStatus();
-  if (!isAuthenticated) {
-    redirect(AUTH_CONFIG.ROUTES.LOGIN);
-  }
+  // No authentication check needed - handled by middleware
 
   const breadcrumbs = [
     { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },
@@ -264,3 +258,6 @@ export default async function AdminProducts() {
     </div>
   );
 }
+
+// Export the page directly - no auth wrapper needed (handled by middleware)
+export default AdminProductsPage;

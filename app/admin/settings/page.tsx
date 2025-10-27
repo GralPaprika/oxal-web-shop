@@ -1,6 +1,4 @@
-import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { checkAuthStatus } from '@/lib/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import { SectionCard } from '@/components/admin/SectionCard';
@@ -13,15 +11,11 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default async function AdminSettings() {
+  // No authentication check needed - handled by middleware
+  
   const t = await getTranslations('admin.settings');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
   
-  // Check authentication status - same as dashboard would have
-  const isAuthenticated = await checkAuthStatus();
-  if (!isAuthenticated) {
-    redirect(AUTH_CONFIG.ROUTES.LOGIN);
-  }
-
   // Initialize empty array for users
   let users: User[] = [];
   let hasErrors = false;
