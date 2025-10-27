@@ -4,6 +4,7 @@ import { container } from '@/container/container.config';
 import { GetAllUsersUseCase, GetUsersByRoleUseCase } from '@/application/usecases/user/GetUsersUseCase';
 import { UpdateUserUseCase } from '@/application/user/UpdateUserUseCase';
 import { CreateUserUseCase, CreateUserRequest } from '@/application/user/CreateUserUseCase';
+import { DeleteUserUseCase } from '@/application/user/DeleteUserUseCase';
 import { TYPES } from '@/types/container.types';
 import type { User } from '@/domain/user/user.entity';
 import { checkAuthStatus, getCurrentUser } from '@/lib/auth';
@@ -60,7 +61,6 @@ function withAdminAuth<TArgs extends unknown[], TReturn>(
   };
 }
 
-// 🎯 Alternative Middleware for functions that don't need currentUser
 function withAdminAuthOnly<TArgs extends unknown[], TReturn>(
   fn: (...args: TArgs) => Promise<TReturn>
 ) {
@@ -140,4 +140,26 @@ export const updateUser = withAdminAuth(async (currentUser: User, userData: {
 export const createUser = withAdminAuth(async (currentUser: User, userData: CreateUserRequest) => {
   const createUserUseCase = container.get<CreateUserUseCase>(TYPES.CreateUserUseCase);
   return await createUserUseCase.execute(userData);
+});
+
+export const deleteUser = withAdminAuth(async (currentUser: User, userId: string): Promise<{ success: boolean; error?: string }> => {
+  if (currentUser.id === userId) {
+    return {
+      success: false,
+      error: 'Cannot delete your own account'
+    };
+  }
+
+  const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
+  const admins = await getUsersByRoleUseCase.execute('admin');
+  
+  if (admins.length === 1 && admins[0].id === userId) {
+    return {
+      success: false,
+      error: 'Cannot delete the last admin user'
+    };
+  }
+
+  const deleteUserUseCase = container.get<DeleteUserUseCase>(TYPES.DeleteUserUseCase);
+  return await deleteUserUseCase.execute(userId);
 });

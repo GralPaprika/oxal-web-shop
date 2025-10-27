@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
 import type { User } from '@/domain/user/user.entity';
 
 interface UserCardProps {
@@ -118,13 +119,17 @@ export function UserCard({
             </button>
           )}
           {onDelete && (
-            <button 
-              onClick={() => onDelete(user)}
-              className="p-1 text-text-secondary hover:text-red-600 transition-colors"
-              aria-label={`Delete ${user.displayName || user.email}`}
-            >
-              <TrashIcon className="h-4 w-4" />
-            </button>
+            <DeleteUserDialog
+              user={user}
+              trigger={
+                <button 
+                  className="p-1 text-text-secondary hover:text-red-600 transition-colors"
+                  aria-label={`Delete ${user.displayName || user.email}`}
+                >
+                  <TrashIcon className="h-4 w-4" />
+                </button>
+              }
+            />
           )}
         </div>
       </td>

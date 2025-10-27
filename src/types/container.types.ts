@@ -17,6 +17,5 @@ export const TYPES = {
   GetUserByIdUseCase: Symbol.for('GetUserByIdUseCase'),
   CreateUserUseCase: Symbol.for('CreateUserUseCase'),
   UpdateUserUseCase: Symbol.for('UpdateUserUseCase'),
-  
-  // Add your service identifiers here as needed
+  DeleteUserUseCase: Symbol.for('DeleteUserUseCase'),
 } as const;

@@ -17,6 +17,7 @@ import { FirestoreUserRepository } from '@/infrastructure/user/FirestoreUserRepo
 import { GetAllUsersUseCase, GetUsersByRoleUseCase, GetUserByIdUseCase } from '@/application/usecases/user/GetUsersUseCase';
 import { CreateUserUseCase } from '@/application/user/CreateUserUseCase';
 import { UpdateUserUseCase } from '@/application/user/UpdateUserUseCase';
+import { DeleteUserUseCase } from '@/application/user/DeleteUserUseCase';
 
 // This will be our main DI container
 export const container = new Container();
@@ -42,5 +43,6 @@ container.bind<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase).to(GetUsersBy
 container.bind<GetUserByIdUseCase>(TYPES.GetUserByIdUseCase).to(GetUserByIdUseCase);
 container.bind<CreateUserUseCase>(TYPES.CreateUserUseCase).to(CreateUserUseCase);
 container.bind<UpdateUserUseCase>(TYPES.UpdateUserUseCase).to(UpdateUserUseCase);
+container.bind<DeleteUserUseCase>(TYPES.DeleteUserUseCase).to(DeleteUserUseCase);
 
 export { TYPES };
