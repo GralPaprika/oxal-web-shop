@@ -18,4 +18,14 @@ export const TYPES = {
   CreateUserUseCase: Symbol.for('CreateUserUseCase'),
   UpdateUserUseCase: Symbol.for('UpdateUserUseCase'),
   DeleteUserUseCase: Symbol.for('DeleteUserUseCase'),
+  
+  // Product Management
+  ProductRepository: Symbol.for('ProductRepository'),
+  GetAllProductsUseCase: Symbol.for('GetAllProductsUseCase'),
+  GetProductByIdUseCase: Symbol.for('GetProductByIdUseCase'),
+  GetProductByCodeUseCase: Symbol.for('GetProductByCodeUseCase'),
+  GetProductCountUseCase: Symbol.for('GetProductCountUseCase'),
+  CreateProductUseCase: Symbol.for('CreateProductUseCase'),
+  UpdateProductUseCase: Symbol.for('UpdateProductUseCase'),
+  DeleteProductUseCase: Symbol.for('DeleteProductUseCase'),
 } as const;

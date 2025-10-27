@@ -19,6 +19,12 @@ import { CreateUserUseCase } from '@/application/usecases/user/CreateUserUseCase
 import { UpdateUserUseCase } from '@/application/usecases/user/UpdateUserUseCase';
 import { DeleteUserUseCase } from '@/application/usecases/user/DeleteUserUseCase';
 
+// Product Management
+import type { IProductRepository } from '@/domain/product/product.repository';
+import { FirestoreProductRepository } from '@/infrastructure/repositories/FirestoreProductRepository';
+import { GetAllProductsUseCase, GetProductByIdUseCase, GetProductByCodeUseCase, GetProductCountUseCase } from '@/application/usecases/product/GetProductsUseCase';
+import { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase } from '@/application/usecases/product/ProductCrudUseCase';
+
 // This will be our main DI container
 export const container = new Container();
 
@@ -44,5 +50,15 @@ container.bind<GetUserByIdUseCase>(TYPES.GetUserByIdUseCase).to(GetUserByIdUseCa
 container.bind<CreateUserUseCase>(TYPES.CreateUserUseCase).to(CreateUserUseCase);
 container.bind<UpdateUserUseCase>(TYPES.UpdateUserUseCase).to(UpdateUserUseCase);
 container.bind<DeleteUserUseCase>(TYPES.DeleteUserUseCase).to(DeleteUserUseCase);
+
+// Product Management bindings
+container.bind<IProductRepository>(TYPES.ProductRepository).to(FirestoreProductRepository).inSingletonScope();
+container.bind<GetAllProductsUseCase>(TYPES.GetAllProductsUseCase).to(GetAllProductsUseCase);
+container.bind<GetProductByIdUseCase>(TYPES.GetProductByIdUseCase).to(GetProductByIdUseCase);
+container.bind<GetProductByCodeUseCase>(TYPES.GetProductByCodeUseCase).to(GetProductByCodeUseCase);
+container.bind<GetProductCountUseCase>(TYPES.GetProductCountUseCase).to(GetProductCountUseCase);
+container.bind<CreateProductUseCase>(TYPES.CreateProductUseCase).to(CreateProductUseCase);
+container.bind<UpdateProductUseCase>(TYPES.UpdateProductUseCase).to(UpdateProductUseCase);
+container.bind<DeleteProductUseCase>(TYPES.DeleteProductUseCase).to(DeleteProductUseCase);
 
 export { TYPES };
