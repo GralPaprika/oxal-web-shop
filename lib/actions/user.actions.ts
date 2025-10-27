@@ -8,10 +8,8 @@ import { TYPES } from '@/types/container.types';
 import type { User } from '@/domain/user/user.entity';
 import { checkAuthStatus, getCurrentUser } from '@/lib/auth';
 
-// Helper function to handle authentication and authorization (DRY principle)
 async function verifyAdminAccess(): Promise<{ success: boolean; error?: string; currentUser?: User }> {
   try {
-    // Security Check: Verify user is authenticated
     const isAuthenticated = await checkAuthStatus();
     if (!isAuthenticated) {
       return {
@@ -20,7 +18,6 @@ async function verifyAdminAccess(): Promise<{ success: boolean; error?: string; 
       };
     }
 
-    // Security Check: Verify user has admin privileges
     const currentUser = await getCurrentUser();
     if (!currentUser || currentUser.role !== 'admin') {
       return {
@@ -42,7 +39,6 @@ async function verifyAdminAccess(): Promise<{ success: boolean; error?: string; 
   }
 }
 
-// 🎯 Elegant Middleware: Higher-Order Function for Admin Authentication
 function withAdminAuth<TArgs extends unknown[], TReturn>(
   fn: (currentUser: User, ...args: TArgs) => Promise<TReturn>
 ) {
@@ -64,7 +60,29 @@ function withAdminAuth<TArgs extends unknown[], TReturn>(
   };
 }
 
-export const getAllUsers = withAdminAuth(async (_currentUser: User): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+// 🎯 Alternative Middleware for functions that don't need currentUser
+function withAdminAuthOnly<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => Promise<TReturn>
+) {
+  return async (...args: TArgs): Promise<TReturn | { success: false; error: string }> => {
+    const authResult = await verifyAdminAccess();
+    if (!authResult.success) {
+      return { success: false, error: authResult.error! } as TReturn;
+    }
+    
+    try {
+      return await fn(...args);
+    } catch (error) {
+      console.error('Error in authenticated function:', error);
+      return { 
+        success: false, 
+        error: 'Operation failed' 
+      } as TReturn;
+    }
+  };
+}
+
+export const getAllUsers = withAdminAuthOnly(async (): Promise<{ success: boolean; users?: User[]; error?: string }> => {
   const getAllUsersUseCase = container.get<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase);
   const users = await getAllUsersUseCase.execute();
   
@@ -74,7 +92,7 @@ export const getAllUsers = withAdminAuth(async (_currentUser: User): Promise<{ s
   };
 });
 
-export const getUsersByRole = withAdminAuth(async (_currentUser: User, role: User['role']): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+export const getUsersByRole = withAdminAuthOnly(async (role: User['role']): Promise<{ success: boolean; users?: User[]; error?: string }> => {
   const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
   const users = await getUsersByRoleUseCase.execute(role);
   
@@ -84,7 +102,7 @@ export const getUsersByRole = withAdminAuth(async (_currentUser: User, role: Use
   };
 });
 
-export const getAdminUsers = withAdminAuth(async (_currentUser: User): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+export const getAdminUsers = withAdminAuthOnly(async (): Promise<{ success: boolean; users?: User[]; error?: string }> => {
   const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
   const admins = await getUsersByRoleUseCase.execute('admin');
   
