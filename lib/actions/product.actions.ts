@@ -2,7 +2,9 @@
 
 import { container } from '@/container/container.config';
 import { GetAllProductsUseCase, GetProductByIdUseCase, GetProductCountUseCase } from '@/application/usecases/product/GetProductsUseCase';
-import { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase } from '@/application/usecases/product/ProductCrudUseCase';
+import { CreateProductUseCase } from '@/application/usecases/product/CreateProductUseCase';
+import { UpdateProductUseCase } from '@/application/usecases/product/UpdateProductUseCase';
+import { DeleteProductUseCase } from '@/application/usecases/product/DeleteProductUseCase';
 import { TYPES } from '@/types/container.types';
 import type { Product, ProductListOptions, CreateProductData, UpdateProductData } from '@/domain/product/product.entity';
 import type { User } from '@/domain/user/user.entity';
@@ -37,27 +39,6 @@ async function verifyAdminAccess(): Promise<{ success: boolean; error?: string; 
       error: 'Authentication verification failed'
     };
   }
-}
-
-function withAdminAuth<TArgs extends unknown[], TReturn>(
-  fn: (currentUser: User, ...args: TArgs) => Promise<TReturn>
-) {
-  return async (...args: TArgs): Promise<TReturn | { success: false; error: string }> => {
-    const authResult = await verifyAdminAccess();
-    if (!authResult.success) {
-      return { success: false, error: authResult.error! } as TReturn;
-    }
-
-    try {
-      return await fn(authResult.currentUser!, ...args);
-    } catch (error) {
-      console.error('Product action error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred' 
-      } as TReturn;
-    }
-  };
 }
 
 function withAdminAuthOnly<TArgs extends unknown[], TReturn>(
@@ -106,21 +87,21 @@ export const getProductCount = withAdminAuthOnly(async (options?: ProductListOpt
 });
 
 // CREATE PRODUCT
-export const createProduct = withAdminAuth(async (currentUser: User, productData: CreateProductData) => {
+export const createProduct = withAdminAuthOnly(async (productData: CreateProductData) => {
   const createProductUseCase = container.get<CreateProductUseCase>(TYPES.CreateProductUseCase);
   const product = await createProductUseCase.execute(productData);
   return { success: true, product };
 });
 
 // UPDATE PRODUCT
-export const updateProduct = withAdminAuth(async (currentUser: User, productId: string, productData: UpdateProductData) => {
+export const updateProduct = withAdminAuthOnly(async (productId: string, productData: UpdateProductData) => {
   const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
   const product = await updateProductUseCase.execute(productId, productData);
   return { success: true, product };
 });
 
 // DELETE PRODUCT
-export const deleteProduct = withAdminAuth(async (currentUser: User, productId: string): Promise<{ success: boolean; error?: string }> => {
+export const deleteProduct = withAdminAuthOnly(async (productId: string): Promise<{ success: boolean; error?: string }> => {
   const deleteProductUseCase = container.get<DeleteProductUseCase>(TYPES.DeleteProductUseCase);
   await deleteProductUseCase.execute(productId);
   return { success: true };

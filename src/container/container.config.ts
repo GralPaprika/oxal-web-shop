@@ -23,7 +23,9 @@ import { DeleteUserUseCase } from '@/application/usecases/user/DeleteUserUseCase
 import type { IProductRepository } from '@/domain/product/product.repository';
 import { FirestoreProductRepository } from '@/infrastructure/repositories/FirestoreProductRepository';
 import { GetAllProductsUseCase, GetProductByIdUseCase, GetProductByCodeUseCase, GetProductCountUseCase } from '@/application/usecases/product/GetProductsUseCase';
-import { CreateProductUseCase, UpdateProductUseCase, DeleteProductUseCase } from '@/application/usecases/product/ProductCrudUseCase';
+import { CreateProductUseCase } from '@/application/usecases/product/CreateProductUseCase';
+import { UpdateProductUseCase } from '@/application/usecases/product/UpdateProductUseCase';
+import { DeleteProductUseCase } from '@/application/usecases/product/DeleteProductUseCase';
 
 // This will be our main DI container
 export const container = new Container();
