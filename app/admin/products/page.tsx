@@ -11,63 +11,63 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 
-// Mock data - in real app this would come from database
-const mockProducts = [
-  {
-    id: 1,
-    code: 'COL001',
-    name: 'Collar Lunar Místico',
-    image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&h=300&fit=crop',
-    price: 89.99,
-    stock: 12,
-    description: 'Hermoso collar artesanal con piedras naturales',
-    category: 'Joyería'
-  },
-  {
-    id: 2,
-    code: 'VEL002',
-    name: 'Vela Aromática Lavanda',
-    image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=300&fit=crop',
-    price: 24.99,
-    stock: 25,
-    description: 'Vela artesanal con aceites esenciales naturales',
-    category: 'Decoración'
-  },
-  {
-    id: 3,
-    code: 'MAN003',
-    name: 'Manta Boho Chic',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop',
-    price: 129.99,
-    stock: 8,
-    description: 'Manta tejida a mano con patrones bohemios',
-    category: 'Ropa'
-  },
-  {
-    id: 4,
-    code: 'MAC004',
-    name: 'Maceta Cerámica Artesanal',
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop',
-    price: 45.99,
-    stock: 15,
-    description: 'Maceta de cerámica hecha a mano',
-    category: 'Decoración'
-  },
-  {
-    id: 5,
-    code: 'BOL005',
-    name: 'Bolso Artesanal Cuero',
-    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop',
-    price: 199.99,
-    stock: 3,
-    description: 'Bolso de cuero genuino trabajado artesanalmente',
-    category: 'Accesorios'
-  },
-];
-
 async function AdminProductsPage() {
   const t = await getTranslations('admin.products');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
+  
+  // Mock data - in real app this would come from database
+  const mockProducts = [
+    {
+      id: 1,
+      code: 'COL001',
+      name: 'Collar Lunar Místico',
+      image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&h=300&fit=crop',
+      price: 89.99,
+      stock: 12,
+      description: 'Hermoso collar artesanal con piedras naturales',
+      categoryKey: 'jewelry'
+    },
+    {
+      id: 2,
+      code: 'VEL002',
+      name: 'Vela Aromática Lavanda',
+      image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=300&fit=crop',
+      price: 24.99,
+      stock: 25,
+      description: 'Vela artesanal con aceites esenciales naturales',
+      categoryKey: 'decoration'
+    },
+    {
+      id: 3,
+      code: 'MAN003',
+      name: 'Manta Boho Chic',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=300&fit=crop',
+      price: 129.99,
+      stock: 8,
+      description: 'Manta tejida a mano con patrones bohemios',
+      categoryKey: 'clothing'
+    },
+    {
+      id: 4,
+      code: 'MAC004',
+      name: 'Maceta Cerámica Artesanal',
+      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop',
+      price: 45.99,
+      stock: 15,
+      description: 'Maceta de cerámica hecha a mano',
+      categoryKey: 'decoration'
+    },
+    {
+      id: 5,
+      code: 'BOL005',
+      name: 'Bolso Artesanal Cuero',
+      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop',
+      price: 199.99,
+      stock: 3,
+      description: 'Bolso de cuero genuino trabajado artesanalmente',
+      categoryKey: 'accessories'
+    },
+  ];
   
   // No authentication check needed - handled by middleware
 
@@ -130,10 +130,10 @@ async function AdminProductsPage() {
               </button>
               <select className="px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                 <option>{t('allCategories')}</option>
-                <option>Joyería</option>
-                <option>Ropa</option>
-                <option>Decoración</option>
-                <option>Accesorios</option>
+                <option>{t('categories.jewelry')}</option>
+                <option>{t('categories.clothing')}</option>
+                <option>{t('categories.decoration')}</option>
+                <option>{t('categories.accessories')}</option>
               </select>
             </div>
           </div>
@@ -146,22 +146,22 @@ async function AdminProductsPage() {
               <thead className="bg-neutral-50 border-b border-neutral-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-                    Producto
+                    {t('table.product')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-                    Código
+                    {t('table.code')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-                    Precio
+                    {t('table.price')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-                    Stock
+                    {t('table.stock')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-                    Estado
+                    {t('table.status')}
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-text-secondary uppercase tracking-wider">
-                    Acciones
+                    {t('table.actions')}
                   </th>
                 </tr>
               </thead>
@@ -186,7 +186,7 @@ async function AdminProductsPage() {
                               {product.name}
                             </div>
                             <div className="text-sm text-text-secondary">
-                              {product.category}
+                              {t(`categories.${product.categoryKey}`)}
                             </div>
                             {product.description && (
                               <div className="text-xs text-text-muted mt-1 max-w-xs truncate">
@@ -208,7 +208,7 @@ async function AdminProductsPage() {
                       </td>
                       <td className="px-6 py-4">
                         <span className="text-sm font-medium text-text-primary">
-                          {product.stock} unidades
+                          {product.stock} {t('units')}
                         </span>
                       </td>
                       <td className="px-6 py-4">
@@ -237,11 +237,11 @@ async function AdminProductsPage() {
         {/* Pagination */}
         <div className="flex items-center justify-between mt-6">
           <div className="flex items-center text-sm text-text-secondary">
-            Mostrando 1-5 de 24 productos
+            {t('pagination.showing')} 1-5 {t('pagination.of')} 24 {t('pagination.products')}
           </div>
           <div className="flex items-center gap-2">
             <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-              Anterior
+              {t('pagination.previous')}
             </button>
             <button className="px-3 py-2 bg-amber-600 text-white rounded-lg text-sm">
               1
@@ -250,7 +250,7 @@ async function AdminProductsPage() {
               2
             </button>
             <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-              Siguiente
+              {t('pagination.next')}
             </button>
           </div>
         </div>

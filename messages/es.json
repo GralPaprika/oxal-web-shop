@@ -200,6 +200,12 @@
       "searchPlaceholder": "Buscar productos...",
       "filters": "Filtros",
       "allCategories": "Todas las categorías",
+      "categories": {
+        "jewelry": "Joyería",
+        "clothing": "Ropa",
+        "decoration": "Decoración",
+        "accessories": "Accesorios"
+      },
       "table": {
         "product": "Producto",
         "code": "Código",
