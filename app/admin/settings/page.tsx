@@ -46,7 +46,7 @@ export default async function AdminSettings() {
   }
 
   const breadcrumbs = [
-    { label: breadcrumbsT('dashboard'), href: '/admin/dashboard' },
+    { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },
     { label: breadcrumbsT('settings'), current: true }
   ];
 

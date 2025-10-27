@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import { AUTH_CONFIG } from '@/config/auth.config';
 
 export function useAdminBreadcrumbs() {
   const t = useTranslations('admin.common.breadcrumbs');
@@ -6,27 +7,31 @@ export function useAdminBreadcrumbs() {
   return {
     dashboard: {
       label: t('dashboard'),
-      href: '/admin/dashboard'
+      href: AUTH_CONFIG.ROUTES.DASHBOARD
     },
     products: {
       label: t('products'),
-      href: '/admin/products'
+      href: AUTH_CONFIG.ROUTES.PRODUCTS
     },
     clients: {
       label: t('clients'),
-      href: '/admin/clients'
+      href: AUTH_CONFIG.ROUTES.CLIENTS
     },
     orders: {
       label: t('orders'),
-      href: '/admin/orders'
+      href: AUTH_CONFIG.ROUTES.ORDERS
+    },
+    sales: {
+      label: t('sales'),
+      href: AUTH_CONFIG.ROUTES.SALES
     },
     images: {
       label: t('images'),
-      href: '/admin/images'
+      href: AUTH_CONFIG.ROUTES.IMAGES
     },
     settings: {
       label: t('settings'),
-      href: '/admin/settings'
+      href: AUTH_CONFIG.ROUTES.SETTINGS
     }
   };
 }

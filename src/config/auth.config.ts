@@ -11,6 +11,10 @@ export const AUTH_CONFIG = {
     LOGIN: '/admin/login',
     DASHBOARD: '/admin/dashboard',
     PRODUCTS: '/admin/products',
+    CLIENTS: '/admin/clients',
+    ORDERS: '/admin/orders',
+    IMAGES: '/admin/images',
+    SALES: '/admin/sales',
     SETTINGS: '/admin/settings',
   },
   

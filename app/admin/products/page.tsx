@@ -78,7 +78,7 @@ export default async function AdminProducts() {
   }
 
   const breadcrumbs = [
-    { label: breadcrumbsT('dashboard'), href: '/admin/dashboard' },
+    { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },
     { label: breadcrumbsT('products'), current: true }
   ];
 

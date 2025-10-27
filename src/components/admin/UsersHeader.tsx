@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { ReactNode } from 'react';
+import { AUTH_CONFIG } from '@/config/auth.config';
 
 interface BreadcrumbItem {
   label: string;
@@ -18,7 +19,7 @@ interface AdminHeaderProps {
 export function UsersHeader({ 
   breadcrumbs, 
   showBackButton = false, 
-  backButtonHref = '/admin/dashboard',
+  backButtonHref = AUTH_CONFIG.ROUTES.DASHBOARD,
   rightContent 
 }: AdminHeaderProps) {
   return (

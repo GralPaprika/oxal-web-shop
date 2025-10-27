@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { logoutAction } from '@/lib/auth';
+import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -17,7 +18,7 @@ const adminModules = [
     titleKey: 'modules.products.title',
     descriptionKey: 'modules.products.description',
     icon: CubeIcon,
-    href: '/admin/products',
+    href: AUTH_CONFIG.ROUTES.PRODUCTS,
     statsKey: 'modules.products.stats',
     color: 'bg-amber-500'
   },
@@ -25,7 +26,7 @@ const adminModules = [
     titleKey: 'modules.clients.title',
     descriptionKey: 'modules.clients.description',
     icon: UsersIcon,
-    href: '/admin/clients',
+    href: AUTH_CONFIG.ROUTES.CLIENTS,
     statsKey: 'modules.clients.stats',
     color: 'bg-blue-500'
   },
@@ -33,7 +34,7 @@ const adminModules = [
     titleKey: 'modules.images.title',
     descriptionKey: 'modules.images.description',
     icon: PhotoIcon,
-    href: '/admin/images',
+    href: AUTH_CONFIG.ROUTES.IMAGES,
     statsKey: 'modules.images.stats',
     color: 'bg-green-500'
   },
@@ -41,7 +42,7 @@ const adminModules = [
     titleKey: 'modules.sales.title',
     descriptionKey: 'modules.sales.description',
     icon: ChartBarIcon,
-    href: '/admin/sales',
+    href: AUTH_CONFIG.ROUTES.SALES,
     statsKey: 'modules.sales.stats',
     color: 'bg-purple-500'
   },
@@ -49,7 +50,7 @@ const adminModules = [
     titleKey: 'modules.orders.title',
     descriptionKey: 'modules.orders.description',
     icon: ShoppingBagIcon,
-    href: '/admin/orders',
+    href: AUTH_CONFIG.ROUTES.ORDERS,
     statsKey: 'modules.orders.stats',
     color: 'bg-red-500'
   },
@@ -57,7 +58,7 @@ const adminModules = [
     titleKey: 'modules.settings.title',
     descriptionKey: 'modules.settings.description',
     icon: CogIcon,
-    href: '/admin/settings',
+    href: AUTH_CONFIG.ROUTES.SETTINGS,
     statsKey: '',
     color: 'bg-gray-500'
   },
