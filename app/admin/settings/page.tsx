@@ -4,7 +4,7 @@ import { checkAuthStatus } from '@/lib/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import { SectionCard } from '@/components/admin/SectionCard';
-import { UserManagementTable } from '@/components/admin/UserManagementTable';
+import { UserManagementSection } from '@/components/admin/UserManagementSection';
 import { AddUserModal } from '@/components/admin/AddUserModal';
 import { getAllUsers } from '@/lib/actions/user.actions';
 import type { User } from '@/domain/user/user.entity';
@@ -114,38 +114,20 @@ export default async function AdminSettings() {
               <AddUserModal />
             }
           >
-            {users.length === 0 ? (
-              <div className="text-center py-12">
-                <div className="text-gray-500 mb-4">
-                  <UserIcon className="mx-auto h-12 w-12" />
-                </div>
-                <h3 className="mt-2 text-sm font-medium text-gray-900">{t('userManagement.errors.noUsersFound')}</h3>
-                <p className="mt-1 text-sm text-gray-500">
-                  {hasErrors ? t('userManagement.errors.unableToLoad') : t('userManagement.errors.noUsersCreated')}
-                </p>
-                {!hasErrors && (
-                  <div className="mt-6">
-                    <AddUserModal>
-                      <button
-                        type="button"
-                        className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-amber-600 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
-                      >
-                        <UserIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                        {t('userManagement.errors.createFirstUser')}
-                      </button>
-                    </AddUserModal>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <UserManagementTable
-                columns={userColumns}
-                data={users}
-                showRole={true}
-                roleLabels={roleLabels}
-                statusLabels={statusLabels}
-              />
-            )}
+            <UserManagementSection
+              users={users}
+              hasErrors={hasErrors}
+              errorMessage={errorMessage}
+              userColumns={userColumns}
+              roleLabels={roleLabels}
+              statusLabels={statusLabels}
+              translations={{
+                noUsersFound: t('userManagement.errors.noUsersFound'),
+                unableToLoad: t('userManagement.errors.unableToLoad'),
+                noUsersCreated: t('userManagement.errors.noUsersCreated'),
+                createFirstUser: t('userManagement.errors.createFirstUser')
+              }}
+            />
           </SectionCard>
         </div>
       </div>

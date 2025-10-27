@@ -2,6 +2,7 @@
 
 import { container } from '@/container/container.config';
 import { GetAllUsersUseCase, GetUsersByRoleUseCase } from '@/application/usecases/user/GetUsersUseCase';
+import { UpdateUserUseCase } from '@/application/user/UpdateUserUseCase';
 import { TYPES } from '@/types/container.types';
 import type { User } from '@/domain/user/user.entity';
 
@@ -57,6 +58,27 @@ export async function getAdminUsers(): Promise<{ success: boolean; users?: User[
     return {
       success: false,
       error: 'Failed to fetch admin users'
+    };
+  }
+}
+
+export async function updateUser(userData: {
+  id: string;
+  displayName?: string;
+  email?: string;
+  role?: 'admin' | 'cashier';
+  status?: 'active' | 'inactive' | 'suspended';
+}): Promise<{ success: boolean; user?: User; error?: string }> {
+  try {
+    const updateUserUseCase = container.get<UpdateUserUseCase>(TYPES.UpdateUserUseCase);
+    const result = await updateUserUseCase.execute(userData);
+    
+    return result;
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return {
+      success: false,
+      error: 'Failed to update user'
     };
   }
 }

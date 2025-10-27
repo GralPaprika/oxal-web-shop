@@ -7,7 +7,6 @@ import type { User } from '@/domain/user/user.entity';
 interface UserCardProps {
   user: User;
   showRole?: boolean;
-  showLastLogin?: boolean;
   showRegisteredAt?: boolean;
   showOrders?: boolean;
   onEdit?: (user: User) => void;
@@ -20,7 +19,6 @@ interface UserCardProps {
 export function UserCard({ 
   user, 
   showRole = false,
-  showLastLogin = false,
   showRegisteredAt = false,
   showOrders = false,
   onEdit,
@@ -92,13 +90,6 @@ export function UserCard({
           {statusLabels[user.status] || user.status}
         </span>
       </td>
-
-      {/* Last Login */}
-      {showLastLogin && user.lastLoginAt && (
-        <td className="px-6 py-4 text-sm text-text-secondary">
-          {formatDate(user.lastLoginAt)}
-        </td>
-      )}
 
       {/* Registered At */}
       {showRegisteredAt && user.createdAt && (

@@ -16,6 +16,7 @@ export const TYPES = {
   GetUsersByRoleUseCase: Symbol.for('GetUsersByRoleUseCase'),
   GetUserByIdUseCase: Symbol.for('GetUserByIdUseCase'),
   CreateUserUseCase: Symbol.for('CreateUserUseCase'),
+  UpdateUserUseCase: Symbol.for('UpdateUserUseCase'),
   
   // Add your service identifiers here as needed
 } as const;
