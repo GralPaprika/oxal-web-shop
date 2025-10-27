@@ -5,8 +5,9 @@ import { GetAllProductsUseCase, GetProductByIdUseCase, GetProductCountUseCase } 
 import { CreateProductUseCase } from '@/application/usecases/product/CreateProductUseCase';
 import { UpdateProductUseCase } from '@/application/usecases/product/UpdateProductUseCase';
 import { DeleteProductUseCase } from '@/application/usecases/product/DeleteProductUseCase';
+import { GetCategoriesUseCase } from '@/application/usecases/product/GetCategoriesUseCase';
 import { TYPES } from '@/types/container.types';
-import type { Product, ProductListOptions, CreateProductData, UpdateProductData } from '@/domain/product/product.entity';
+import type { Product, ProductListOptions, CreateProductData, UpdateProductData, ProductCategory } from '@/domain/product/product.entity';
 import type { User } from '@/domain/user/user.entity';
 import { checkAuthStatus, getCurrentUser } from '@/lib/auth';
 
@@ -106,3 +107,18 @@ export const deleteProduct = withAdminAuthOnly(async (productId: string): Promis
   await deleteProductUseCase.execute(productId);
   return { success: true };
 });
+
+// GET ALL CATEGORIES
+export async function getAllCategories(): Promise<{ success: boolean; categories?: ProductCategory[]; error?: string }> {
+  try {
+    const getCategoriesUseCase = container.get<GetCategoriesUseCase>(TYPES.GetCategoriesUseCase);
+    const categories = await getCategoriesUseCase.execute();
+    return { success: true, categories };
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : 'Failed to fetch categories' 
+    };
+  }
+}

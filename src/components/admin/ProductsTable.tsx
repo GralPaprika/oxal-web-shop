@@ -27,6 +27,10 @@ interface ProductsTableProps {
       decoration: string;
       accessories: string;
     };
+    empty: {
+      title: string;
+      subtitle: string;
+    };
   };
   onEditProduct?: (product: Product) => void;
   onDeleteProduct?: (product: Product) => void;
@@ -161,8 +165,8 @@ export function ProductsTable({
       
       {products.length === 0 && (
         <div className="text-center py-12">
-          <div className="text-neutral-400 text-lg mb-2">No products found</div>
-          <div className="text-neutral-500 text-sm">Start by adding your first product</div>
+          <div className="text-neutral-400 text-lg mb-2">{t.empty.title}</div>
+          <div className="text-neutral-500 text-sm">{t.empty.subtitle}</div>
         </div>
       )}
     </div>

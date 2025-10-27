@@ -1,8 +1,9 @@
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/UsersHeader';
 import { ProductsTable } from '@/src/components/admin/ProductsTable';
-import { getAllProducts } from '@/lib/actions/product.actions';
+import { getAllProducts, getAllCategories } from '@/lib/actions/product.actions';
 import { 
   PlusIcon, 
   MagnifyingGlassIcon,
@@ -14,11 +15,11 @@ async function AdminProductsPage() {
   const t = await getTranslations('admin.products');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
   
-  // Fetch real products from database
   const productsResult = await getAllProducts();
   const products = productsResult.success ? productsResult.products || [] : [];
   
-  // No authentication check needed - handled by middleware
+  const categoriesResult = await getAllCategories();
+  const categories = categoriesResult.success ? categoriesResult.categories || [] : [];
 
   const breadcrumbs = [
     { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },
@@ -26,10 +27,12 @@ async function AdminProductsPage() {
   ];
 
   const rightContent = (
-    <Button className="flex items-center gap-2">
-      <PlusIcon className="h-4 w-4" />
-      {t('newProduct')}
-    </Button>
+    <Link href="/admin/products/create">
+      <Button className="flex items-center gap-2">
+        <PlusIcon className="h-4 w-4" />
+        {t('newProduct')}
+      </Button>
+    </Link>
   );
 
   return (
@@ -73,10 +76,11 @@ async function AdminProductsPage() {
               </button>
               <select className="px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
                 <option>{t('allCategories')}</option>
-                <option>{t('categories.jewelry')}</option>
-                <option>{t('categories.clothing')}</option>
-                <option>{t('categories.decoration')}</option>
-                <option>{t('categories.accessories')}</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -101,10 +105,14 @@ async function AdminProductsPage() {
             },
             units: t('units'),
             categories: {
-              jewelry: t('categories.jewelry'),
-              clothing: t('categories.clothing'),
-              decoration: t('categories.decoration'),
-              accessories: t('categories.accessories'),
+              jewelry: categories.find(c => c.key === 'jewelry')?.name || '',
+              clothing: categories.find(c => c.key === 'clothing')?.name || '',
+              decoration: categories.find(c => c.key === 'decoration')?.name || '',
+              accessories: categories.find(c => c.key === 'accessories')?.name || '',
+            },
+            empty: {
+              title: t('empty.title'),
+              subtitle: t('empty.subtitle'),
             },
           }}
         />
@@ -133,5 +141,4 @@ async function AdminProductsPage() {
   );
 }
 
-// Export the page directly - no auth wrapper needed (handled by middleware)
 export default AdminProductsPage;

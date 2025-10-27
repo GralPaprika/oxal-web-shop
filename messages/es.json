@@ -226,6 +226,60 @@
         "products": "productos",
         "previous": "Anterior",
         "next": "Siguiente"
+      },
+      "empty": {
+        "title": "No se encontraron productos",
+        "subtitle": "Comienza agregando tu primer producto"
+      },
+      "create": {
+        "title": "Crear Nuevo Producto",
+        "subtitle": "Agrega un nuevo producto artesanal a tu catálogo",
+        "form": {
+          "code": "Código del Producto",
+          "codePlaceholder": "Ej: COL001",
+          "name": "Nombre del Producto",
+          "namePlaceholder": "Ej: Collar Artesanal de Plata",
+          "description": "Descripción",
+          "descriptionPlaceholder": "Describe las características del producto...",
+          "price": "Precio",
+          "stock": "Cantidad en Stock",
+          "category": "Categoría",
+          "selectCategory": "Seleccionar categoría",
+          "loadingCategories": "Cargando categorías...",
+          "images": "Imágenes del Producto",
+          "imageUrlPlaceholder": "URL de la imagen",
+          "addImage": "Agregar Imagen",
+          "primaryImage": "Imagen Principal",
+          "image": "Imagen",
+          "tags": "Etiquetas",
+          "tagPlaceholder": "Ej: artesanal, hecho a mano",
+          "addTag": "Agregar Etiqueta",
+          "metadata": "Información Adicional",
+          "weight": "Peso",
+          "length": "Largo",
+          "width": "Ancho",
+          "height": "Alto",
+          "materials": "Materiales",
+          "materialPlaceholder": "Ej: plata, cuero, piedras",
+          "addMaterial": "Agregar Material",
+          "createProduct": "Crear Producto",
+          "creating": "Creando...",
+          "cancel": "Cancelar"
+        },
+        "validation": {
+          "nameRequired": "El nombre del producto es obligatorio",
+          "codeRequired": "El código del producto es obligatorio",
+          "priceRequired": "El precio debe ser mayor a 0",
+          "stockRequired": "La cantidad en stock no puede ser negativa",
+          "categoryRequired": "Debes seleccionar una categoría"
+        },
+        "success": {
+          "created": "Producto creado exitosamente"
+        },
+        "error": {
+          "failed": "Error al crear el producto. Inténtalo de nuevo.",
+          "categoriesLoad": "Error al cargar las categorías. Inténtalo de nuevo."
+        }
       }
     },
     "settings": {
