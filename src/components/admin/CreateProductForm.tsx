@@ -4,6 +4,7 @@ import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { AUTH_CONFIG } from '@/config/auth.config';
 import { CreateProductData, ProductCategory } from '@/src/domain/product/product.entity';
 import { createProduct, getAllCategories } from '@/lib/actions/product.actions';
 import { Button } from '@/components/ui/Button';
@@ -120,7 +121,7 @@ export function CreateProductForm() {
         if (result.success) {
           setSuccess(t('success.created'));
           setTimeout(() => {
-            router.push('/admin/products');
+            router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
           }, 1500);
         } else {
           setError('error' in result ? result.error : t('error.failed'));
@@ -605,7 +606,7 @@ export function CreateProductForm() {
         <Button
           type="button"
           variant="outline"
-          onClick={() => router.push('/admin/products')}
+          onClick={() => router.push(AUTH_CONFIG.ROUTES.PRODUCTS)}
           disabled={isPending}
         >
           {t('form.cancel')}

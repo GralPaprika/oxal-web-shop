@@ -27,7 +27,7 @@ async function AdminProductsPage() {
   ];
 
   const rightContent = (
-    <Link href="/admin/products/create">
+    <Link href={AUTH_CONFIG.ROUTES.PRODUCTS_CREATE}>
       <Button className="flex items-center gap-2">
         <PlusIcon className="h-4 w-4" />
         {t('newProduct')}

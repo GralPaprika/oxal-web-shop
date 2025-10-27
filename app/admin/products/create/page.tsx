@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/UsersHeader';
-import { CreateProductForm } from '../../../../src/components/admin/CreateProductForm';
+import { CreateProductForm } from '@/src/components/admin/CreateProductForm';
 
 async function CreateProductPage() {
   const t = await getTranslations('admin.products');
@@ -9,7 +9,7 @@ async function CreateProductPage() {
   
   const breadcrumbs = [
     { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },
-    { label: breadcrumbsT('products'), href: '/admin/products' },
+    { label: breadcrumbsT('products'), href: AUTH_CONFIG.ROUTES.PRODUCTS },
     { label: t('create.title'), current: true }
   ];
 
