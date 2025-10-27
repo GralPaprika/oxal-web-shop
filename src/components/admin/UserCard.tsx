@@ -64,7 +64,7 @@ export function UserCard({
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
           <Image 
-            src={user.photoURL || '/default-avatar.png'} 
+            src={user.photoURL || '/default-avatar.svg'} 
             alt={user.displayName || user.email}
             width={32}
             height={32}

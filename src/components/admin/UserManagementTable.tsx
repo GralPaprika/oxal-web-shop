@@ -10,7 +10,6 @@ interface UserManagementTableProps {
   onEdit?: (user: User) => void;
   onDelete?: (user: User) => void;
   showRole?: boolean;
-  showLastLogin?: boolean;
   showRegisteredAt?: boolean;
   showOrders?: boolean;
   roleLabels?: Record<string, string>;
@@ -24,7 +23,6 @@ export function UserManagementTable({
   onEdit,
   onDelete,
   showRole = false,
-  showLastLogin = false,
   showRegisteredAt = false,
   showOrders = false,
   roleLabels = {},
@@ -57,7 +55,6 @@ export function UserManagementTable({
           key={user.id}
           user={user}
           showRole={showRole}
-          showLastLogin={showLastLogin}
           showRegisteredAt={showRegisteredAt}
           showOrders={showOrders}
           onEdit={handleEdit}

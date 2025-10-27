@@ -55,7 +55,6 @@ export default async function AdminSettings() {
     { key: 'user', label: t('userManagement.table.user') },
     { key: 'role', label: t('userManagement.table.role') },
     { key: 'status', label: t('userManagement.table.status') },
-    { key: 'lastLogin', label: t('userManagement.table.lastLogin') },
     { key: 'actions', label: t('userManagement.table.actions') }
   ];
 
@@ -143,7 +142,6 @@ export default async function AdminSettings() {
                 columns={userColumns}
                 data={users}
                 showRole={true}
-                showLastLogin={true}
                 roleLabels={roleLabels}
                 statusLabels={statusLabels}
               />
