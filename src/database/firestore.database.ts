@@ -48,7 +48,7 @@ export class FirestoreDatabase implements IDatabase {
 
   async update<T>(collectionName: string, id: string, data: Partial<T>): Promise<void> {
     const docRef = doc(this.db, collectionName, id);
-    await updateDoc(docRef, data as any);
+    await updateDoc(docRef, data as Record<string, unknown>);
   }
 
   async delete(collectionName: string, id: string): Promise<void> {
@@ -60,7 +60,7 @@ export class FirestoreDatabase implements IDatabase {
     collectionName: string, 
     field: string, 
     operator: '==' | '!=' | '<' | '<=' | '>' | '>=', 
-    value: any
+    value: string | number | boolean | Date
   ): Promise<T[]> {
     const q = query(collection(this.db, collectionName), where(field, operator, value));
     const querySnapshot = await getDocs(q);
