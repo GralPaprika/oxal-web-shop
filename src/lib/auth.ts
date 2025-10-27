@@ -7,6 +7,8 @@ import { TYPES } from '@/types/container.types';
 import { LoginUseCase } from '@/application/usecases/auth/LoginUseCase';
 import { LogoutUseCase } from '@/application/usecases/auth/LogoutUseCase';
 import { GetCurrentUserUseCase } from '@/application/usecases/auth/GetCurrentUserUseCase';
+import { GetUserByIdUseCase } from '@/application/usecases/user/GetUsersUseCase';
+import type { User } from '@/domain/user/user.entity';
 import { AUTH_CONFIG } from '@/config/auth.config';
 
 export async function loginAction(formData: FormData) {
@@ -64,5 +66,26 @@ export async function checkAuthStatus() {
   } catch {
     // If there's an error getting the user, consider them not authenticated
     return false;
+  }
+}
+
+export async function getCurrentUser(): Promise<User | null> {
+  try {
+    // First, get the basic auth user to get the UID
+    const getCurrentUserUseCase = container.get<GetCurrentUserUseCase>(TYPES.GetCurrentUserUseCase);
+    const authUser = await getCurrentUserUseCase.execute();
+    
+    if (!authUser) {
+      return null;
+    }
+
+    // Then, get the full user entity using the UID
+    const getUserByIdUseCase = container.get<GetUserByIdUseCase>(TYPES.GetUserByIdUseCase);
+    const fullUser = await getUserByIdUseCase.execute(authUser.uid);
+    
+    return fullUser;
+  } catch (error) {
+    console.error('Error getting current user:', error);
+    return null;
   }
 }

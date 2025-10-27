@@ -3,82 +3,124 @@
 import { container } from '@/container/container.config';
 import { GetAllUsersUseCase, GetUsersByRoleUseCase } from '@/application/usecases/user/GetUsersUseCase';
 import { UpdateUserUseCase } from '@/application/user/UpdateUserUseCase';
+import { CreateUserUseCase, CreateUserRequest } from '@/application/user/CreateUserUseCase';
 import { TYPES } from '@/types/container.types';
 import type { User } from '@/domain/user/user.entity';
+import { checkAuthStatus, getCurrentUser } from '@/lib/auth';
 
-export async function getAllUsers(): Promise<{ success: boolean; users?: User[]; error?: string }> {
+// Helper function to handle authentication and authorization (DRY principle)
+async function verifyAdminAccess(): Promise<{ success: boolean; error?: string; currentUser?: User }> {
   try {
-    const getAllUsersUseCase = container.get<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase);
-    const users = await getAllUsersUseCase.execute();
-    
+    // Security Check: Verify user is authenticated
+    const isAuthenticated = await checkAuthStatus();
+    if (!isAuthenticated) {
+      return {
+        success: false,
+        error: 'Unauthorized: Authentication required'
+      };
+    }
+
+    // Security Check: Verify user has admin privileges
+    const currentUser = await getCurrentUser();
+    if (!currentUser || currentUser.role !== 'admin') {
+      return {
+        success: false,
+        error: 'Unauthorized: Admin privileges required'
+      };
+    }
+
     return {
       success: true,
-      users
+      currentUser
     };
   } catch (error) {
-    console.error('Error fetching all users:', error);
+    console.error('Error verifying admin access:', error);
     return {
       success: false,
-      error: 'Failed to fetch users'
+      error: 'Authentication verification failed'
     };
   }
 }
 
-export async function getUsersByRole(role: User['role']): Promise<{ success: boolean; users?: User[]; error?: string }> {
-  try {
-    const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
-    const users = await getUsersByRoleUseCase.execute(role);
+// 🎯 Elegant Middleware: Higher-Order Function for Admin Authentication
+function withAdminAuth<TArgs extends unknown[], TReturn>(
+  fn: (currentUser: User, ...args: TArgs) => Promise<TReturn>
+) {
+  return async (...args: TArgs): Promise<TReturn | { success: false; error: string }> => {
+    const authResult = await verifyAdminAccess();
+    if (!authResult.success) {
+      return { success: false, error: authResult.error! } as TReturn;
+    }
     
-    return {
-      success: true,
-      users
-    };
-  } catch (error) {
-    console.error('Error fetching users by role:', error);
-    return {
-      success: false,
-      error: 'Failed to fetch users'
-    };
-  }
+    try {
+      return await fn(authResult.currentUser!, ...args);
+    } catch (error) {
+      console.error('Error in authenticated function:', error);
+      return { 
+        success: false, 
+        error: 'Operation failed' 
+      } as TReturn;
+    }
+  };
 }
 
-export async function getAdminUsers(): Promise<{ success: boolean; users?: User[]; error?: string }> {
-  try {
-    const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
-    
-    // Get all admin users
-    const admins = await getUsersByRoleUseCase.execute('admin');
-    
-    return {
-      success: true,
-      users: admins
-    };
-  } catch (error) {
-    console.error('Error fetching admin users:', error);
-    return {
-      success: false,
-      error: 'Failed to fetch admin users'
-    };
-  }
-}
+export const getAllUsers = withAdminAuth(async (_currentUser: User): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+  const getAllUsersUseCase = container.get<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase);
+  const users = await getAllUsersUseCase.execute();
+  
+  return {
+    success: true,
+    users
+  };
+});
 
-export async function updateUser(userData: {
+export const getUsersByRole = withAdminAuth(async (_currentUser: User, role: User['role']): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+  const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
+  const users = await getUsersByRoleUseCase.execute(role);
+  
+  return {
+    success: true,
+    users
+  };
+});
+
+export const getAdminUsers = withAdminAuth(async (_currentUser: User): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+  const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
+  const admins = await getUsersByRoleUseCase.execute('admin');
+  
+  return {
+    success: true,
+    users: admins
+  };
+});
+
+export const updateUser = withAdminAuth(async (currentUser: User, userData: {
   id: string;
   displayName?: string;
   email?: string;
   role?: 'admin' | 'cashier';
   status?: 'active' | 'inactive' | 'suspended';
-}): Promise<{ success: boolean; user?: User; error?: string }> {
-  try {
-    const updateUserUseCase = container.get<UpdateUserUseCase>(TYPES.UpdateUserUseCase);
-    const result = await updateUserUseCase.execute(userData);
-    
-    return result;
-  } catch (error) {
-    console.error('Error updating user:', error);
+}): Promise<{ success: boolean; user?: User; error?: string }> => {
+  // Self-protection logic (business rules)
+  if (currentUser.id === userData.id && userData.role && userData.role !== 'admin') {
     return {
       success: false,
-      error: 'Failed to update user'
+      error: 'Cannot remove admin privileges from your own account'
     };
   }
-}
+
+  if (currentUser.id === userData.id && userData.status && userData.status !== 'active') {
+    return {
+      success: false,
+      error: 'Cannot change status of your own account'
+    };
+  }
+
+  const updateUserUseCase = container.get<UpdateUserUseCase>(TYPES.UpdateUserUseCase);
+  return await updateUserUseCase.execute(userData);
+});
+
+export const createUser = withAdminAuth(async (currentUser: User, userData: CreateUserRequest) => {
+  const createUserUseCase = container.get<CreateUserUseCase>(TYPES.CreateUserUseCase);
+  return await createUserUseCase.execute(userData);
+});

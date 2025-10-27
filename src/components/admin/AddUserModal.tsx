@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { createUser } from '@/lib/actions/create-user.actions';
+import { createUser } from '@/lib/actions/user.actions';
 
 export function AddUserModal({ 
   trigger,
