@@ -147,12 +147,12 @@ export function EditProductForm({ product }: EditProductFormProps) {
         errors={errors}
         translations={{
           fields: {
-            code: `${t('fields.code')} *`,
-            name: `${t('fields.name')} *`,
-            description: `${t('fields.description')} *`,
-            price: `${t('fields.price')} *`,
-            stock: `${t('fields.stock')} *`,
-            category: `${t('fields.category')} *`,
+            code: `${t('fields.code')}`,
+            name: `${t('fields.name')}`,
+            description: `${t('fields.description')}`,
+            price: `${t('fields.price')}`,
+            stock: `${t('fields.stock')}`,
+            category: `${t('fields.category')}`,
           },
           placeholders: {
             code: t('placeholders.code'),

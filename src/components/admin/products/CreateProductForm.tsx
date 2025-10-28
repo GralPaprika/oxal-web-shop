@@ -198,12 +198,12 @@ export function CreateProductForm() {
         errors={{}}
         translations={{
           fields: {
-            code: `${t('form.code')} *`,
-            name: `${t('form.name')} *`,
+            code: `${t('form.code')}`,
+            name: `${t('form.name')}`,
             description: t('form.description'),
-            price: `${t('form.price')} *`,
-            stock: `${t('form.stock')} *`,
-            category: `${t('form.category')} *`,
+            price: `${t('form.price')}`,
+            stock: `${t('form.stock')}`,
+            category: `${t('form.category')}`,
           },
           placeholders: {
             code: t('form.codePlaceholder'),
