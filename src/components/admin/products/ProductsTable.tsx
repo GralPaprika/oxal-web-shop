@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, StarIcon } from '@heroicons/react/24/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { DeleteProductDialog } from './DeleteProductDialog';
+import { updateProduct } from '@/lib/actions/product.actions';
 import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableProps {
@@ -86,6 +88,24 @@ export function ProductsTable({
   const handleCloseDeleteDialog = () => {
     setIsDeleteDialogOpen(false);
     setDeleteProduct(null);
+  };
+
+  const handleToggleStar = async (product: Product) => {
+    try {
+      const result = await updateProduct(product.id, {
+        isStarred: !product.isStarred
+      });
+      
+      if (result.success) {
+        // Update the local products array
+        const updatedProducts = products.map(p => 
+          p.id === product.id ? { ...p, isStarred: !p.isStarred } : p
+        );
+        setProducts(updatedProducts);
+      }
+    } catch (error) {
+      console.error('Error toggling star:', error);
+    }
   };
 
   const getStockStatus = (stock: number) => {
@@ -177,7 +197,7 @@ export function ProductsTable({
                         {product.description && (
                           <div className="text-xs text-text-muted mt-1 max-w-xs truncate">
                             {product.description}
-                          </div>
+                           </div>
                         )}
                       </div>
                     </div>
@@ -204,6 +224,18 @@ export function ProductsTable({
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
+                      {/* Star Toggle Button */}
+                      <button 
+                        onClick={() => handleToggleStar(product)}
+                        className="p-2 hover:bg-amber-50 rounded-lg transition-colors group"
+                        title={product.isStarred ? "Quitar de destacados" : "Marcar como destacado"}
+                      >
+                        {product.isStarred ? (
+                          <StarIconSolid className="h-4 w-4 text-yellow-500" />
+                        ) : (
+                          <StarIcon className="h-4 w-4 text-gray-400 group-hover:text-yellow-400" />
+                        )}
+                      </button>
                       <button 
                         onClick={() => onEditProduct?.(product)}
                         className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
