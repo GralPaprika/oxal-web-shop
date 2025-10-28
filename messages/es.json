@@ -254,6 +254,8 @@
           "clickToUpload": "Click para subir",
           "uploading": "Subiendo...",
           "uploadError": "Error al subir imagen",
+          "file": "archivo",
+          "files": "archivos",
           "tags": "Etiquetas",
           "tagPlaceholder": "Ej: artesanal, hecho a mano",
           "addTag": "Agregar Etiqueta",

@@ -8,7 +8,7 @@ import { CreateProductData, ProductCategory } from '@/src/domain/product/product
 import { createProduct, getAllCategories, updateProductImages } from '@/lib/actions/product.actions';
 import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
-import { ImageUploadGrid } from '@/src/components/admin/ImageUploadGrid';
+import { ImageUploadGrid } from '@/components/admin/ImageUploadGrid';
 import { 
   PlusIcon,
   XMarkIcon
@@ -342,7 +342,9 @@ export function CreateProductForm() {
           reorderHint: t('form.reorderHint'),
           clickToUpload: t('form.clickToUpload'),
           uploading: t('form.uploading'),
-          uploadError: t('form.uploadError')
+          uploadError: t('form.uploadError'),
+          file: t('form.file'),
+          files: t('form.files')
         }}
       />
 
