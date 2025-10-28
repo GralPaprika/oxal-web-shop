@@ -8,10 +8,9 @@ import { CreateProductData, ProductCategory } from '@/src/domain/product/product
 import { createProduct, getAllCategories, updateProductImages } from '@/lib/actions/product.actions';
 import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
+import { StringArrayInput } from '@/components/ui/StringArrayInput';
 import { ImageUploadGrid } from './ImageUploadGrid';
 import { ProductFormFields } from './ProductFormFields';
-import { TagsInput } from './TagsInput';
-import { MaterialsInput } from './MaterialsInput';
 import { MetadataFields } from './MetadataFields';
 
 interface ProductImage {
@@ -238,18 +237,20 @@ export function CreateProductForm() {
 
       {/* Additional Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TagsInput
+        <StringArrayInput
           label={t('form.tags')}
           placeholder={t('form.tagPlaceholder')}
-          tags={tags}
-          onTagsChange={setTags}
+          items={tags}
+          onItemsChange={setTags}
+          id="tags"
         />
         
-        <MaterialsInput
+        <StringArrayInput
           label={t('form.materials')}
           placeholder={t('form.materialPlaceholder')}
-          materials={materials}
-          onMaterialsChange={setMaterials}
+          items={materials}
+          onItemsChange={setMaterials}
+          id="materials"
         />
       </div>
 

@@ -7,10 +7,9 @@ import { AUTH_CONFIG } from '@/config/auth.config';
 import { CreateProductData, ProductCategory, Product } from '@/src/domain/product/product.entity';
 import { updateProduct, getAllCategories } from '@/lib/actions/product.actions';
 import { Button } from '@/components/ui/Button';
+import { StringArrayInput } from '@/components/ui/StringArrayInput';
 import { ImageUploadGrid } from './ImageUploadGrid';
 import { ProductFormFields } from './ProductFormFields';
-import { TagsInput } from './TagsInput';
-import { MaterialsInput } from './MaterialsInput';
 import { MetadataFields } from './MetadataFields';
 
 interface ProductImage {
@@ -189,18 +188,20 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
       {/* Additional Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <TagsInput
+        <StringArrayInput
           label={t('fields.tags')}
           placeholder={t('placeholders.tags')}
-          tags={tags}
-          onTagsChange={setTags}
+          items={tags}
+          onItemsChange={setTags}
+          id="tags"
         />
         
-        <MaterialsInput
+        <StringArrayInput
           label={t('fields.materials')}
           placeholder={t('placeholders.materials')}
-          materials={materials}
-          onMaterialsChange={setMaterials}
+          items={materials}
+          onItemsChange={setMaterials}
+          id="materials"
         />
       </div>
 

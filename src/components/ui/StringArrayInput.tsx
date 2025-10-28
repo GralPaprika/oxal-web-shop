@@ -3,68 +3,76 @@
 import { useState } from 'react';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
-interface TagsInputProps {
-  tags: string[];
-  onTagsChange: (tags: string[]) => void;
+interface StringArrayInputProps {
+  items: string[];
+  onItemsChange: (items: string[]) => void;
   placeholder?: string;
   label?: string;
+  id?: string;
 }
 
-export function TagsInput({ tags, onTagsChange, placeholder, label }: TagsInputProps) {
-  const [tagInput, setTagInput] = useState('');
+export function StringArrayInput({ 
+  items, 
+  onItemsChange, 
+  placeholder, 
+  label,
+  id 
+}: StringArrayInputProps) {
+  const [inputValue, setInputValue] = useState('');
 
-  const addTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      onTagsChange([...tags, tagInput.trim()]);
-      setTagInput('');
+  const addItem = () => {
+    if (inputValue.trim() && !items.includes(inputValue.trim())) {
+      onItemsChange([...items, inputValue.trim()]);
+      setInputValue('');
     }
   };
 
-  const removeTag = (tagToRemove: string) => {
-    onTagsChange(tags.filter(tag => tag !== tagToRemove));
+  const removeItem = (itemToRemove: string) => {
+    onItemsChange(items.filter(item => item !== itemToRemove));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      addTag();
+      addItem();
     }
   };
 
   return (
     <div>
       {label && (
-        <label className="block text-sm font-medium text-text-primary mb-2">
+        <label htmlFor={id} className="block text-sm font-medium text-text-primary mb-2">
           {label}
         </label>
       )}
       <div className="flex gap-2 mb-2">
         <input
           type="text"
-          value={tagInput}
-          onChange={(e) => setTagInput(e.target.value)}
+          id={id}
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
           className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors"
           placeholder={placeholder}
         />
         <button
           type="button"
-          onClick={addTag}
+          onClick={addItem}
           className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
         >
           <PlusIcon className="h-4 w-4" />
         </button>
       </div>
       <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
+        {items.map((item) => (
           <span
-            key={tag}
+            key={item}
             className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm"
           >
-            {tag}
+            {item}
             <button
               type="button"
-              onClick={() => removeTag(tag)}
+              onClick={() => removeItem(item)}
               className="hover:text-amber-900"
             >
               <XMarkIcon className="h-3 w-3" />
