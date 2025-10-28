@@ -39,7 +39,6 @@ export function ImageUploadGrid({
   maxImages = imageUtils.DEFAULT_MAX_IMAGES
 }: ImageUploadGridProps) {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [isDragOver, setIsDragOver] = useState(false);
   const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
   const [uploadErrors, setUploadErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -161,91 +160,23 @@ export function ImageUploadGrid({
     onImagesChange(updatedImages);
   };
 
-  // Drag and drop handlers
+  // Drag and drop handlers for image reordering
   const handleDragStart = (index: number) => {
     setDraggedIndex(index);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    // Only set drag over to false if we're leaving the grid container
-    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      setIsDragOver(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent, targetIndex?: number) => {
-    e.preventDefault();
-    setIsDragOver(false);
-
-    if (e.dataTransfer.files.length > 0) {
-      // Files dropped from system - add them to the end
-      handleFileUpload(e.dataTransfer.files);
-    } else if (draggedIndex !== null && targetIndex !== undefined) {
-      // Image reordering
-      const reorderedImages = imageUtils.reorderImages(images, draggedIndex, targetIndex);
-      onImagesChange(reorderedImages);
-    }
-
-    setDraggedIndex(null);
-  };
-
-  // Handle drag and drop for the entire grid area
-  const handleGridDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(true);
-  };
-
-  const handleGridDragLeave = (e: React.DragEvent) => {
-    // Only set drag over to false if we're leaving the grid container
-    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      setIsDragOver(false);
-    }
-  };
-
-  const handleGridDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-
-    if (e.dataTransfer.files.length > 0) {
-      // Files dropped from system - add them to the end
-      handleFileUpload(e.dataTransfer.files);
-    }
-
-    setDraggedIndex(null);
   };
 
   return (
     <div className="space-y-4">
       {/* Instructions */}
       <p className="text-sm text-gray-600">
-        {translations.reorderHint} También puedes arrastrar imágenes desde tu computadora a cualquier parte del área.
+        {translations.reorderHint}
       </p>
 
       {/* Image Grid - Fixed 3x2 layout with proper spacing */}
       <div 
-        className={`relative grid grid-cols-3 gap-4 p-4 border-2 border-dashed rounded-lg transition-all duration-200 ${
-          isDragOver ? 'border-primary-400 bg-primary-500 bg-opacity-20' : 'border-gray-300'
-        }`}
+        className="relative grid grid-cols-3 gap-4 p-4 border-2 border-dashed border-gray-300 rounded-lg"
         style={{ minHeight: '320px' }}
-        onDragOver={handleGridDragOver}
-        onDragLeave={handleGridDragLeave}
-        onDrop={handleGridDrop}
       >
-        {/* Drag overlay */}
-        {isDragOver && (
-          <div className="absolute inset-0 bg-white bg-opacity-70 border-2 border-primary-400 border-dashed rounded-lg flex items-center justify-center z-10">
-            <div className="text-center">
-              <CloudArrowUpIcon className="h-16 w-16 text-primary-500 mx-auto mb-3" />
-              <p className="text-lg font-semibold text-primary-800">Suelta las imágenes aquí</p>
-              <p className="text-sm text-primary-700">Se añadirán al final de la galería</p>
-            </div>
-          </div>
-        )}
         {/* Render existing images and upload slots */}
         {Array.from({ length: 6 }, (_, index) => {
           const image = images[index];
@@ -260,8 +191,7 @@ export function ImageUploadGrid({
                   onRemove={removeImage}
                   onDragStart={handleDragStart}
                   onDragOver={(e) => {
-                    e.stopPropagation();
-                    handleDragOver(e);
+                    e.preventDefault();
                   }}
                   onDrop={targetIndex => {
                     if (draggedIndex !== null) {
@@ -270,7 +200,7 @@ export function ImageUploadGrid({
                       setDraggedIndex(null);
                     }
                   }}
-                  isDraggedOver={isDragOver && draggedIndex === index}
+                  isDraggedOver={false}
                 />
               </div>
             );
@@ -282,15 +212,13 @@ export function ImageUploadGrid({
               <div key={`upload-slot-${index}`} className="aspect-square relative z-0">
                 <UploadZone
                   onFileSelect={handleFileUpload}
-                  isDragOver={false} // Let the grid handle the overall drag state
+                  isDragOver={false}
                   onDragOver={(e) => {
-                    e.stopPropagation();
-                    handleDragOver(e);
+                    e.preventDefault();
                   }}
-                  onDragLeave={handleDragLeave}
+                  onDragLeave={() => {}}
                   onDrop={(e) => {
-                    e.stopPropagation();
-                    handleDrop(e);
+                    e.preventDefault();
                   }}
                   fileInputRef={fileInputRef}
                   translations={translations}
