@@ -26,6 +26,7 @@ interface EditProductFormProps {
 
 export function EditProductForm({ product }: EditProductFormProps) {
   const t = useTranslations('admin.products.edit');
+  const translations = useTranslations();
   const categoriesT = useTranslations('admin.products.categories');
   const imagesT = useTranslations('admin.products.images');
   const router = useRouter();
@@ -88,8 +89,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
     
     if (!validationResult.success) {
       showError(
-        'Límite alcanzado',
-        'No puedes destacar más de 4 productos.'
+        translations('admin.products.notifications.limitReached'),
+        translations('admin.products.notifications.limitReachedMessage')
       );
       return false;
     }

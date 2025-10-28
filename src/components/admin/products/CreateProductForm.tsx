@@ -23,6 +23,7 @@ interface ProductImage {
 
 export function CreateProductForm() {
   const t = useTranslations('admin.products.create');
+  const translations = useTranslations();
   const categoriesT = useTranslations('admin.products.categories');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -71,8 +72,8 @@ export function CreateProductForm() {
     
     if (!validationResult.success) {
       showError(
-        'Límite alcanzado',
-        'No puedes destacar más de 4 productos.'
+        translations('admin.products.notifications.limitReached'),
+        translations('admin.products.notifications.limitReachedMessage')
       );
       return false;
     }

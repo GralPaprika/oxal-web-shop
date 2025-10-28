@@ -287,12 +287,6 @@
         "error": {
           "failed": "Error al crear el producto. Inténtalo de nuevo.",
           "categoriesLoad": "Error al cargar las categorías. Inténtalo de nuevo."
-        },
-        "notifications": {
-          "limitReached": "Límite alcanzado",
-          "limitReachedMessage": "No puedes destacar más de 4 productos. Actualmente tienes {count} destacados.",
-          "updateError": "Error",
-          "updateErrorMessage": "No se pudo actualizar el producto. Intenta de nuevo."
         }
       },
       "edit": {
@@ -375,6 +369,12 @@
         "deleting": "Eliminando...",
         "success": "Producto eliminado exitosamente",
         "error": "Error al eliminar el producto. Inténtalo de nuevo."
+      },
+      "notifications": {
+        "limitReached": "Límite alcanzado",
+        "limitReachedMessage": "No puedes destacar más de 4 productos.",
+        "updateError": "Error",
+        "updateErrorMessage": "No se pudo actualizar el producto. Intenta de nuevo."
       }
     },
     "settings": {

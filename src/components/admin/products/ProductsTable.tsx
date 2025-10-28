@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { PencilIcon, TrashIcon, StarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { DeleteProductDialog } from './DeleteProductDialog';
@@ -66,6 +67,7 @@ export function ProductsTable({
   showPagination = false,
   paginationTranslations
 }: ProductsTableProps) {
+  const translations = useTranslations();
   const [products, setProducts] = useState(initialProducts);
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -100,8 +102,8 @@ export function ProductsTable({
         
         if (!validationResult.success) {
           showError(
-            'Límite alcanzado',
-            'No puedes destacar más de 4 productos.'
+            translations('admin.products.notifications.limitReached'),
+            translations('admin.products.notifications.limitReachedMessage')
           );
           return;
         }
@@ -120,7 +122,10 @@ export function ProductsTable({
       }
     } catch (error) {
       console.error('Error toggling star:', error);
-      showError('Error', 'No se pudo actualizar el producto. Intenta de nuevo.');
+      showError(
+        translations('admin.products.notifications.updateError'),
+        translations('admin.products.notifications.updateErrorMessage')
+      );
     }
   };
 
