@@ -18,11 +18,18 @@ interface ProductFormFieldsProps {
       price: string;
       stock: string;
       category: string;
+      isStarred: string;
+      badge: string;
     };
     placeholders: {
       code: string;
       name: string;
       description: string;
+    };
+    badges: {
+      none: string;
+      new: string;
+      sale: string;
     };
     selectCategory: string;
     loading: string;
@@ -44,6 +51,17 @@ export function ProductFormFields({
   ) => {
     const value = e.target.type === 'number' ? parseFloat(e.target.value) || 0 : e.target.value;
     onFormDataChange({ ...formData, [field]: value });
+  };
+
+  const handleCheckboxChange = (field: keyof CreateProductData) => (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    onFormDataChange({ ...formData, [field]: e.target.checked });
+  };
+
+  const handleBadgeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value === '' ? null : e.target.value as 'new' | 'sale';
+    onFormDataChange({ ...formData, badge: value });
   };
 
   return (
@@ -130,6 +148,34 @@ export function ProductFormFields({
               label: categoriesTranslations(category.key),
               value: category.id,
             }))
+          ]}
+        />
+      </div>
+
+      {/* Marketing Options */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex items-center space-x-3">
+          <input
+            type="checkbox"
+            id="isStarred"
+            checked={formData.isStarred || false}
+            onChange={handleCheckboxChange('isStarred')}
+            className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+          />
+          <label htmlFor="isStarred" className="text-sm font-medium text-gray-700">
+            {translations.fields.isStarred}
+          </label>
+        </div>
+
+        <Select
+          label={translations.fields.badge}
+          id="badge"
+          value={formData.badge || ''}
+          onChange={handleBadgeChange}
+          options={[
+            { label: translations.badges.none, value: '' },
+            { label: translations.badges.new, value: 'new' },
+            { label: translations.badges.sale, value: 'sale' }
           ]}
         />
       </div>

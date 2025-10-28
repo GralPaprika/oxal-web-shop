@@ -239,8 +239,15 @@
           "price": "Precio",
           "stock": "Cantidad en Stock",
           "category": "Categoría",
+          "isStarred": "Producto Destacado",
+          "badge": "Etiqueta Promocional",
           "selectCategory": "Seleccionar categoría",
           "loadingCategories": "Cargando categorías...",
+          "badges": {
+            "none": "Sin etiqueta",
+            "new": "Nuevo",
+            "sale": "Oferta"
+          },
           "images": "Imágenes del Producto",
           "primaryImage": "Imagen Principal",
           "image": "Imagen",
@@ -298,6 +305,8 @@
           "price": "Precio",
           "stock": "Cantidad en Stock",
           "category": "Categoría",
+          "isStarred": "Producto Destacado",
+          "badge": "Etiqueta Promocional",
           "tags": "Etiquetas",
           "materials": "Materiales",
           "weight": "Peso",
@@ -315,6 +324,11 @@
         },
         "selectCategory": "Seleccionar categoría",
         "loading": "Cargando...",
+        "badges": {
+          "none": "Sin etiqueta",
+          "new": "Nuevo",
+          "sale": "Oferta"
+        },
         "helpers": {
           "dimensions": "Dimensiones en centímetros (largo x ancho x alto)"
         },

@@ -36,6 +36,8 @@ export function CreateProductForm() {
     price: 0,
     stock: 0,
     categoryId: '',
+    isStarred: false,
+    badge: null,
     images: [],
     tags: [],
     metadata: {
@@ -203,11 +205,18 @@ export function CreateProductForm() {
             price: `${t('form.price')}`,
             stock: `${t('form.stock')}`,
             category: `${t('form.category')}`,
+            isStarred: t('form.isStarred') ?? 'Featured Product',
+            badge: t('form.badge') ?? 'Badge',
           },
           placeholders: {
             code: t('form.codePlaceholder'),
             name: t('form.namePlaceholder'),
             description: t('form.descriptionPlaceholder'),
+          },
+          badges: {
+            none: t('form.badges.none') ?? 'None',
+            new: t('form.badges.new') ?? 'New',
+            sale: t('form.badges.sale') ?? 'Sale',
           },
           selectCategory: t('form.selectCategory'),
           loading: t('form.loadingCategories'),

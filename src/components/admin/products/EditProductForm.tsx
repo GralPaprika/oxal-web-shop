@@ -41,6 +41,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
     price: product.price,
     stock: product.stock,
     categoryId: product.category.id,
+    isStarred: product.isStarred || false,
+    badge: product.badge || null,
     images: product.images || [],
     tags: product.tags || [],
     metadata: {
@@ -152,11 +154,18 @@ export function EditProductForm({ product }: EditProductFormProps) {
             price: `${t('fields.price')}`,
             stock: `${t('fields.stock')}`,
             category: `${t('fields.category')}`,
+            isStarred: t('fields.isStarred') ?? 'Featured Product',
+            badge: t('fields.badge') ?? 'Badge',
           },
           placeholders: {
             code: t('placeholders.code'),
             name: t('placeholders.name'),
             description: t('placeholders.description'),
+          },
+          badges: {
+            none: t('badges.none') ?? 'None',
+            new: t('badges.new') ?? 'New',
+            sale: t('badges.sale') ?? 'Sale',
           },
           selectCategory: t('selectCategory'),
           loading: t('loading'),

@@ -8,6 +8,8 @@ export interface Product {
   category: ProductCategory;
   images: ProductImage[];
   status: 'active' | 'inactive' | 'discontinued';
+  isStarred: boolean; // For featuring on landing page
+  badge?: 'new' | 'sale' | null; // Product badge for promotions
   tags?: string[];
   metadata?: {
     weight?: number;
@@ -44,6 +46,8 @@ export interface CreateProductData {
   price: number;
   stock: number;
   categoryId: string;
+  isStarred?: boolean;
+  badge?: 'new' | 'sale' | null;
   images?: Omit<ProductImage, 'id'>[];
   tags?: string[];
   metadata?: Product['metadata'];
@@ -55,6 +59,8 @@ export interface UpdateProductData {
   price?: number;
   stock?: number;
   categoryId?: string;
+  isStarred?: boolean;
+  badge?: 'new' | 'sale' | null;
   images?: Omit<ProductImage, 'id'>[];
   status?: Product['status'];
   tags?: string[];

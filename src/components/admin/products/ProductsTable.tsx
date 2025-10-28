@@ -150,8 +150,26 @@ export function ProductsTable({
                         )}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-text-primary">
-                          {product.name}
+                        <div className="flex items-center gap-2">
+                          <div className="text-sm font-medium text-text-primary">
+                            {product.name}
+                          </div>
+                          {product.isStarred && (
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                              ⭐ Destacado
+                            </span>
+                          )}
+                          {product.badge && (
+                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                              product.badge === 'new' 
+                                ? 'bg-green-100 text-green-800' 
+                                : product.badge === 'sale'
+                                ? 'bg-red-100 text-red-800'
+                                : ''
+                            }`}>
+                              {product.badge === 'new' ? 'Nuevo' : product.badge === 'sale' ? 'Oferta' : product.badge}
+                            </span>
+                          )}
                         </div>
                         <div className="text-sm text-text-secondary">
                           {getCategoryName(product.category.key)}
