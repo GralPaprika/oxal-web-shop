@@ -1,5 +1,7 @@
 'use client';
 
+import { Input, TextArea } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import type { CreateProductData, ProductCategory } from '@/domain/product/product.entity';
 
 interface ProductFormFieldsProps {
@@ -49,127 +51,87 @@ export function ProductFormFields({
       {/* Code and Name */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="md:col-span-1">
-          <label htmlFor="code" className="block text-sm font-medium text-text-primary mb-2">
-            {translations.fields.code} *
-          </label>
-          <input
+          <Input
+            label={translations.fields.code}
             type="text"
             id="code"
             value={formData.code}
             onChange={handleInputChange('code')}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors ${
-              errors.code ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-            }`}
             placeholder={translations.placeholders.code}
+            error={errors.code}
             required
           />
-          {errors.code && <p className="text-red-600 text-sm mt-1">{errors.code}</p>}
         </div>
 
         <div className="md:col-span-3">
-          <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
-            {translations.fields.name} *
-          </label>
-          <input
+          <Input
+            label={translations.fields.name}
             type="text"
             id="name"
             value={formData.name}
             onChange={handleInputChange('name')}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors ${
-              errors.name ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-            }`}
             placeholder={translations.placeholders.name}
+            error={errors.name}
             required
           />
-          {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
         </div>
       </div>
 
       {/* Description */}
-      <div>
-        <label htmlFor="description" className="block text-sm font-medium text-text-primary mb-2">
-          {translations.fields.description}
-        </label>
-        <textarea
-          id="description"
-          rows={3}
-          value={formData.description || ''}
-          onChange={handleInputChange('description')}
-          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors resize-none ${
-            errors.description ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-          }`}
-          placeholder={translations.placeholders.description}
-        />
-        {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
-      </div>
+      <TextArea
+        label={translations.fields.description}
+        id="description"
+        rows={3}
+        value={formData.description || ''}
+        onChange={handleInputChange('description')}
+        placeholder={translations.placeholders.description}
+        error={errors.description}
+      />
 
       {/* Price, Stock, Category */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-          <label htmlFor="price" className="block text-sm font-medium text-text-primary mb-2">
-            {translations.fields.price} *
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted">$</span>
-            <input
-              type="number"
-              id="price"
-              min="0"
-              step="0.01"
-              value={formData.price || ''}
-              onChange={handleInputChange('price')}
-              className={`w-full pl-8 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors ${
-                errors.price ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-              }`}
-              placeholder="0.00"
-              required
-            />
-          </div>
-          {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
-        </div>
+        <Input
+          label={translations.fields.price}
+          type="number"
+          id="price"
+          min="0"
+          step="0.01"
+          value={formData.price || ''}
+          onChange={handleInputChange('price')}
+          placeholder="0.00"
+          prefix="$"
+          error={errors.price}
+          required
+        />
 
-        <div>
-          <label htmlFor="stock" className="block text-sm font-medium text-text-primary mb-2">
-            {translations.fields.stock} *
-          </label>
-          <input
-            type="number"
-            id="stock"
-            min="0"
-            value={formData.stock || ''}
-            onChange={handleInputChange('stock')}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors ${
-              errors.stock ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-            }`}
-            placeholder="0"
-            required
-          />
-          {errors.stock && <p className="text-red-600 text-sm mt-1">{errors.stock}</p>}
-        </div>
+        <Input
+          label={translations.fields.stock}
+          type="number"
+          id="stock"
+          min="0"
+          value={formData.stock || ''}
+          onChange={handleInputChange('stock')}
+          placeholder="0"
+          error={errors.stock}
+          required
+        />
 
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-text-primary mb-2">
-            {translations.fields.category} *
-          </label>
-          <select
-            id="category"
-            value={formData.categoryId}
-            onChange={handleInputChange('categoryId')}
-            disabled={loadingCategories}
-            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors ${
-              errors.categoryId ? 'border-red-300 bg-red-50' : 'border-neutral-300'
-            }`}
-            required
-          >
-            <option value="">{loadingCategories ? translations.loading : translations.selectCategory}</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {categoriesTranslations(category.key)}
-              </option>
-            ))}
-          </select>
-          {errors.categoryId && <p className="text-red-600 text-sm mt-1">{errors.categoryId}</p>}
-        </div>
+        <Select
+          label={translations.fields.category}
+          id="category"
+          value={formData.categoryId}
+          onChange={handleInputChange('categoryId')}
+          disabled={loadingCategories}
+          error={errors.categoryId}
+          required
+        >
+          <option value="">{loadingCategories ? translations.loading : translations.selectCategory}</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {categoriesTranslations(category.key)}
+            </option>
+          ))}
+        </Select>
       </div>
     </>
   );

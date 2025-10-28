@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { loginAction } from '@/lib/auth';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 
 export function LoginForm() {
   const t = useTranslations('auth.login');
@@ -29,35 +30,25 @@ export function LoginForm() {
   return (
     <form action={handleSubmit} className="space-y-6">
       <div className="space-y-4">
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-text-primary mb-2">
-            {t('email')}
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors text-text-primary placeholder-text-muted"
-            placeholder="tu@ejemplo.com"
-          />
-        </div>
+        <Input
+          id="email"
+          name="email"
+          type="email"
+          label={t('email')}
+          autoComplete="email"
+          required
+          placeholder="tu@ejemplo.com"
+        />
         
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-text-primary mb-2">
-            {t('password')}
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors text-text-primary placeholder-text-muted"
-            placeholder="••••••••"
-          />
-        </div>
+        <Input
+          id="password"
+          name="password"
+          type="password"
+          label={t('password')}
+          autoComplete="current-password"
+          required
+          placeholder="••••••••"
+        />
       </div>
 
       {error && (
