@@ -1,7 +1,7 @@
 'use client';
 
-import { DataTable } from '@/components/admin/DataTable';
-import { UserCard } from '@/components/admin/UserCard';
+import { DataTable } from '@/components/admin/common';
+import { UserCard } from './UserCard';
 import type { User } from '@/domain/user/user.entity';
 
 interface UserManagementTableProps {

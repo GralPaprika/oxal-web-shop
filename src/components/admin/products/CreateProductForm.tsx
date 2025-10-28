@@ -8,7 +8,7 @@ import { CreateProductData, ProductCategory } from '@/src/domain/product/product
 import { createProduct, getAllCategories, updateProductImages } from '@/lib/actions/product.actions';
 import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
-import { ImageUploadGrid } from '@/components/admin/ImageUploadGrid';
+import { ImageUploadGrid } from './ImageUploadGrid';
 import { 
   PlusIcon,
   XMarkIcon

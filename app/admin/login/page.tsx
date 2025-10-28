@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { checkAuthStatus } from '@/lib/auth';
-import { LoginForm } from '@/components/admin/LoginForm';
+import { LoginForm } from '@/components/admin/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
 
 export default async function AdminLogin() {

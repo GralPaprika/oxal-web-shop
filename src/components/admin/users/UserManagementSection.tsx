@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { UserManagementTable } from '@/components/admin/UserManagementTable';
-import { AddUserModal } from '@/components/admin/AddUserModal';
-import { EditUserModal } from '@/components/admin/EditUserModal';
+import { UserManagementTable } from './UserManagementTable';
+import { AddUserModal } from './AddUserModal';
+import { EditUserModal } from './EditUserModal';
 import { updateUser } from '@/lib/actions/user.actions';
 import type { User } from '@/domain/user/user.entity';
 import { UserIcon } from '@heroicons/react/24/outline';

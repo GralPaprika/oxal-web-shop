@@ -1,9 +1,9 @@
 import { getTranslations } from 'next-intl/server';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { UsersHeader } from '@/src/components/admin/UsersHeader';
-import { SectionCard } from '@/components/admin/SectionCard';
-import { UserManagementSection } from '@/components/admin/UserManagementSection';
-import { AddUserModal } from '@/components/admin/AddUserModal';
+import { UsersHeader } from '@/src/components/admin/users';
+import { SectionCard } from '@/components/admin/layout';
+import { UserManagementSection } from '@/components/admin/users';
+import { AddUserModal } from '@/components/admin/users';
 import { getAllUsers } from '@/lib/actions/user.actions';
 import type { User } from '@/domain/user/user.entity';
 import { 

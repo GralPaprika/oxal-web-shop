@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { UsersHeader } from '@/src/components/admin/UsersHeader';
-import { CreateProductForm } from '@/src/components/admin/CreateProductForm';
+import { UsersHeader } from '@/src/components/admin/users';
+import { CreateProductForm } from '@/src/components/admin/products';
 
 async function CreateProductPage() {
   const t = await getTranslations('admin.products');

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { DeleteUserDialog } from '@/components/admin/DeleteUserDialog';
+import { DeleteUserDialog } from './DeleteUserDialog';
 import type { User } from '@/domain/user/user.entity';
 
 interface UserCardProps {
