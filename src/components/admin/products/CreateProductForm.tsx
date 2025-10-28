@@ -344,7 +344,8 @@ export function CreateProductForm() {
           uploading: t('form.uploading'),
           uploadError: t('form.uploadError'),
           file: t('form.file'),
-          files: t('form.files')
+          files: t('form.files'),
+          slot: t('form.slot'),
         }}
       />
 

@@ -256,6 +256,7 @@
           "uploadError": "Error al subir imagen",
           "file": "archivo",
           "files": "archivos",
+          "slot": "Espacio",
           "tags": "Etiquetas",
           "tagPlaceholder": "Ej: artesanal, hecho a mano",
           "addTag": "Agregar Etiqueta",

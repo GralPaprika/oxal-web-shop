@@ -25,6 +25,7 @@ interface ImageUploadGridProps {
     uploadError: string;
     file: string;
     files: string;
+    slot: string;
   };
   maxImages?: number;
 }
@@ -238,7 +239,7 @@ export function ImageUploadGrid({
             >
               <div className="text-center">
                 <CloudArrowUpIcon className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                <p className="text-xs text-gray-400">Slot {index + 1}</p>
+                <p className="text-xs text-gray-400">{translations.slot} {index + 1}</p>
               </div>
             </div>
           );
