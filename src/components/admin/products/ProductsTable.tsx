@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { PencilIcon, TrashIcon, StarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { DeleteProductDialog } from './DeleteProductDialog';
-import { updateProduct } from '@/lib/actions/product.actions';
+import { updateProduct, validateCanStarProduct } from '@/lib/actions/product.actions';
+import { NotificationContainer, useNotification } from '@/components/ui/NotificationContainer';
 import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableProps {
@@ -68,6 +69,7 @@ export function ProductsTable({
   const [products, setProducts] = useState(initialProducts);
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { notifications, removeNotification, showError } = useNotification();
 
   // Update local state when props change
   useEffect(() => {
@@ -92,6 +94,20 @@ export function ProductsTable({
 
   const handleToggleStar = async (product: Product) => {
     try {
+      // Only validate if trying to star, not unstar
+      if (!product.isStarred) {
+        const validationResult = await validateCanStarProduct(product.id);
+        
+        if (!validationResult.success) {
+          const starredCount = 'currentStarredCount' in validationResult ? validationResult.currentStarredCount : 0;
+          showError(
+            'Límite alcanzado',
+            `No puedes destacar más de 4 productos. Actualmente tienes ${starredCount} destacados.`
+          );
+          return;
+        }
+      }
+
       const result = await updateProduct(product.id, {
         isStarred: !product.isStarred
       });
@@ -105,6 +121,7 @@ export function ProductsTable({
       }
     } catch (error) {
       console.error('Error toggling star:', error);
+      showError('Error', 'No se pudo actualizar el producto. Intenta de nuevo.');
     }
   };
 
@@ -293,6 +310,8 @@ export function ProductsTable({
           </div>
         </div>
       )}
+
+      <NotificationContainer notifications={notifications} onRemove={removeNotification} />
     </div>
   );
 }

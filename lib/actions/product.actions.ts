@@ -6,6 +6,7 @@ import { CreateProductUseCase } from '@/application/usecases/product/CreateProdu
 import { UpdateProductUseCase } from '@/application/usecases/product/UpdateProductUseCase';
 import { DeleteProductUseCase } from '@/application/usecases/product/DeleteProductUseCase';
 import { GetCategoriesUseCase } from '@/application/usecases/product/GetCategoriesUseCase';
+import { ValidateCanStarProductUseCase } from '@/application/usecases/product/ValidateCanStarProductUseCase';
 import { TYPES } from '@/types/container.types';
 import type { Product, ProductListOptions, CreateProductData, UpdateProductData, ProductCategory } from '@/domain/product/product.entity';
 import type { User } from '@/domain/user/user.entity';
@@ -116,6 +117,29 @@ export const updateProductImages = withAdminAuthOnly(async (
   const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
   const product = await updateProductUseCase.execute(productId, { images });
   return { success: true, product };
+});
+
+// VALIDATE CAN STAR PRODUCT
+export const validateCanStarProduct = withAdminAuthOnly(async (productId: string): Promise<{ success: boolean; canStar?: boolean; currentStarredCount?: number; maxAllowed?: number; error?: string }> => {
+  const validateCanStarUseCase = container.get<ValidateCanStarProductUseCase>(TYPES.ValidateCanStarProductUseCase);
+  const validationResult = await validateCanStarUseCase.execute(productId);
+  
+  if (!validationResult.canStar) {
+    return { 
+      success: false, 
+      canStar: false,
+      currentStarredCount: validationResult.currentStarredCount,
+      maxAllowed: validationResult.maxAllowed,
+      error: validationResult.message 
+    };
+  }
+
+  return { 
+    success: true, 
+    canStar: true,
+    currentStarredCount: validationResult.currentStarredCount,
+    maxAllowed: validationResult.maxAllowed
+  };
 });
 
 // GET ALL CATEGORIES

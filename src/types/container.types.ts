@@ -34,4 +34,6 @@ export const TYPES = {
   UpdateProductUseCase: Symbol.for('UpdateProductUseCase'),
   DeleteProductUseCase: Symbol.for('DeleteProductUseCase'),
   GetCategoriesUseCase: Symbol.for('GetCategoriesUseCase'),
+  ValidateCanStarProductUseCase: Symbol.for('ValidateCanStarProductUseCase'),
+  GetStarredProductsCountUseCase: Symbol.for('GetStarredProductsCountUseCase'),
 } as const;

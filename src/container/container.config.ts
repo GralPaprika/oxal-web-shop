@@ -32,6 +32,8 @@ import { CreateProductUseCase } from '@/application/usecases/product/CreateProdu
 import { UpdateProductUseCase } from '@/application/usecases/product/UpdateProductUseCase';
 import { DeleteProductUseCase } from '@/application/usecases/product/DeleteProductUseCase';
 import { GetCategoriesUseCase } from '@/application/usecases/product/GetCategoriesUseCase';
+import { ValidateCanStarProductUseCase } from '@/application/usecases/product/ValidateCanStarProductUseCase';
+import { GetStarredProductsCountUseCase } from '@/application/usecases/product/GetStarredProductsCountUseCase';
 
 // This will be our main DI container
 export const container = new Container();
@@ -72,6 +74,8 @@ container.bind<CreateProductUseCase>(TYPES.CreateProductUseCase).to(CreateProduc
 container.bind<UpdateProductUseCase>(TYPES.UpdateProductUseCase).to(UpdateProductUseCase);
 container.bind<DeleteProductUseCase>(TYPES.DeleteProductUseCase).to(DeleteProductUseCase);
 container.bind<GetCategoriesUseCase>(TYPES.GetCategoriesUseCase).to(GetCategoriesUseCase);
+container.bind<ValidateCanStarProductUseCase>(TYPES.ValidateCanStarProductUseCase).to(ValidateCanStarProductUseCase);
+container.bind<GetStarredProductsCountUseCase>(TYPES.GetStarredProductsCountUseCase).to(GetStarredProductsCountUseCase);
 
 // Storage use cases binding
 container.bind<UploadFileUseCase>(TYPES.UploadFileUseCase).to(UploadFileUseCase);

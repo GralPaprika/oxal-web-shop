@@ -5,13 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { CreateProductData, ProductCategory } from '@/src/domain/product/product.entity';
-import { createProduct, getAllCategories, updateProductImages } from '@/lib/actions/product.actions';
+import { createProduct, getAllCategories, updateProductImages, validateCanStarProduct } from '@/lib/actions/product.actions';
 import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
 import { StringArrayInput } from '@/components/ui/StringArrayInput';
 import { ImageUploadGrid } from './ImageUploadGrid';
 import { ProductFormFields } from './ProductFormFields';
 import { MetadataFields } from './MetadataFields';
+import { NotificationContainer, useNotification } from '@/components/ui/NotificationContainer';
 
 interface ProductImage {
   url: string;
@@ -25,6 +26,7 @@ export function CreateProductForm() {
   const categoriesT = useTranslations('admin.products.categories');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const { notifications, removeNotification, showError } = useNotification();
   
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -56,6 +58,28 @@ export function CreateProductForm() {
   const [materials, setMaterials] = useState<string[]>([]);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+
+  const handleStarToggle = async (newStarState: boolean): Promise<boolean> => {
+    // Only validate if trying to star (newStarState === true)
+    if (!newStarState) {
+      // Unstarring, always allowed
+      return true;
+    }
+
+    // Trying to star, validate the limit
+    const validationResult = await validateCanStarProduct('');
+    
+    if (!validationResult.success) {
+      const starredCount = 'currentStarredCount' in validationResult ? validationResult.currentStarredCount : 0;
+      showError(
+        'Límite alcanzado',
+        `No puedes destacar más de 4 productos. Actualmente tienes ${starredCount} destacados.`
+      );
+      return false;
+    }
+
+    return true;
+  };
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -194,6 +218,7 @@ export function CreateProductForm() {
       <ProductFormFields
         formData={formData}
         onFormDataChange={setFormData}
+        onStarToggle={handleStarToggle}
         categories={categories}
         loadingCategories={loadingCategories}
         errors={{}}
@@ -300,6 +325,8 @@ export function CreateProductForm() {
           {isPending ? t('form.creating') : t('form.createProduct')}
         </Button>
       </div>
+
+      <NotificationContainer notifications={notifications} onRemove={removeNotification} />
     </form>
   );
 }

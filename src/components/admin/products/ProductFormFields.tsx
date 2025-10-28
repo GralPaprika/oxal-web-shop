@@ -37,6 +37,7 @@ interface ProductFormFieldsProps {
     loading: string;
   };
   categoriesTranslations: (key: string) => string;
+  onStarToggle?: (newStarState: boolean) => Promise<boolean>;
 }
 
 export function ProductFormFields({
@@ -47,6 +48,7 @@ export function ProductFormFields({
   errors,
   translations,
   categoriesTranslations,
+  onStarToggle,
 }: ProductFormFieldsProps) {
   const handleInputChange = (field: keyof CreateProductData) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -55,10 +57,19 @@ export function ProductFormFields({
     onFormDataChange({ ...formData, [field]: value });
   };
 
-  const handleCheckboxChange = (field: keyof CreateProductData) => (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    onFormDataChange({ ...formData, [field]: e.target.checked });
+  const handleStarClick = async () => {
+    const newStarState = !formData.isStarred;
+    
+    // If there's a validation callback, use it
+    if (onStarToggle) {
+      const isAllowed = await onStarToggle(newStarState);
+      if (isAllowed) {
+        onFormDataChange({ ...formData, isStarred: newStarState });
+      }
+    } else {
+      // No validation, just toggle
+      onFormDataChange({ ...formData, isStarred: newStarState });
+    }
   };
 
   return (
@@ -66,7 +77,7 @@ export function ProductFormFields({
       {/* Star Icon in Top Right Corner */}
       <button
         type="button"
-        onClick={() => handleCheckboxChange('isStarred')({ target: { checked: !formData.isStarred } } as React.ChangeEvent<HTMLInputElement>)}
+        onClick={handleStarClick}
         className="absolute top-2 right-2 z-10 p-2 transition-all duration-300 transform hover:scale-110 group"
         title={formData.isStarred ? "Quitar de destacados" : "Marcar como destacado"}
       >

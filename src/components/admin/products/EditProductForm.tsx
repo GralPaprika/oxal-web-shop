@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { CreateProductData, ProductCategory, Product } from '@/src/domain/product/product.entity';
-import { updateProduct, getAllCategories } from '@/lib/actions/product.actions';
+import { updateProduct, getAllCategories, validateCanStarProduct } from '@/lib/actions/product.actions';
 import { Button } from '@/components/ui/Button';
 import { StringArrayInput } from '@/components/ui/StringArrayInput';
 import { ImageUploadGrid } from './ImageUploadGrid';
 import { ProductFormFields } from './ProductFormFields';
 import { MetadataFields } from './MetadataFields';
+import { NotificationContainer, useNotification } from '@/components/ui/NotificationContainer';
 
 interface ProductImage {
   url: string;
@@ -29,6 +30,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const imagesT = useTranslations('admin.products.images');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const { notifications, removeNotification, showError } = useNotification();
   
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -68,6 +70,33 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const [tags, setTags] = useState<string[]>(product.tags || []);
   const [materials, setMaterials] = useState<string[]>(product.metadata?.materials || []);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleStarToggle = async (newStarState: boolean): Promise<boolean> => {
+    // Only validate if trying to star (newStarState === true)
+    if (!newStarState) {
+      // Unstarring, always allowed
+      return true;
+    }
+
+    // If product is already starred, allow changing other fields without validation
+    if (product.isStarred) {
+      return true;
+    }
+
+    // Trying to star a new product, validate the limit
+    const validationResult = await validateCanStarProduct(product.id);
+    
+    if (!validationResult.success) {
+      const starredCount = 'currentStarredCount' in validationResult ? validationResult.currentStarredCount : 0;
+      showError(
+        'Límite alcanzado',
+        `No puedes destacar más de 4 productos. Actualmente tienes ${starredCount} destacados.`
+      );
+      return false;
+    }
+
+    return true;
+  };
 
   // Load categories
   useEffect(() => {
@@ -143,6 +172,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
       <ProductFormFields
         formData={formData}
         onFormDataChange={setFormData}
+        onStarToggle={handleStarToggle}
         categories={categories}
         loadingCategories={loadingCategories}
         errors={errors}
@@ -250,6 +280,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
           {isPending ? t('actions.updating') : t('actions.update')}
         </Button>
       </div>
+
+      <NotificationContainer notifications={notifications} onRemove={removeNotification} />
     </form>
   );
 }
