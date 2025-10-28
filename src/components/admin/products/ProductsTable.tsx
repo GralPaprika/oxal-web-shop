@@ -1,7 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { DeleteProductDialog } from './DeleteProductDialog';
 import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableProps {
@@ -31,17 +33,48 @@ interface ProductsTableProps {
       title: string;
       subtitle: string;
     };
+    deleteDialog: {
+      title: string;
+      message: string;
+      confirmButton: string;
+      cancelButton: string;
+      deleting: string;
+      success: string;
+      error: string;
+    };
   };
   onEditProduct?: (product: Product) => void;
-  onDeleteProduct?: (product: Product) => void;
 }
 
 export function ProductsTable({
-  products,
+  products: initialProducts,
   translations: t,
-  onEditProduct,
-  onDeleteProduct
+  onEditProduct
 }: ProductsTableProps) {
+  const [products, setProducts] = useState(initialProducts);
+  const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  // Update local state when props change
+  useEffect(() => {
+    setProducts(initialProducts);
+  }, [initialProducts]);
+
+  const handleDeleteProduct = (product: Product) => {
+    setDeleteProduct(product);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleProductDeleted = (productId: string) => {
+    const updatedProducts = products.filter(p => p.id !== productId);
+    setProducts(updatedProducts);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
+    setDeleteProduct(null);
+  };
+
   const getStockStatus = (stock: number) => {
     if (stock === 0) return { text: t.stockStatus.outOfStock, color: 'text-red-600 bg-red-50' };
     if (stock <= 5) return { text: t.stockStatus.lowStock, color: 'text-orange-600 bg-orange-50' };
@@ -148,7 +181,7 @@ export function ProductsTable({
                         <PencilIcon className="h-4 w-4" />
                       </button>
                       <button 
-                        onClick={() => onDeleteProduct?.(product)}
+                        onClick={() => handleDeleteProduct(product)}
                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                         title="Delete product"
                       >
@@ -169,6 +202,14 @@ export function ProductsTable({
           <div className="text-neutral-500 text-sm">{t.empty.subtitle}</div>
         </div>
       )}
+
+      <DeleteProductDialog
+        product={deleteProduct}
+        isOpen={isDeleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        onDeleted={handleProductDeleted}
+        translations={t.deleteDialog}
+      />
     </div>
   );
 }

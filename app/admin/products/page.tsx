@@ -114,6 +114,15 @@ async function AdminProductsPage() {
               title: t('empty.title'),
               subtitle: t('empty.subtitle'),
             },
+            deleteDialog: {
+              title: t('deleteDialog.title'),
+              message: t('deleteDialog.message'),
+              confirmButton: t('deleteDialog.confirmButton'),
+              cancelButton: t('deleteDialog.cancelButton'),
+              deleting: t('deleteDialog.deleting'),
+              success: t('deleteDialog.success'),
+              error: t('deleteDialog.error'),
+            },
           }}
         />
 

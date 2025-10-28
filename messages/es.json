@@ -285,6 +285,15 @@
           "failed": "Error al crear el producto. Inténtalo de nuevo.",
           "categoriesLoad": "Error al cargar las categorías. Inténtalo de nuevo."
         }
+      },
+      "deleteDialog": {
+        "title": "Eliminar Producto",
+        "message": "¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.",
+        "confirmButton": "Eliminar",
+        "cancelButton": "Cancelar",
+        "deleting": "Eliminando...",
+        "success": "Producto eliminado exitosamente",
+        "error": "Error al eliminar el producto. Inténtalo de nuevo."
       }
     },
     "settings": {

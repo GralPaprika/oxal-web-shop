@@ -1,4 +1,5 @@
 export { CreateProductForm } from './CreateProductForm';
+export { DeleteProductDialog } from './DeleteProductDialog';
 export { ImageUploadGrid } from './ImageUploadGrid';
 export { ImageItem } from './ImageItem';
 export { ProductsTable } from './ProductsTable';
