@@ -20,20 +20,29 @@ export function Notification({
   type,
   title,
   message,
-  duration = 5000,
+  duration = 3500,
   onClose
 }: NotificationProps) {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    if (duration > 0) {
+    // Trigger animation on mount
+    const animationDelay = setTimeout(() => {
+      setIsVisible(true);
+    }, 10);
+
+    return () => clearTimeout(animationDelay);
+  }, []);
+
+  useEffect(() => {
+    if (isVisible && duration > 0) {
       const timer = setTimeout(() => {
         setIsVisible(false);
         setTimeout(() => onClose(id), 300); // Allow animation to complete
       }, duration);
       return () => clearTimeout(timer);
     }
-  }, [duration, id, onClose]);
+  }, [isVisible, duration, id, onClose]);
 
   const getColors = () => {
     switch (type) {
@@ -81,8 +90,8 @@ export function Notification({
 
   return (
     <div
-      className={`transform transition-all duration-300 ${
-        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
+      className={`transform transition-all duration-300 ease-out ${
+        isVisible ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'
       }`}
     >
       <div
