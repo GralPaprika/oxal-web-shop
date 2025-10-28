@@ -55,28 +55,23 @@
       "modules": {
         "products": {
           "title": "Productos",
-          "description": "Gestiona tu catálogo de productos artesanales",
-          "stats": "24 productos"
+          "description": "Gestiona tu catálogo de productos artesanales"
         },
         "clients": {
           "title": "Clientes", 
-          "description": "Administra la base de datos de clientes",
-          "stats": "156 clientes"
+          "description": "Administra la base de datos de clientes"
         },
         "images": {
           "title": "Imágenes",
-          "description": "Gestiona las imágenes de la página principal",
-          "stats": "12 imágenes"
+          "description": "Gestiona las imágenes de la página principal"
         },
         "sales": {
           "title": "Ventas",
-          "description": "Reportes y estadísticas de ventas",
-          "stats": "89 pedidos"
+          "description": "Reportes y estadísticas de ventas"
         },
         "orders": {
           "title": "Pedidos",
-          "description": "Gestiona pedidos y entregas",
-          "stats": "23 pendientes"
+          "description": "Gestiona pedidos y entregas"
         },
         "settings": {
           "title": "Configuración",

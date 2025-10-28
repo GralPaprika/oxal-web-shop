@@ -3,6 +3,7 @@ import { logoutAction } from '@/lib/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/users';
 import { Button } from '@/components/ui/Button';
+import { getProductCount } from '@/lib/actions/product.actions';
 import Link from 'next/link';
 import { 
   CubeIcon, 
@@ -13,60 +14,65 @@ import {
   CogIcon
 } from '@heroicons/react/24/outline';
 
-const adminModules = [
-  {
-    titleKey: 'modules.products.title',
-    descriptionKey: 'modules.products.description',
-    icon: CubeIcon,
-    href: AUTH_CONFIG.ROUTES.PRODUCTS,
-    statsKey: 'modules.products.stats',
-    color: 'bg-amber-500'
-  },
-  {
-    titleKey: 'modules.clients.title',
-    descriptionKey: 'modules.clients.description',
-    icon: UsersIcon,
-    href: AUTH_CONFIG.ROUTES.CLIENTS,
-    statsKey: 'modules.clients.stats',
-    color: 'bg-blue-500'
-  },
-  {
-    titleKey: 'modules.images.title',
-    descriptionKey: 'modules.images.description',
-    icon: PhotoIcon,
-    href: AUTH_CONFIG.ROUTES.IMAGES,
-    statsKey: 'modules.images.stats',
-    color: 'bg-green-500'
-  },
-  {
-    titleKey: 'modules.sales.title',
-    descriptionKey: 'modules.sales.description',
-    icon: ChartBarIcon,
-    href: AUTH_CONFIG.ROUTES.SALES,
-    statsKey: 'modules.sales.stats',
-    color: 'bg-purple-500'
-  },
-  {
-    titleKey: 'modules.orders.title',
-    descriptionKey: 'modules.orders.description',
-    icon: ShoppingBagIcon,
-    href: AUTH_CONFIG.ROUTES.ORDERS,
-    statsKey: 'modules.orders.stats',
-    color: 'bg-red-500'
-  },
-  {
-    titleKey: 'modules.settings.title',
-    descriptionKey: 'modules.settings.description',
-    icon: CogIcon,
-    href: AUTH_CONFIG.ROUTES.SETTINGS,
-    statsKey: '',
-    color: 'bg-gray-500'
-  },
-];
-
 export default async function AdminDashboard() {
   const t = await getTranslations('auth.dashboard');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
+  
+  // Get product count from database
+  const productCountResult = await getProductCount();
+  const totalProducts = productCountResult.success ? (productCountResult.count || 0) : 0;
+  
+  // Create admin modules with dynamic stats
+  const adminModules = [
+    {
+      titleKey: 'modules.products.title',
+      descriptionKey: 'modules.products.description',
+      icon: CubeIcon,
+      href: AUTH_CONFIG.ROUTES.PRODUCTS,
+      stats: `${totalProducts} productos`,
+      color: 'bg-amber-500'
+    },
+    {
+      titleKey: 'modules.clients.title',
+      descriptionKey: 'modules.clients.description',
+      icon: UsersIcon,
+      href: AUTH_CONFIG.ROUTES.CLIENTS,
+      stats: '156 clientes', // TODO: Get from database
+      color: 'bg-blue-500'
+    },
+    {
+      titleKey: 'modules.images.title',
+      descriptionKey: 'modules.images.description',
+      icon: PhotoIcon,
+      href: AUTH_CONFIG.ROUTES.IMAGES,
+      stats: '12 imágenes', // TODO: Get from database
+      color: 'bg-green-500'
+    },
+    {
+      titleKey: 'modules.sales.title',
+      descriptionKey: 'modules.sales.description',
+      icon: ChartBarIcon,
+      href: AUTH_CONFIG.ROUTES.SALES,
+      stats: '89 pedidos', // TODO: Get from database
+      color: 'bg-purple-500'
+    },
+    {
+      titleKey: 'modules.orders.title',
+      descriptionKey: 'modules.orders.description',
+      icon: ShoppingBagIcon,
+      href: AUTH_CONFIG.ROUTES.ORDERS,
+      stats: '23 pendientes', // TODO: Get from database
+      color: 'bg-red-500'
+    },
+    {
+      titleKey: 'modules.settings.title',
+      descriptionKey: 'modules.settings.description',
+      icon: CogIcon,
+      href: AUTH_CONFIG.ROUTES.SETTINGS,
+      stats: '',
+      color: 'bg-gray-500'
+    },
+  ];
   
   const breadcrumbs = [
     { label: breadcrumbsT('dashboard'), current: true }
@@ -91,7 +97,7 @@ export default async function AdminDashboard() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
+        <div className="mb-8">    
           <h2 className="text-3xl font-bold text-text-primary mb-2">
             {t('welcomeBack')}
           </h2>
@@ -109,7 +115,7 @@ export default async function AdminDashboard() {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-text-secondary">{t('stats.totalProducts')}</p>
-                <p className="text-2xl font-bold text-text-primary">24</p>
+                <p className="text-2xl font-bold text-text-primary">{totalProducts}</p>
               </div>
             </div>
           </div>
@@ -172,9 +178,9 @@ export default async function AdminDashboard() {
                     <p className="text-text-secondary text-sm mt-1">
                       {t(module.descriptionKey)}
                     </p>
-                    {module.statsKey && (
+                    {module.stats && (
                       <p className="text-amber-600 text-sm font-medium mt-2">
-                        {t(module.statsKey)}
+                        {module.stats}
                       </p>
                     )}
                   </div>
