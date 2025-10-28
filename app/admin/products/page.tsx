@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/src/components/admin/users';
-import { ProductsTable } from '@/src/components/admin/products';
+import { ProductsTableWrapper } from '@/src/components/admin/products';
 import { getAllProducts, getAllCategories } from '@/lib/actions/product.actions';
 import { 
   PlusIcon, 
@@ -87,7 +87,7 @@ async function AdminProductsPage() {
         </div>
 
         {/* Products Table with Pagination */}
-        <ProductsTable
+        <ProductsTableWrapper
           products={products}
           showPagination={true}
           translations={{

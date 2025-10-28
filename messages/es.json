@@ -282,6 +282,71 @@
           "categoriesLoad": "Error al cargar las categorías. Inténtalo de nuevo."
         }
       },
+      "edit": {
+        "title": "Editar Producto",
+        "subtitle": "Modifica los detalles de tu producto artesanal",
+        "sections": {
+          "basicInfo": "Información Básica",
+          "images": "Imágenes del Producto",
+          "additionalInfo": "Información Adicional",
+          "metadata": "Información Técnica"
+        },
+        "fields": {
+          "code": "Código del Producto",
+          "name": "Nombre del Producto",
+          "description": "Descripción",
+          "price": "Precio",
+          "stock": "Cantidad en Stock",
+          "category": "Categoría",
+          "tags": "Etiquetas",
+          "materials": "Materiales",
+          "weight": "Peso",
+          "dimensions": "Dimensiones"
+        },
+        "placeholders": {
+          "code": "Ej: COL001",
+          "name": "Ej: Collar Artesanal de Plata",
+          "description": "Describe las características del producto...",
+          "tags": "Ej: artesanal, hecho a mano",
+          "materials": "Ej: plata, cuero, piedras",
+          "length": "Largo",
+          "width": "Ancho",
+          "height": "Alto"
+        },
+        "selectCategory": "Seleccionar categoría",
+        "loading": "Cargando...",
+        "helpers": {
+          "dimensions": "Dimensiones en centímetros (largo x ancho x alto)"
+        },
+        "actions": {
+          "update": "Actualizar Producto",
+          "updating": "Actualizando...",
+          "cancel": "Cancelar"
+        },
+        "validation": {
+          "nameRequired": "El nombre del producto es obligatorio",
+          "codeRequired": "El código del producto es obligatorio",
+          "descriptionRequired": "La descripción del producto es obligatoria",
+          "priceRequired": "El precio debe ser mayor a 0",
+          "stockRequired": "La cantidad en stock no puede ser negativa",
+          "categoryRequired": "Debes seleccionar una categoría"
+        },
+        "error": {
+          "updateFailed": "Error al actualizar el producto. Inténtalo de nuevo."
+        }
+      },
+      "images": {
+        "primaryImage": "Imagen Principal",
+        "image": "Imagen",
+        "dragDropHint": "Agrega hasta 6 imágenes. La primera será la imagen principal.",
+        "reorderHint": "Arrastra las imágenes para reordenarlas. La primera imagen será la principal.",
+        "clickToUpload": "Click para subir",
+        "uploading": "Subiendo...",
+        "uploadError": "Error al subir imagen",
+        "file": "archivo",
+        "files": "archivos",
+        "slot": "Espacio"
+      },
       "deleteDialog": {
         "title": "Eliminar Producto",
         "message": "¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.",
