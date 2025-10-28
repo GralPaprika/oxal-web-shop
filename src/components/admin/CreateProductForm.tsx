@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { CreateProductData, ProductCategory } from '@/src/domain/product/product.entity';
-import { createProduct, getAllCategories } from '@/lib/actions/product.actions';
+import { createProduct, getAllCategories, updateProductImages } from '@/lib/actions/product.actions';
+import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
 import { ImageUploadGrid } from '@/src/components/admin/ImageUploadGrid';
 import { 
@@ -104,19 +105,58 @@ export function CreateProductForm() {
 
     startTransition(async () => {
       try {
+        // Step 1: Create product without images
         const productData: CreateProductData = {
           ...formData,
-          images: images.map(({ url, alt, order, isPrimary }) => ({
-            url,
-            alt,
-            order,
-            isPrimary,
-          })),
+          images: [], // Empty images array initially
         };
 
         const result = await createProduct(productData);
         
-        if (result.success) {
+        if (result.success && result.product) {
+          // Step 2: Upload images to Firebase Storage and update product
+          if (images.length > 0) {
+            const uploadedImages: Array<{ url: string; alt?: string; order: number; isPrimary: boolean }> = [];
+            
+            for (let i = 0; i < images.length; i++) {
+              const image = images[i];
+              
+              // Only upload if it's a preview URL (data:image)
+              if (image.url.startsWith('data:image')) {
+                try {
+                  // Convert data URL back to File
+                  const response = await fetch(image.url);
+                  const blob = await response.blob();
+                  const file = new File([blob], image.alt || `image-${i}.jpg`, { type: blob.type });
+                  
+                  // Upload to Firebase Storage
+                  const formData = new FormData();
+                  formData.append('file', file);
+                  formData.append('productId', result.product.id);
+                  
+                  const uploadResult = await uploadProductImage(formData);
+                  
+                  if (uploadResult.success && uploadResult.url) {
+                    uploadedImages.push({
+                      url: uploadResult.url,
+                      alt: image.alt,
+                      order: image.order,
+                      isPrimary: image.isPrimary,
+                    });
+                  }
+                } catch (uploadError) {
+                  console.error('Error uploading image:', uploadError);
+                  // Continue with other images even if one fails
+                }
+              }
+            }
+            
+            // Step 3: Update product with uploaded image URLs
+            if (uploadedImages.length > 0) {
+              await updateProductImages(result.product.id, uploadedImages);
+            }
+          }
+          
           setSuccess(t('success.created'));
           setTimeout(() => {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
@@ -124,7 +164,8 @@ export function CreateProductForm() {
         } else {
           setError('error' in result ? result.error : t('error.failed'));
         }
-      } catch {
+      } catch (error) {
+        console.error('Error creating product:', error);
         setError(t('error.failed'));
       }
     });
@@ -293,12 +334,15 @@ export function CreateProductForm() {
         images={images}
         onImagesChange={setImages}
         productName={formData.name}
+        mode="create"
         translations={{
           primaryImage: t('form.primaryImage'),
           image: t('form.image'),
           dragDropHint: t('form.dragDropHint'),
           reorderHint: t('form.reorderHint'),
-          clickToUpload: t('form.clickToUpload')
+          clickToUpload: t('form.clickToUpload'),
+          uploading: t('form.uploading'),
+          uploadError: t('form.uploadError')
         }}
       />
 

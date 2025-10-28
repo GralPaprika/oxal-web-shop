@@ -252,6 +252,8 @@
           "dragDropHint": "Agrega hasta 6 imágenes. La primera será la imagen principal.",
           "reorderHint": "Arrastra las imágenes para reordenarlas. La primera imagen será la principal.",
           "clickToUpload": "Click para subir",
+          "uploading": "Subiendo...",
+          "uploadError": "Error al subir imagen",
           "tags": "Etiquetas",
           "tagPlaceholder": "Ej: artesanal, hecho a mano",
           "addTag": "Agregar Etiqueta",

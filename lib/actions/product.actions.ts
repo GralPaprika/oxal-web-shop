@@ -108,6 +108,16 @@ export const deleteProduct = withAdminAuthOnly(async (productId: string): Promis
   return { success: true };
 });
 
+// UPDATE PRODUCT IMAGES
+export const updateProductImages = withAdminAuthOnly(async (
+  productId: string, 
+  images: CreateProductData['images']
+): Promise<{ success: boolean; product?: Product; error?: string }> => {
+  const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
+  const product = await updateProductUseCase.execute(productId, { images });
+  return { success: true, product };
+});
+
 // GET ALL CATEGORIES
 export async function getAllCategories(): Promise<{ success: boolean; categories?: ProductCategory[]; error?: string }> {
   try {

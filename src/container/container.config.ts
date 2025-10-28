@@ -11,6 +11,11 @@ import { LoginUseCase } from '@/application/usecases/auth/LoginUseCase';
 import { LogoutUseCase } from '@/application/usecases/auth/LogoutUseCase';
 import { GetCurrentUserUseCase } from '@/application/usecases/auth/GetCurrentUserUseCase';
 
+// Storage
+import { IStorageService } from '@/domain/storage/storage.interface';
+import { FirebaseStorageService } from '@/infrastructure/services/FirebaseStorageService';
+import { UploadFileUseCase, DeleteFileUseCase } from '@/application/usecases/storage/FileUploadUseCase';
+
 // User Management
 import type { IUserRepository } from '@/domain/user/user.repository';
 import { FirestoreUserRepository } from '@/infrastructure/user/FirestoreUserRepository';
@@ -36,6 +41,9 @@ container.bind<IFirebaseService>(TYPES.FirebaseService).to(FirebaseService).inSi
 
 // Database binding - clients depend on IDatabase interface, not FirestoreDatabase
 container.bind<IDatabase>(TYPES.Database).to(FirestoreDatabase).inSingletonScope();
+
+// Storage service binding
+container.bind<IStorageService>(TYPES.StorageService).to(FirebaseStorageService).inSingletonScope();
 
 // Authentication repository binding
 container.bind<IAuthRepository>(TYPES.AuthRepository).to(FirebaseAuthRepository).inSingletonScope();
@@ -64,5 +72,9 @@ container.bind<CreateProductUseCase>(TYPES.CreateProductUseCase).to(CreateProduc
 container.bind<UpdateProductUseCase>(TYPES.UpdateProductUseCase).to(UpdateProductUseCase);
 container.bind<DeleteProductUseCase>(TYPES.DeleteProductUseCase).to(DeleteProductUseCase);
 container.bind<GetCategoriesUseCase>(TYPES.GetCategoriesUseCase).to(GetCategoriesUseCase);
+
+// Storage use cases binding
+container.bind<UploadFileUseCase>(TYPES.UploadFileUseCase).to(UploadFileUseCase);
+container.bind<DeleteFileUseCase>(TYPES.DeleteFileUseCase).to(DeleteFileUseCase);
 
 export { TYPES };

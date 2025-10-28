@@ -4,6 +4,11 @@ export const TYPES = {
   Database: Symbol.for('Database'),
   FirebaseService: Symbol.for('FirebaseService'),
   
+  // Storage
+  StorageService: Symbol.for('StorageService'),
+  UploadFileUseCase: Symbol.for('UploadFileUseCase'),
+  DeleteFileUseCase: Symbol.for('DeleteFileUseCase'),
+  
   // Authentication
   AuthRepository: Symbol.for('AuthRepository'),
   LoginUseCase: Symbol.for('LoginUseCase'),

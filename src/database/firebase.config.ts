@@ -2,6 +2,7 @@ import { injectable } from 'inversify';
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { IFirebaseService } from '@/database/firebase.interface';
 
 @injectable()
@@ -9,6 +10,7 @@ export class FirebaseService implements IFirebaseService {
   private app: FirebaseApp;
   private firestore: Firestore;
   private auth: Auth;
+  private storage: FirebaseStorage;
 
   constructor() {
     const firebaseConfig = {
@@ -25,6 +27,7 @@ export class FirebaseService implements IFirebaseService {
     this.app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     this.firestore = getFirestore(this.app);
     this.auth = getAuth(this.app);
+    this.storage = getStorage(this.app);
   }
 
   getFirestore(): Firestore {
@@ -33,5 +36,9 @@ export class FirebaseService implements IFirebaseService {
 
   getAuth(): Auth {
     return this.auth;
+  }
+
+  getStorage(): FirebaseStorage {
+    return this.storage;
   }
 }

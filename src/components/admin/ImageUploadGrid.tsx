@@ -7,6 +7,7 @@ import {
   CloudArrowUpIcon,
   Bars3Icon
 } from '@heroicons/react/24/outline';
+import { uploadProductImage, deleteProductImage } from '@/lib/actions/storage.actions';
 
 interface ProductImage {
   url: string;
@@ -19,12 +20,16 @@ interface ImageUploadGridProps {
   images: ProductImage[];
   onImagesChange: (images: ProductImage[]) => void;
   productName: string;
+  productId?: string; // Optional: when editing existing product
+  mode?: 'create' | 'edit'; // New prop to determine behavior
   translations: {
     primaryImage: string;
     image: string;
     dragDropHint: string;
     reorderHint: string;
     clickToUpload: string;
+    uploading: string;
+    uploadError: string;
   };
   maxImages?: number;
 }
@@ -33,14 +38,30 @@ export function ImageUploadGrid({
   images, 
   onImagesChange, 
   productName,
+  productId,
+  mode = 'create',
   translations,
   maxImages = 6 
 }: ImageUploadGridProps) {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
+  const [uploadErrors, setUploadErrors] = useState<Record<string, string>>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const removeImage = (index: number) => {
+  const removeImage = async (index: number) => {
+    const imageToRemove = images[index];
+    
+    // If it's a Firebase Storage URL, delete from storage
+    if (imageToRemove.url.includes('firebase')) {
+      try {
+        await deleteProductImage(imageToRemove.url);
+      } catch (error) {
+        console.error('Error deleting image from storage:', error);
+        // Continue with removal from UI even if storage deletion fails
+      }
+    }
+    
     const updatedImages = images.filter((_, i) => i !== index);
     // Update order and primary status
     const reorderedImages = updatedImages.map((img, i) => ({
@@ -51,7 +72,7 @@ export function ImageUploadGrid({
     onImagesChange(reorderedImages);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
 
@@ -59,34 +80,86 @@ export function ImageUploadGrid({
     const availableSlots = maxImages - images.length;
     const filesToProcess = fileArray.slice(0, availableSlots);
 
-    let processedCount = 0;
-    const newImages: ProductImage[] = [];
+    if (mode === 'create') {
+      // For create mode, just show preview URLs
+      let processedCount = 0;
+      const newImages: ProductImage[] = [];
 
-    filesToProcess.forEach((file, index) => {
-      // Create a preview URL for the image
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        if (result) {
-          const newImage: ProductImage = {
-            url: result,
-            alt: file.name,
-            order: images.length + index,
-            isPrimary: images.length === 0 && index === 0,
-          };
-          
-          newImages.push(newImage);
-          processedCount++;
+      filesToProcess.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          if (result) {
+            const newImage: ProductImage = {
+              url: result, // Preview URL for create mode
+              alt: file.name,
+              order: images.length + index,
+              isPrimary: images.length === 0 && index === 0,
+            };
+            
+            newImages.push(newImage);
+            processedCount++;
 
-          // When all files are processed, update the images state
-          if (processedCount === filesToProcess.length) {
-            const updatedImages = [...images, ...newImages.sort((a, b) => a.order - b.order)];
-            onImagesChange(updatedImages);
+            if (processedCount === filesToProcess.length) {
+              const updatedImages = [...images, ...newImages.sort((a, b) => a.order - b.order)];
+              onImagesChange(updatedImages);
+            }
           }
+        };
+        reader.readAsDataURL(file);
+      });
+    } else if (mode === 'edit' && productId) {
+      // For edit mode, upload to Firebase Storage immediately
+      setUploadErrors({});
+
+      for (let i = 0; i < filesToProcess.length; i++) {
+        const file = filesToProcess[i];
+        const fileKey = `${file.name}-${Date.now()}-${i}`;
+        
+        try {
+          setUploadingFiles(prev => new Set(prev).add(fileKey));
+
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('productId', productId);
+
+          const result = await uploadProductImage(formData);
+          
+          if (result.success && result.url) {
+            const newImage: ProductImage = {
+              url: result.url,
+              alt: file.name,
+              order: images.length + i,
+              isPrimary: images.length === 0 && i === 0,
+            };
+            
+            const updatedImages = [...images, newImage].map((img, index) => ({
+              ...img,
+              order: index,
+              isPrimary: index === 0,
+            }));
+            onImagesChange(updatedImages);
+          } else {
+            setUploadErrors(prev => ({
+              ...prev,
+              [fileKey]: result.error || 'Upload failed'
+            }));
+          }
+        } catch (error) {
+          console.error('Error uploading file:', error);
+          setUploadErrors(prev => ({
+            ...prev,
+            [fileKey]: 'Upload failed'
+          }));
+        } finally {
+          setUploadingFiles(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(fileKey);
+            return newSet;
+          });
         }
-      };
-      reader.readAsDataURL(file);
-    });
+      }
+    }
 
     // Reset the input
     if (fileInputRef.current) {
@@ -251,6 +324,26 @@ export function ImageUploadGrid({
             }
           </p>
         </div>
+        
+        {/* Upload Errors */}
+        {Object.keys(uploadErrors).length > 0 && (
+          <div className="mt-4 space-y-1">
+            {Object.entries(uploadErrors).map(([key, error]) => (
+              <p key={key} className="text-sm text-red-600">
+                {translations.uploadError}: {error}
+              </p>
+            ))}
+          </div>
+        )}
+        
+        {/* Upload Progress */}
+        {uploadingFiles.size > 0 && (
+          <div className="mt-4 text-center">
+            <p className="text-sm text-amber-600">
+              {translations.uploading} ({uploadingFiles.size} {uploadingFiles.size === 1 ? 'archivo' : 'archivos'})
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
