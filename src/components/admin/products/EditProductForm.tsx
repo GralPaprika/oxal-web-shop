@@ -87,10 +87,9 @@ export function EditProductForm({ product }: EditProductFormProps) {
     const validationResult = await validateCanStarProduct(product.id);
     
     if (!validationResult.success) {
-      const starredCount = 'currentStarredCount' in validationResult ? validationResult.currentStarredCount : 0;
       showError(
         'Límite alcanzado',
-        `No puedes destacar más de 4 productos. Actualmente tienes ${starredCount} destacados.`
+        'No puedes destacar más de 4 productos.'
       );
       return false;
     }
