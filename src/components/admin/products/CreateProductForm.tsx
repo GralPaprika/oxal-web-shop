@@ -9,10 +9,10 @@ import { createProduct, getAllCategories, updateProductImages } from '@/lib/acti
 import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
 import { ImageUploadGrid } from './ImageUploadGrid';
-import { 
-  PlusIcon,
-  XMarkIcon
-} from '@heroicons/react/24/outline';
+import { ProductFormFields } from './ProductFormFields';
+import { TagsInput } from './TagsInput';
+import { MaterialsInput } from './MaterialsInput';
+import { MetadataFields } from './MetadataFields';
 
 interface ProductImage {
   url: string;
@@ -51,8 +51,8 @@ export function CreateProductForm() {
   });
 
   const [images, setImages] = useState<ProductImage[]>([]);
-  const [newTag, setNewTag] = useState('');
-  const [newMaterial, setNewMaterial] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [materials, setMaterials] = useState<string[]>([]);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
 
@@ -105,9 +105,14 @@ export function CreateProductForm() {
 
     startTransition(async () => {
       try {
-        // Step 1: Create product without images
+        // Step 1: Create product with current data
         const productData: CreateProductData = {
           ...formData,
+          tags,
+          metadata: {
+            ...formData.metadata,
+            materials,
+          },
           images: [], // Empty images array initially
         };
 
@@ -171,46 +176,6 @@ export function CreateProductForm() {
     });
   };
 
-  const addTag = () => {
-    if (!newTag.trim() || formData.tags?.includes(newTag.trim())) return;
-    
-    setFormData(prev => ({
-      ...prev,
-      tags: [...(prev.tags || []), newTag.trim()],
-    }));
-    setNewTag('');
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setFormData(prev => ({
-      ...prev,
-      tags: prev.tags?.filter(tag => tag !== tagToRemove) || [],
-    }));
-  };
-
-  const addMaterial = () => {
-    if (!newMaterial.trim() || formData.metadata?.materials?.includes(newMaterial.trim())) return;
-    
-    setFormData(prev => ({
-      ...prev,
-      metadata: {
-        ...prev.metadata,
-        materials: [...(prev.metadata?.materials || []), newMaterial.trim()],
-      },
-    }));
-    setNewMaterial('');
-  };
-
-  const removeMaterial = (materialToRemove: string) => {
-    setFormData(prev => ({
-      ...prev,
-      metadata: {
-        ...prev.metadata,
-        materials: prev.metadata?.materials?.filter(material => material !== materialToRemove) || [],
-      },
-    }));
-  };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {/* Error/Success Messages */}
@@ -225,109 +190,31 @@ export function CreateProductForm() {
         </div>
       )}
 
-      {/* Basic Information */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="md:col-span-1">
-          <label htmlFor="code" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.code')} *
-          </label>
-          <input
-            type="text"
-            id="code"
-            value={formData.code}
-            onChange={(e) => setFormData(prev => ({ ...prev, code: e.target.value }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder={t('form.codePlaceholder')}
-            required
-          />
-        </div>
-
-        <div className="md:col-span-3">
-          <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.name')} *
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={formData.name}
-            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder={t('form.namePlaceholder')}
-            required
-          />
-        </div>
-      </div>
-
-      <div>
-        <label htmlFor="description" className="block text-sm font-medium text-text-primary mb-2">
-          {t('form.description')}
-        </label>
-        <textarea
-          id="description"
-          rows={3}
-          value={formData.description}
-          onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-          className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-          placeholder={t('form.descriptionPlaceholder')}
-        />
-      </div>
-
-      {/* Pricing and Inventory */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-          <label htmlFor="price" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.price')} *
-          </label>
-          <input
-            type="number"
-            id="price"
-            min="0"
-            step="0.01"
-            value={formData.price}
-            onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) || 0 }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder="0.00"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="stock" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.stock')} *
-          </label>
-          <input
-            type="number"
-            id="stock"
-            min="0"
-            value={formData.stock}
-            onChange={(e) => setFormData(prev => ({ ...prev, stock: parseInt(e.target.value) || 0 }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            placeholder="0"
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.category')} *
-          </label>
-          <select
-            id="category"
-            value={formData.categoryId}
-            onChange={(e) => setFormData(prev => ({ ...prev, categoryId: e.target.value }))}
-            className="w-full px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-            required
-            disabled={loadingCategories}
-          >
-            <option value="">{loadingCategories ? t('form.loadingCategories') : t('form.selectCategory')}</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {categoriesT(category.key)}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <ProductFormFields
+        formData={formData}
+        onFormDataChange={setFormData}
+        categories={categories}
+        loadingCategories={loadingCategories}
+        errors={{}}
+        translations={{
+          fields: {
+            code: `${t('form.code')} *`,
+            name: `${t('form.name')} *`,
+            description: t('form.description'),
+            price: `${t('form.price')} *`,
+            stock: `${t('form.stock')} *`,
+            category: `${t('form.category')} *`,
+          },
+          placeholders: {
+            code: t('form.codePlaceholder'),
+            name: t('form.namePlaceholder'),
+            description: t('form.descriptionPlaceholder'),
+          },
+          selectCategory: t('form.selectCategory'),
+          loading: t('form.loadingCategories'),
+        }}
+        categoriesTranslations={categoriesT}
+      />
 
       {/* Images */}
       <ImageUploadGrid
@@ -351,190 +238,39 @@ export function CreateProductForm() {
 
       {/* Additional Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Tags */}
-        <div>
-          <label htmlFor="tags" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.tags')}
-          </label>
-          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              id="tags"
-              value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-              className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors"
-              placeholder={t('form.tagPlaceholder')}
-            />
-            <button
-              type="button"
-              onClick={addTag}
-              className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
-            >
-              <PlusIcon className="h-4 w-4" />
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {formData.tags?.map((tag, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm"
-              >
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                  className="hover:text-amber-900"
-                >
-                  <XMarkIcon className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Materials */}
-        <div>
-          <label htmlFor="materials" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.materials')}
-          </label>
-          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              id="materials"
-              value={newMaterial}
-              onChange={(e) => setNewMaterial(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addMaterial())}
-              className="flex-1 px-3 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors"
-              placeholder={t('form.materialPlaceholder')}
-            />
-            <button
-              type="button"
-              onClick={addMaterial}
-              className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors"
-            >
-              <PlusIcon className="h-4 w-4" />
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {formData.metadata?.materials?.map((material, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm"
-              >
-                {material}
-                <button
-                  type="button"
-                  onClick={() => removeMaterial(material)}
-                  className="hover:text-amber-900"
-                >
-                  <XMarkIcon className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-        </div>
+        <TagsInput
+          label={t('form.tags')}
+          placeholder={t('form.tagPlaceholder')}
+          tags={tags}
+          onTagsChange={setTags}
+        />
+        
+        <MaterialsInput
+          label={t('form.materials')}
+          placeholder={t('form.materialPlaceholder')}
+          materials={materials}
+          onMaterialsChange={setMaterials}
+        />
       </div>
 
-      {/* Metadata */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label htmlFor="weight" className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.weight')}
-          </label>
-          <div className="relative">
-            <input
-              type="number"
-              id="weight"
-              min="0"
-              step="0.01"
-              value={formData.metadata?.weight || ''}
-              onChange={(e) => setFormData(prev => ({
-                ...prev,
-                metadata: {
-                  ...prev.metadata,
-                  weight: parseFloat(e.target.value) || 0,
-                },
-              }))}
-              className="w-full px-3 py-2 pr-12 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors"
-              placeholder="0.00"
-            />
-            <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-muted">kg</span>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-text-primary mb-2">
-            {t('form.length')} x {t('form.width')} x {t('form.height')}
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            <div>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={formData.metadata?.dimensions?.length || ''}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  metadata: {
-                    ...prev.metadata,
-                    dimensions: {
-                      length: parseFloat(e.target.value) || 0,
-                      width: prev.metadata?.dimensions?.width || 0,
-                      height: prev.metadata?.dimensions?.height || 0,
-                    },
-                  },
-                }))}
-                className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors text-sm"
-                placeholder={t('form.length')}
-              />
-            </div>
-            <div>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={formData.metadata?.dimensions?.width || ''}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  metadata: {
-                    ...prev.metadata,
-                    dimensions: {
-                      length: prev.metadata?.dimensions?.length || 0,
-                      width: parseFloat(e.target.value) || 0,
-                      height: prev.metadata?.dimensions?.height || 0,
-                    },
-                  },
-                }))}
-                className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors text-sm"
-                placeholder={t('form.width')}
-              />
-            </div>
-            <div>
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value={formData.metadata?.dimensions?.height || ''}
-                onChange={(e) => setFormData(prev => ({
-                  ...prev,
-                  metadata: {
-                    ...prev.metadata,
-                    dimensions: {
-                      length: prev.metadata?.dimensions?.length || 0,
-                      width: prev.metadata?.dimensions?.width || 0,
-                      height: parseFloat(e.target.value) || 0,
-                    },
-                  },
-                }))}
-                className="w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors text-sm"
-                placeholder={t('form.height')}
-              />
-            </div>
-          </div>
-          <p className="text-xs text-text-muted mt-1">Dimensiones en centímetros (largo x ancho x alto)</p>
-        </div>
-      </div>
+      <MetadataFields
+        formData={formData}
+        onFormDataChange={setFormData}
+        translations={{
+          fields: {
+            weight: t('form.weight'),
+            dimensions: `${t('form.length')} x ${t('form.width')} x ${t('form.height')}`,
+          },
+          placeholders: {
+            length: t('form.length'),
+            width: t('form.width'),
+            height: t('form.height'),
+          },
+          helpers: {
+            dimensions: 'Dimensiones en centímetros (largo x ancho x alto)',
+          },
+        }}
+      />
 
       {/* Form Actions */}
       <div className="flex justify-end gap-4 pt-6 border-t border-neutral-200">
