@@ -4,7 +4,7 @@ import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { CreateProductData, ProductCategory, Product, UpdateProductData } from '@/src/domain/product/product.entity';
+import { CreateProductData, ProductCategory, Product } from '@/src/domain/product/product.entity';
 import { updateProduct, getAllCategories } from '@/lib/actions/product.actions';
 import { Button } from '@/components/ui/Button';
 import { ImageUploadGrid } from './ImageUploadGrid';
@@ -208,8 +208,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
       )}
 
       {/* Basic Information */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="md:col-span-1">
           <label htmlFor="code" className="block text-sm font-medium text-text-primary mb-2">
             {t('fields.code')} *
           </label>
@@ -226,7 +226,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
           {errors.code && <p className="text-red-600 text-sm mt-1">{errors.code}</p>}
         </div>
 
-        <div>
+        <div className="md:col-span-3">
           <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
             {t('fields.name')} *
           </label>
