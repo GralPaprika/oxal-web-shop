@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
@@ -21,6 +22,7 @@ interface EditUserModalProps {
 }
 
 export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalProps) {
+  const t = useTranslations('admin.settings');
   const [formData, setFormData] = useState({
     displayName: user?.displayName || '',
     email: user?.email || '',
@@ -99,7 +101,7 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-gray-900">Edit User</h2>
+          <h2 className="text-xl font-semibold text-gray-900">{t('userManagement.editUser') ?? 'Edit User'}</h2>
           <button
             onClick={handleClose}
             className="text-gray-400 hover:text-gray-600"
@@ -118,7 +120,7 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
           <Input
             type="text"
             id="displayName"
-            label="Display Name"
+            label={t('userManagement.form.displayName')}
             value={formData.displayName}
             onChange={(e) => setFormData({ ...formData, displayName: e.target.value })}
             required
@@ -127,7 +129,7 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
           <Input
             type="email"
             id="email"
-            label="Email"
+            label={t('userManagement.form.email')}
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
@@ -135,24 +137,24 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
 
           <Select
             id="role"
-            label="Role"
+            label={t('userManagement.form.role')}
             value={formData.role}
             onChange={(e) => setFormData({ ...formData, role: e.target.value as 'admin' | 'cashier' })}
             options={[
-              { label: 'Cashier', value: 'cashier' },
-              { label: 'Admin', value: 'admin' }
+              { label: t('roles.cashier'), value: 'cashier' },
+              { label: t('roles.admin'), value: 'admin' }
             ]}
           />
 
           <Select
             id="status"
-            label="Status"
+            label={t('userManagement.table.status')}
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as 'active' | 'inactive' | 'suspended' })}
             options={[
-              { label: 'Active', value: 'active' },
-              { label: 'Inactive', value: 'inactive' },
-              { label: 'Suspended', value: 'suspended' }
+              { label: t('status.active'), value: 'active' },
+              { label: t('status.inactive'), value: 'inactive' },
+              { label: t('status.suspended'), value: 'suspended' }
             ]}
           />
 
@@ -163,13 +165,13 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
               onClick={handleClose}
               disabled={isLoading}
             >
-              Cancel
+              {t('userManagement.form.cancel')}
             </Button>
             <Button
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? 'Saving...' : 'Save Changes'}
+              {isLoading ? (t('userManagement.form.saving') ?? 'Saving...') : (t('userManagement.form.save') ?? 'Save Changes')}
             </Button>
           </div>
         </form>

@@ -366,6 +366,7 @@
         "title": "Gestión de Usuarios",
         "subtitle": "Administra roles y permisos del personal",
         "newUser": "Nuevo Usuario",
+        "editUser": "Editar Usuario",
         "ordersLabel": "pedidos",
         "form": {
           "email": "Email",
@@ -377,7 +378,9 @@
           "passwordPlaceholder": "Mínimo 6 caracteres",
           "cancel": "Cancelar",
           "create": "Crear Usuario",
-          "creating": "Creando..."
+          "creating": "Creando...",
+          "save": "Guardar Cambios",
+          "saving": "Guardando..."
         },
         "table": {
           "user": "Usuario",
@@ -393,6 +396,17 @@
           "unableToLoad": "No se pudieron cargar los usuarios debido a un error.",
           "noUsersCreated": "Aún no se han creado usuarios.",
           "createFirstUser": "Crear primer usuario"
+        },
+        "deleteDialog": {
+          "title": "Eliminar Usuario",
+          "message": "Esta acción no se puede deshacer",
+          "confirmation": "¿Estás seguro de que deseas eliminar al usuario {name}?",
+          "detail": "Esto eliminará permanentemente la cuenta de usuario y todos los datos asociados.",
+          "confirmButton": "Eliminar",
+          "cancelButton": "Cancelar",
+          "deleting": "Eliminando...",
+          "success": "Usuario eliminado exitosamente",
+          "error": "Error al eliminar el usuario. Inténtalo de nuevo."
         }
       },
       "roles": {
