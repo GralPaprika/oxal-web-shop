@@ -2,6 +2,8 @@
 
 import { Input, TextArea } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
+import { StarIcon } from '@heroicons/react/24/outline';
+import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import type { CreateProductData, ProductCategory } from '@/domain/product/product.entity';
 
 interface ProductFormFieldsProps {
@@ -59,13 +61,26 @@ export function ProductFormFields({
     onFormDataChange({ ...formData, [field]: e.target.checked });
   };
 
-  const handleBadgeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value === '' ? null : e.target.value as 'new' | 'sale';
-    onFormDataChange({ ...formData, badge: value });
-  };
-
   return (
-    <>
+    <div className="relative pt-12"> {/* Added top padding to make room for star */}
+      {/* Star Icon in Top Right Corner */}
+      <button
+        type="button"
+        onClick={() => handleCheckboxChange('isStarred')({ target: { checked: !formData.isStarred } } as React.ChangeEvent<HTMLInputElement>)}
+        className="absolute top-2 right-2 z-10 p-2 transition-all duration-300 transform hover:scale-110 group"
+        title={formData.isStarred ? "Quitar de destacados" : "Marcar como destacado"}
+      >
+        {formData.isStarred ? (
+          <StarIconSolid className="w-8 h-8 text-yellow-500 drop-shadow-lg transition-all duration-500 transform hover:rotate-12 animate-pulse" />
+        ) : (
+          <StarIcon className="w-8 h-8 text-gray-300 group-hover:text-yellow-300 group-hover:scale-110 transition-all duration-300" />
+        )}
+        {/* Subtle glow effect when starred */}
+        {formData.isStarred && (
+          <div className="absolute inset-0 w-8 h-8 bg-yellow-400 rounded-full opacity-20 blur-sm animate-ping"></div>
+        )}
+      </button>
+
       {/* Code and Name */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="md:col-span-1">
@@ -152,33 +167,50 @@ export function ProductFormFields({
         />
       </div>
 
-      {/* Marketing Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex items-center space-x-3">
-          <input
-            type="checkbox"
-            id="isStarred"
-            checked={formData.isStarred || false}
-            onChange={handleCheckboxChange('isStarred')}
-            className="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
-          />
-          <label htmlFor="isStarred" className="text-sm font-medium text-gray-700">
-            {translations.fields.isStarred}
-          </label>
-        </div>
+      {/* Badge Selection - Modern Toggle Design */}
+      <div className="space-y-3 mt-8">
+        <label className="block text-sm font-medium text-gray-700">
+          {translations.fields.badge}
+        </label>
+        <div className="flex gap-3">
+          {/* New Badge Option */}
+          <button
+            type="button"
+            onClick={() => onFormDataChange({ ...formData, badge: formData.badge === 'new' ? null : 'new' })}
+            className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 flex items-center gap-2 ${
+              formData.badge === 'new'
+                ? 'border-green-500 bg-green-500 text-white shadow-md scale-105'
+                : 'border-green-200 bg-green-50 text-green-600 hover:border-green-300 hover:bg-green-100'
+            }`}
+          >
+            <div className={`w-2 h-2 rounded-full ${
+              formData.badge === 'new' ? 'bg-white' : 'bg-green-500'
+            }`}></div>
+            {translations.badges.new}
+          </button>
 
-        <Select
-          label={translations.fields.badge}
-          id="badge"
-          value={formData.badge || ''}
-          onChange={handleBadgeChange}
-          options={[
-            { label: translations.badges.none, value: '' },
-            { label: translations.badges.new, value: 'new' },
-            { label: translations.badges.sale, value: 'sale' }
-          ]}
-        />
+          {/* Sale Badge Option */}
+          <button
+            type="button"
+            onClick={() => onFormDataChange({ ...formData, badge: formData.badge === 'sale' ? null : 'sale' })}
+            className={`px-4 py-2 rounded-lg border-2 transition-all duration-200 flex items-center gap-2 ${
+              formData.badge === 'sale'
+                ? 'border-red-500 bg-red-500 text-white shadow-md scale-105'
+                : 'border-red-200 bg-red-50 text-red-600 hover:border-red-300 hover:bg-red-100'
+            }`}
+          >
+            <div className={`w-2 h-2 rounded-full ${
+              formData.badge === 'sale' ? 'bg-white' : 'bg-red-500'
+            }`}></div>
+            {translations.badges.sale}
+          </button>
+        </div>
+        {formData.badge && (
+          <p className="text-xs text-gray-500 italic">
+            Haz clic en la etiqueta seleccionada para quitarla
+          </p>
+        )}
       </div>
-    </>
+    </div>
   );
 }
