@@ -124,14 +124,14 @@ export function ProductFormFields({
           disabled={loadingCategories}
           error={errors.categoryId}
           required
-        >
-          <option value="">{loadingCategories ? translations.loading : translations.selectCategory}</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {categoriesTranslations(category.key)}
-            </option>
-          ))}
-        </Select>
+          options={[
+            { label: loadingCategories ? translations.loading : translations.selectCategory, value: '', disabled: true },
+            ...categories.map((category) => ({
+              label: categoriesTranslations(category.key),
+              value: category.id,
+            }))
+          ]}
+        />
       </div>
     </>
   );

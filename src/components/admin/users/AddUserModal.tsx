@@ -136,10 +136,11 @@ export function AddUserModal({
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => 
               setFormData(prev => ({ ...prev, role: e.target.value as 'admin' | 'cashier' }))
             }
-          >
-            <option value="cashier">{t('roles.cashier')}</option>
-            <option value="admin">{t('roles.admin')}</option>
-          </Select>
+            options={[
+              { label: t('roles.cashier'), value: 'cashier' },
+              { label: t('roles.admin'), value: 'admin' }
+            ]}
+          />
 
           <div className="flex justify-end space-x-3 pt-6">
             <Button

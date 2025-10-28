@@ -138,21 +138,23 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
             label="Role"
             value={formData.role}
             onChange={(e) => setFormData({ ...formData, role: e.target.value as 'admin' | 'cashier' })}
-          >
-            <option value="cashier">Cashier</option>
-            <option value="admin">Admin</option>
-          </Select>
+            options={[
+              { label: 'Cashier', value: 'cashier' },
+              { label: 'Admin', value: 'admin' }
+            ]}
+          />
 
           <Select
             id="status"
             label="Status"
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value as 'active' | 'inactive' | 'suspended' })}
-          >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="suspended">Suspended</option>
-          </Select>
+            options={[
+              { label: 'Active', value: 'active' },
+              { label: 'Inactive', value: 'inactive' },
+              { label: 'Suspended', value: 'suspended' }
+            ]}
+          />
 
           <div className="flex justify-end space-x-3 pt-6">
             <Button
