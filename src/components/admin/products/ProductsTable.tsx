@@ -44,12 +44,24 @@ interface ProductsTableProps {
     };
   };
   onEditProduct?: (product: Product) => void;
+  onProductCountChange?: (count: number) => void;
+  showPagination?: boolean;
+  paginationTranslations?: {
+    showing: string;
+    of: string;
+    products: string;
+    previous: string;
+    next: string;
+  };
 }
 
 export function ProductsTable({
   products: initialProducts,
   translations: t,
-  onEditProduct
+  onEditProduct,
+  onProductCountChange,
+  showPagination = false,
+  paginationTranslations
 }: ProductsTableProps) {
   const [products, setProducts] = useState(initialProducts);
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
@@ -68,6 +80,7 @@ export function ProductsTable({
   const handleProductDeleted = (productId: string) => {
     const updatedProducts = products.filter(p => p.id !== productId);
     setProducts(updatedProducts);
+    onProductCountChange?.(updatedProducts.length);
   };
 
   const handleCloseDeleteDialog = () => {
@@ -210,6 +223,26 @@ export function ProductsTable({
         onDeleted={handleProductDeleted}
         translations={t.deleteDialog}
       />
+
+      {/* Pagination */}
+      {showPagination && paginationTranslations && products.length > 0 && (
+        <div className="flex items-center justify-between mt-6 px-6 pb-6">
+          <div className="flex items-center text-sm text-text-secondary">
+            {paginationTranslations.showing} 1-{products.length} {paginationTranslations.of} {products.length} {paginationTranslations.products}
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
+              {paginationTranslations.previous}
+            </button>
+            <button className="px-3 py-2 bg-amber-600 text-white rounded-lg text-sm">
+              1
+            </button>
+            <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
+              {paginationTranslations.next}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

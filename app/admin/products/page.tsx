@@ -86,9 +86,10 @@ async function AdminProductsPage() {
           </div>
         </div>
 
-        {/* Products Table */}
+        {/* Products Table with Pagination */}
         <ProductsTable
           products={products}
+          showPagination={true}
           translations={{
             table: {
               product: t('table.product'),
@@ -124,27 +125,14 @@ async function AdminProductsPage() {
               error: t('deleteDialog.error'),
             },
           }}
+          paginationTranslations={{
+            showing: t('pagination.showing'),
+            of: t('pagination.of'),
+            products: t('pagination.products'),
+            previous: t('pagination.previous'),
+            next: t('pagination.next'),
+          }}
         />
-
-        {/* Pagination */}
-        {products.length > 0 && (
-          <div className="flex items-center justify-between mt-6">
-            <div className="flex items-center text-sm text-text-secondary">
-              {t('pagination.showing')} 1-{products.length} {t('pagination.of')} {products.length} {t('pagination.products')}
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-                {t('pagination.previous')}
-              </button>
-              <button className="px-3 py-2 bg-amber-600 text-white rounded-lg text-sm">
-                1
-              </button>
-              <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-                {t('pagination.next')}
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
