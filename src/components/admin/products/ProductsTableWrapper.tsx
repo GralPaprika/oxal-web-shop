@@ -7,6 +7,8 @@ import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableWrapperProps {
   products: Product[];
+  searchTerm?: string;
+  selectedCategory?: string;
   showPagination?: boolean;
   translations: {
     table: {
@@ -54,6 +56,8 @@ interface ProductsTableWrapperProps {
 
 export function ProductsTableWrapper({
   products,
+  searchTerm,
+  selectedCategory,
   showPagination,
   translations,
   paginationTranslations,
@@ -67,6 +71,8 @@ export function ProductsTableWrapper({
   return (
     <ProductsTable
       products={products}
+      searchTerm={searchTerm}
+      selectedCategory={selectedCategory}
       showPagination={showPagination}
       translations={translations}
       paginationTranslations={paginationTranslations}

@@ -3,19 +3,30 @@ import Link from 'next/link';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/components/admin/users';
 import { ProductsTableWrapper } from '@/components/admin/products';
+import { SearchForm } from '@/components/admin/products/SearchForm';
 import { getAllProducts, getAllCategories } from '@/lib/actions/product.actions';
-import { 
-  PlusIcon, 
-  MagnifyingGlassIcon,
-  FunnelIcon
-} from '@heroicons/react/24/outline';
+import { PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 
-async function AdminProductsPage() {
+async function AdminProductsPage({
+  searchParams
+}: {
+  searchParams: { search?: string; category?: string }
+}) {
   const t = await getTranslations('admin.products');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
-  
-  const productsResult = await getAllProducts();
+
+  // Await searchParams since it's a Promise in Next.js 15
+  const params = await searchParams;
+  const searchTerm = params.search || '';
+  const selectedCategory = params.category || '';
+
+  const productsResult = await getAllProducts({
+    filters: {
+      search: searchTerm || undefined,
+      category: selectedCategory || undefined
+    }
+  });
   const products = productsResult.success ? productsResult.data?.items || [] : [];
   
   const categoriesResult = await getAllCategories();
@@ -57,38 +68,23 @@ async function AdminProductsPage() {
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 mb-6">
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-text-muted" />
-                <input
-                  type="text"
-                  placeholder={t('searchPlaceholder')}
-                  className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                />
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <button className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
-                <FunnelIcon className="h-4 w-4" />
-                {t('filters')}
-              </button>
-              <select className="px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500">
-                <option>{t('allCategories')}</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        <SearchForm
+          searchTerm={searchTerm}
+          selectedCategory={selectedCategory}
+          categories={categories}
+          translations={{
+            searchPlaceholder: t('searchPlaceholder'),
+            search: t('search'),
+            filters: t('filters'),
+            allCategories: t('allCategories'),
+          }}
+        />
 
         {/* Products Table with Pagination */}
         <ProductsTableWrapper
           products={products}
+          searchTerm={searchTerm}
+          selectedCategory={selectedCategory}
           showPagination={true}
           translations={{
             table: {

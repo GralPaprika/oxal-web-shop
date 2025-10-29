@@ -9,6 +9,7 @@ import type {
   ProductCategory 
 } from '@/domain/product/product.entity';
 import { TYPES } from '@/types/container.types';
+import { matchesSearchTerm } from '@/utils/textUtils';
 
 @injectable()
 export class FirestoreProductRepository implements IProductRepository {
@@ -21,20 +22,8 @@ export class FirestoreProductRepository implements IProductRepository {
 
   async getAllProducts(options?: ProductListOptions): Promise<Product[]> {
     try {
-      let products: Product[];
-      
-      // Use paginated query if limit/offset are provided
-      if (options?.limit || options?.offset) {
-        const offset = options.offset || 0;
-        const limit = options.limit || 1000; // Default large limit if not specified
-        products = await this.database.getAllPaginated<Product>(
-          this.PRODUCTS_COLLECTION,
-          limit,
-          offset
-        );
-      } else {
-        products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);
-      }
+      // Always get all products first, then apply filters and pagination
+      let products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);
       
       // Apply filters if provided
       if (options?.filters) {
@@ -44,6 +33,13 @@ export class FirestoreProductRepository implements IProductRepository {
       // Apply sorting if provided
       if (options?.sort) {
         products = this.applySorting(products, options.sort);
+      }
+      
+      // Apply pagination if provided
+      if (options?.limit || options?.offset) {
+        const offset = options.offset || 0;
+        const limit = options.limit || products.length;
+        products = products.slice(offset, offset + limit);
       }
       
       return products;
@@ -271,16 +267,15 @@ export class FirestoreProductRepository implements IProductRepository {
       }
       
       if (filters.search) {
-        const searchTerm = filters.search.toLowerCase();
         const searchableText = [
           product.name,
           product.code,
           product.description,
           product.category.name,
           ...(product.tags || [])
-        ].join(' ').toLowerCase();
-        
-        if (!searchableText.includes(searchTerm)) {
+        ].join(' ');
+
+        if (!matchesSearchTerm(searchableText, filters.search)) {
           return false;
         }
       }

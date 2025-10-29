@@ -192,6 +192,7 @@
       "title": "Gestión de Productos",
       "subtitle": "Administra tu inventario y catálogo de productos artesanales",
       "newProduct": "Nuevo Producto",
+      "search": "Buscar",
       "searchPlaceholder": "Buscar productos...",
       "filters": "Filtros",
       "allCategories": "Todas las categorías",

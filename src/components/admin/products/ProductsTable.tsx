@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, useTransition, useRef } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { PencilIcon, TrashIcon, StarIcon } from '@heroicons/react/24/outline';
@@ -12,6 +12,9 @@ import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableProps {
   products: Product[];
+  searchTerm?: string;
+  selectedCategory?: string;
+  showPagination?: boolean;
   translations: {
     table: {
       product: string;
@@ -49,33 +52,85 @@ interface ProductsTableProps {
   };
   onEditProduct?: (product: Product) => void;
   onProductCountChange?: (count: number) => void;
+  paginationTranslations?: {
+    showing: string;
+    of: string;
+    products: string;
+    previous: string;
+    next: string;
+  };
 }
 
 export function ProductsTable({
   products: initialProducts,
+  searchTerm,
+  selectedCategory,
+  showPagination,
   translations: t,
+  paginationTranslations,
   onEditProduct,
   onProductCountChange
 }: ProductsTableProps) {
   const translations = useTranslations();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isPending, startTransition] = useTransition();
-  const [paginatedProducts, setPaginatedProducts] = useState<Product[]>([]);
+  const [paginatedProducts, setPaginatedProducts] = useState<Product[]>(() => {
+    // Initialize with first page of initialProducts if no search filters
+    if (!searchTerm && !selectedCategory && initialProducts.length > 0) {
+      return initialProducts.slice(0, 10); // First 10 items (default page size)
+    }
+    return [];
+  });
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalProducts, setTotalProducts] = useState(initialProducts.length);
   const { notifications, removeNotification, showError } = useNotification();
+  const prevSearchRef = useRef<string | undefined>(searchTerm);
+  const prevCategoryRef = useRef<string | undefined>(selectedCategory);
 
   // Load paginated data when page or pageSize changes
   useEffect(() => {
+    const searchChanged = prevSearchRef.current !== searchTerm;
+    const categoryChanged = prevCategoryRef.current !== selectedCategory;
+
+    // Update refs
+    prevSearchRef.current = searchTerm;
+    prevCategoryRef.current = selectedCategory;
+
     startTransition(async () => {
-      const result = await getPaginatedProducts(currentPage, pageSize);
+      // If search or category changed, start from page 1
+      const pageToLoad = (searchChanged || categoryChanged) ? 1 : currentPage;
+
+      // If no search filters, use the initialProducts directly
+      if (!searchTerm && !selectedCategory) {
+        const startIdx = (pageToLoad - 1) * pageSize;
+        const endIdx = startIdx + pageSize;
+        const pageProducts = initialProducts.slice(startIdx, endIdx);
+        setPaginatedProducts(pageProducts);
+        setTotalProducts(initialProducts.length);
+        onProductCountChange?.(initialProducts.length);
+        return;
+      }
+
+      const options = {
+        filters: {
+          search: searchTerm || undefined,
+          category: selectedCategory || undefined
+        }
+      };
+
+      const result = await getPaginatedProducts(pageToLoad, pageSize, options);
       if (result.success && result.data?.items && typeof result.data.total === 'number') {
         setPaginatedProducts(result.data.items);
         setTotalProducts(result.data.total);
         onProductCountChange?.(result.data.total);
+
+        // If we loaded page 1 due to filter change, update currentPage state
+        if (searchChanged || categoryChanged) {
+          setCurrentPage(1);
+        }
       } else {
         showError(
           translations('admin.products.notifications.updateError'),
@@ -83,7 +138,7 @@ export function ProductsTable({
         );
       }
     });
-  }, [currentPage, pageSize, translations, onProductCountChange, showError]);
+  }, [currentPage, pageSize, searchTerm, selectedCategory, initialProducts, translations, onProductCountChange, showError]);
 
   const handleDeleteProduct = (product: Product) => {
     setDeleteProduct(product);
@@ -93,7 +148,13 @@ export function ProductsTable({
   const handleProductDeleted = () => {
     // Refresh the paginated data after deletion
     startTransition(async () => {
-      const result = await getPaginatedProducts(currentPage, pageSize);
+      const options = {
+        filters: {
+          search: searchTerm || undefined,
+          category: selectedCategory || undefined
+        }
+      };
+      const result = await getPaginatedProducts(currentPage, pageSize, options);
       if (result.success && result.data?.items && typeof result.data.total === 'number') {
         setPaginatedProducts(result.data.items);
         setTotalProducts(result.data.total);
@@ -323,11 +384,11 @@ export function ProductsTable({
       />
 
       {/* Pagination */}
-      {totalProducts > 0 && (
+      {showPagination && totalProducts > 0 && (
         <div className="border-t border-neutral-200 p-6 flex items-center justify-between">
           {/* Page Size Selector */}
           <div className="flex items-center gap-3">
-            <span className="text-sm text-text-secondary">Mostrar:</span>
+            <span className="text-sm text-text-secondary">{paginationTranslations?.showing || 'Showing'}:</span>
             <select
               value={pageSize}
               onChange={(e) => handlePageSizeChange(Number(e.target.value))}
@@ -339,14 +400,14 @@ export function ProductsTable({
               <option value={100}>100</option>
             </select>
             <span className="text-sm text-text-secondary">
-              (Total: {totalProducts})
+              ({paginationTranslations?.of || 'of'} {totalProducts} {paginationTranslations?.products || 'products'})
             </span>
           </div>
 
           {/* Pagination Info and Controls */}
           <div className="flex items-center gap-4">
             <span className="text-sm text-text-secondary">
-              {startIndex + 1}-{endIndex} de {totalProducts}
+              {startIndex + 1}-{endIndex} {paginationTranslations?.of || 'of'} {totalProducts}
             </span>
             <div className="flex items-center gap-2">
               <button
@@ -354,7 +415,7 @@ export function ProductsTable({
                 disabled={currentPage === 1}
                 className="px-3 py-2 border border-neutral-300 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
               >
-                ← Anterior
+                ← {paginationTranslations?.previous || 'Previous'}
               </button>
 
               {/* Page Numbers */}
@@ -379,7 +440,7 @@ export function ProductsTable({
                 disabled={currentPage === totalPages}
                 className="px-3 py-2 border border-neutral-300 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
               >
-                Siguiente →
+                {paginationTranslations?.next || 'Next'} →
               </button>
             </div>
           </div>
