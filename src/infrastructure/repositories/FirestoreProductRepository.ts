@@ -1,5 +1,5 @@
 import { injectable, inject } from 'inversify';
-import type { IDatabase } from '@/database/database.interface';
+import type { IDatabase } from '@/infrastructure/firebase/database.interface';
 import type { IProductRepository } from '@/domain/product/product.repository';
 import type { 
   Product, 

@@ -7,7 +7,7 @@ import {
   Auth
 } from 'firebase/auth';
 import type { IAuthRepository, LoginCredentials, AuthResult, User } from '@/domain/auth/auth.interface';
-import type { IFirebaseService } from '@/database/firebase.interface';
+import type { IFirebaseService } from '@/infrastructure/firebase/firebase.interface';
 import { TYPES } from '@/types/container.types';
 
 @injectable()
@@ -67,6 +67,7 @@ export class FirebaseAuthRepository implements IAuthRepository {
     };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private mapFirebaseError(error: any): Error {
     const errorCode = error?.code;
     

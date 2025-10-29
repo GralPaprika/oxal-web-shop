@@ -2,7 +2,7 @@ import { injectable, inject } from 'inversify';
 import type { IUserRepository } from '@/domain/user/user.repository';
 import type { User } from '@/domain/user/user.entity';
 import type { CreateUserData } from '@/domain/user/user.repository';
-import type { IDatabase } from '@/database/database.interface';
+import type { IDatabase } from '@/infrastructure/firebase/database.interface';
 import { TYPES } from '@/types/container.types';
 import { FirebaseUserService } from './FirebaseUserService';
 

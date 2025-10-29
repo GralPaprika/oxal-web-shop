@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { Container } from 'inversify';
 import { TYPES } from '@/types/container.types';
-import { IDatabase } from '@/database/database.interface';
-import { FirestoreDatabase } from '@/database/firestore.database';
-import { IFirebaseService } from '@/database/firebase.interface';
-import { FirebaseService } from '@/database/firebase.config';
+import { IDatabase } from '@/infrastructure/firebase/database.interface';
+import { FirestoreDatabase } from '@/infrastructure/firebase/firestore.database';
+import { IFirebaseService } from '@/infrastructure/firebase/firebase.interface';
+import { FirebaseService } from '@/infrastructure/firebase/firebase.config';
 import type { IAuthRepository } from '@/domain/auth/auth.interface';
 import { FirebaseAuthRepository } from '@/infrastructure/auth/FirebaseAuthRepository';
 import { LoginUseCase } from '@/application/usecases/auth/LoginUseCase';

@@ -11,8 +11,8 @@ import {
   where,
   Firestore 
 } from 'firebase/firestore';
-import { IDatabase } from '@/database/database.interface';
-import type { IFirebaseService } from '@/database/firebase.interface';
+import { IDatabase } from '@/infrastructure/firebase/database.interface';
+import type { IFirebaseService } from '@/infrastructure/firebase/firebase.interface';
 import { TYPES } from '@/types/container.types';
 
 @injectable()

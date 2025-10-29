@@ -3,7 +3,7 @@ import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import { getStorage, FirebaseStorage } from 'firebase/storage';
-import { IFirebaseService } from '@/database/firebase.interface';
+import { IFirebaseService } from '@/infrastructure/firebase/firebase.interface';
 
 @injectable()
 export class FirebaseService implements IFirebaseService {

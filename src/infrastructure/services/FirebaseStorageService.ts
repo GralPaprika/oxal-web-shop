@@ -8,7 +8,7 @@ import {
   StorageReference
 } from 'firebase/storage';
 import { IStorageService, UploadProgressCallback } from '@/domain/storage/storage.interface';
-import type { IFirebaseService } from '@/database/firebase.interface';
+import type { IFirebaseService } from '@/infrastructure/firebase/firebase.interface';
 import { TYPES } from '@/types/container.types';
 
 @injectable()
