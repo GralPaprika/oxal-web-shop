@@ -9,60 +9,7 @@ import { GetCategoriesUseCase } from '@/application/usecases/product/GetCategori
 import { ValidateCanStarProductUseCase } from '@/application/usecases/product/ValidateCanStarProductUseCase';
 import { TYPES } from '@/types/container.types';
 import type { Product, ProductListOptions, CreateProductData, UpdateProductData, ProductCategory } from '@/domain/product/product.entity';
-import type { User } from '@/domain/user/user.entity';
-import { checkAuthStatus, getCurrentUser } from '@/lib/auth';
-
-async function verifyAdminAccess(): Promise<{ success: boolean; error?: string; currentUser?: User }> {
-  try {
-    const isAuthenticated = await checkAuthStatus();
-    if (!isAuthenticated) {
-      return {
-        success: false,
-        error: 'Unauthorized: Authentication required'
-      };
-    }
-
-    const currentUser = await getCurrentUser();
-    if (!currentUser || currentUser.role !== 'admin') {
-      return {
-        success: false,
-        error: 'Unauthorized: Admin privileges required'
-      };
-    }
-
-    return {
-      success: true,
-      currentUser
-    };
-  } catch (error) {
-    console.error('Error verifying admin access:', error);
-    return {
-      success: false,
-      error: 'Authentication verification failed'
-    };
-  }
-}
-
-function withAdminAuthOnly<TArgs extends unknown[], TReturn>(
-  fn: (...args: TArgs) => Promise<TReturn>
-) {
-  return async (...args: TArgs): Promise<TReturn | { success: false; error: string }> => {
-    const authResult = await verifyAdminAccess();
-    if (!authResult.success) {
-      return { success: false, error: authResult.error! } as TReturn;
-    }
-
-    try {
-      return await fn(...args);
-    } catch (error) {
-      console.error('Product action error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'An unexpected error occurred' 
-      } as TReturn;
-    }
-  };
-}
+import { withAdminAuthOnly } from '@/lib/auth-wrapper';
 
 // GET PRODUCTS
 export const getAllProducts = withAdminAuthOnly(async (options?: ProductListOptions): Promise<{ success: boolean; products?: Product[]; error?: string }> => {
