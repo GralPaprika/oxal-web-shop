@@ -64,7 +64,7 @@ export function ProductsTable({
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
+  const [pageSize, setPageSize] = useState(10);
   const [totalProducts, setTotalProducts] = useState(initialProducts.length);
   const { notifications, removeNotification, showError } = useNotification();
 
