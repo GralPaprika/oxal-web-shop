@@ -192,7 +192,7 @@ export function CreateProductForm() {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
           }, 1500);
         } else {
-          setError('error' in result ? result.error : t('error.failed'));
+          setError('error' in result ? String(result.error) : t('error.failed'));
         }
       } catch (error) {
         console.error('Error creating product:', error);

@@ -197,12 +197,7 @@ export class FirestoreProductRepository implements IProductRepository {
 
   async getProductCount(options?: ProductListOptions): Promise<number> {
     try {
-      let products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);
-      
-      if (options?.filters) {
-        products = this.applyFilters(products, options.filters);
-      }
-      
+      const products = await this.getFilteredProducts(options);
       return products.length;
     } catch (error) {
       console.error('Error counting products:', error);
@@ -212,8 +207,8 @@ export class FirestoreProductRepository implements IProductRepository {
 
   async isCodeUnique(code: string, excludeId?: string): Promise<boolean> {
     try {
-      const products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);
-      const existingProduct = products.find(product => 
+      const products = await this.getFilteredProducts();
+      const existingProduct = products.find((product: Product) => 
         product.code === code && product.id !== excludeId
       );
       return !existingProduct;
@@ -313,5 +308,23 @@ export class FirestoreProductRepository implements IProductRepository {
       }
       return 0;
     });
+  }
+
+  /**
+   * Helper method to fetch and filter products
+   * Consolidates the fetch-all-then-filter pattern used by multiple methods
+   */
+  private async getFilteredProducts(options?: ProductListOptions): Promise<Product[]> {
+    let products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);
+    
+    if (options?.filters) {
+      products = this.applyFilters(products, options.filters);
+    }
+    
+    if (options?.sort) {
+      products = this.applySorting(products, options.sort);
+    }
+    
+    return products;
   }
 }
