@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import { PencilIcon, TrashIcon, StarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { DeleteProductDialog } from './DeleteProductDialog';
-import { updateProduct, validateCanStarProduct, getPaginatedProducts } from '@/lib/actions/product.actions';
+import { updateProduct, validateCanStarProduct } from '@/lib/actions/product.actions';
 import { NotificationContainer, useNotification } from '@/components/ui/NotificationContainer';
 import type { Product } from '@/domain/product/product.entity';
 
@@ -114,28 +114,25 @@ export function ProductsTable({
         return;
       }
 
-      const options = {
-        filters: {
-          search: searchTerm || undefined,
-          category: selectedCategory || undefined
-        }
-      };
+      // Call the API endpoint
+      const params = new URLSearchParams();
+      if (searchTerm) params.set('search', searchTerm);
+      if (selectedCategory) params.set('category', selectedCategory);
+      params.set('page', pageToLoad.toString());
+      params.set('pageSize', pageSize.toString());
 
-      const result = await getPaginatedProducts(pageToLoad, pageSize, options);
-      if (result.success && result.data?.items && typeof result.data.total === 'number') {
-        setPaginatedProducts(result.data.items);
-        setTotalProducts(result.data.total);
-        onProductCountChange?.(result.data.total);
+      const response = await fetch(`/api/admin/products?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch products');
+      }
 
-        // If we loaded page 1 due to filter change, update currentPage state
-        if (searchChanged || categoryChanged) {
-          setCurrentPage(1);
-        }
+      const data = await response.json();
+      if (data.success && data.data) {
+        setPaginatedProducts(data.data.items || []);
+        setTotalProducts(data.data.total || 0);
+        onProductCountChange?.(data.data.total || 0);
       } else {
-        showError(
-          translations('admin.products.notifications.updateError'),
-          'Failed to load products'
-        );
+        throw new Error(data.error || 'Failed to load products');
       }
     });
   }, [currentPage, pageSize, searchTerm, selectedCategory, initialProducts, translations, onProductCountChange, showError]);
@@ -148,17 +145,25 @@ export function ProductsTable({
   const handleProductDeleted = () => {
     // Refresh the paginated data after deletion
     startTransition(async () => {
-      const options = {
-        filters: {
-          search: searchTerm || undefined,
-          category: selectedCategory || undefined
-        }
-      };
-      const result = await getPaginatedProducts(currentPage, pageSize, options);
-      if (result.success && result.data?.items && typeof result.data.total === 'number') {
-        setPaginatedProducts(result.data.items);
-        setTotalProducts(result.data.total);
-        onProductCountChange?.(result.data.total);
+      // Call the API endpoint
+      const params = new URLSearchParams();
+      if (searchTerm) params.set('search', searchTerm);
+      if (selectedCategory) params.set('category', selectedCategory);
+      params.set('page', currentPage.toString());
+      params.set('pageSize', pageSize.toString());
+
+      const response = await fetch(`/api/admin/products?${params.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch products');
+      }
+
+      const data = await response.json();
+      if (data.success && data.data) {
+        setPaginatedProducts(data.data.items || []);
+        setTotalProducts(data.data.total || 0);
+        onProductCountChange?.(data.data.total || 0);
+      } else {
+        throw new Error(data.error || 'Failed to load products');
       }
     });
   };

@@ -9,6 +9,7 @@ interface ProductsTableWrapperProps {
   products: Product[];
   searchTerm?: string;
   selectedCategory?: string;
+  onSearch?: (search: string, category: string) => void;
   showPagination?: boolean;
   translations: {
     table: {

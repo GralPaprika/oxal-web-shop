@@ -2,8 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/components/admin/users';
-import { ProductsTableWrapper } from '@/components/admin/products';
-import { SearchForm } from '@/components/admin/products/SearchForm';
+import { ProductsTableClient } from '@/components/admin/products';
 import { getAllProducts, getAllCategories } from '@/lib/actions/product.actions';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
@@ -67,26 +66,17 @@ async function AdminProductsPage({
           </p>
         </div>
 
-        {/* Filters and Search */}
-        <SearchForm
+        {/* Products Table with Search and Pagination */}
+        <ProductsTableClient
+          initialProducts={products}
+          initialCategories={categories}
           searchTerm={searchTerm}
           selectedCategory={selectedCategory}
-          categories={categories}
           translations={{
             searchPlaceholder: t('searchPlaceholder'),
             search: t('search'),
             filters: t('filters'),
             allCategories: t('allCategories'),
-          }}
-        />
-
-        {/* Products Table with Pagination */}
-        <ProductsTableWrapper
-          products={products}
-          searchTerm={searchTerm}
-          selectedCategory={selectedCategory}
-          showPagination={true}
-          translations={{
             table: {
               product: t('table.product'),
               code: t('table.code'),
@@ -120,13 +110,13 @@ async function AdminProductsPage({
               success: t('deleteDialog.success'),
               error: t('deleteDialog.error'),
             },
-          }}
-          paginationTranslations={{
-            showing: t('pagination.showing'),
-            of: t('pagination.of'),
-            products: t('pagination.products'),
-            previous: t('pagination.previous'),
-            next: t('pagination.next'),
+            pagination: {
+              showing: t('pagination.showing'),
+              of: t('pagination.of'),
+              products: t('pagination.products'),
+              previous: t('pagination.previous'),
+              next: t('pagination.next'),
+            },
           }}
         />
       </div>

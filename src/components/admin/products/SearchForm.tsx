@@ -1,12 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { MagnifyingGlassIcon, FunnelIcon } from '@heroicons/react/24/outline';
 
 interface SearchFormProps {
   searchTerm: string;
   selectedCategory: string;
   categories: Array<{ id: string; name: string }>;
+  onSearch: (search: string, category: string) => void;
   translations: {
     searchPlaceholder: string;
     search: string;
@@ -19,30 +20,29 @@ export function SearchForm({
   searchTerm,
   selectedCategory,
   categories,
+  onSearch,
   translations
 }: SearchFormProps) {
-  const router = useRouter();
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
+  const [localSelectedCategory, setLocalSelectedCategory] = useState(selectedCategory);
 
-  const handleSubmit = (formData: FormData) => {
-    const search = formData.get('search') as string;
-    const category = formData.get('category') as string;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(localSearchTerm.trim(), localSelectedCategory);
+  };
 
-    const params = new URLSearchParams();
-    if (search?.trim()) {
-      params.set('search', search.trim());
-    }
-    if (category && category !== '') {
-      params.set('category', category);
-    }
+  const handleSearchChange = (value: string) => {
+    setLocalSearchTerm(value);
+  };
 
-    const queryString = params.toString();
-    router.push(`/admin/products${queryString ? `?${queryString}` : ''}`);
+  const handleCategoryChange = (value: string) => {
+    setLocalSelectedCategory(value);
   };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 mb-6">
       <form
-        action={handleSubmit}
+        onSubmit={handleSubmit}
         className="flex flex-col sm:flex-row gap-4"
       >
         <div className="flex-1">
@@ -51,7 +51,8 @@ export function SearchForm({
             <input
               type="text"
               name="search"
-              defaultValue={searchTerm}
+              value={localSearchTerm}
+              onChange={(e) => handleSearchChange(e.target.value)}
               placeholder={translations.searchPlaceholder}
               className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
             />
@@ -68,7 +69,8 @@ export function SearchForm({
           </button>
           <select
             name="category"
-            defaultValue={selectedCategory}
+            value={localSelectedCategory}
+            onChange={(e) => handleCategoryChange(e.target.value)}
             className="px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           >
             <option value="">{translations.allCategories}</option>
