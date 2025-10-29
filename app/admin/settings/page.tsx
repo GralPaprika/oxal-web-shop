@@ -27,7 +27,7 @@ export default async function AdminSettings() {
 
     // Handle all users result
     if (allUsersResult.success) {
-      users = allUsersResult.users || [];
+      users = allUsersResult.data?.items || [];
     } else {
       console.error('Failed to fetch users:', allUsersResult.error);
       hasErrors = true;

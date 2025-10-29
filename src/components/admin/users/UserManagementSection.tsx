@@ -51,11 +51,11 @@ export function UserManagementSection({
   }) => {
     const result = await updateUser(userData);
     
-    if (result.success && result.user) {
+    if (result.success && result.data) {
       // Update local state with the updated user
       setLocalUsers(prevUsers => 
         prevUsers.map(user => 
-          user.id === userData.id ? result.user! : user
+          user.id === userData.id ? result.data! : user
         )
       );
     } else {

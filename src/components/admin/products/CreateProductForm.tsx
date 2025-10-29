@@ -86,8 +86,8 @@ export function CreateProductForm() {
     const fetchCategories = async () => {
       try {
         const result = await getAllCategories();
-        if (result.success && result.categories) {
-          setCategories(result.categories);
+        if (result.success && result.data?.items) {
+          setCategories(result.data.items);
         } else {
           setError(t('error.categoriesLoad'));
         }
@@ -143,7 +143,7 @@ export function CreateProductForm() {
 
         const result = await createProduct(productData);
         
-        if (result.success && result.product) {
+        if (result.success && result.data) {
           // Step 2: Upload images to Firebase Storage and update product
           if (images.length > 0) {
             const uploadedImages: Array<{ url: string; alt?: string; order: number; isPrimary: boolean }> = [];
@@ -162,13 +162,13 @@ export function CreateProductForm() {
                   // Upload to Firebase Storage
                   const formData = new FormData();
                   formData.append('file', file);
-                  formData.append('productId', result.product.id);
+                  formData.append('productId', result.data.id);
                   
                   const uploadResult = await uploadProductImage(formData);
                   
-                  if (uploadResult.success && uploadResult.url) {
+                  if (uploadResult.success && uploadResult.data?.url) {
                     uploadedImages.push({
-                      url: uploadResult.url,
+                      url: uploadResult.data.url,
                       alt: image.alt,
                       order: image.order,
                       isPrimary: image.isPrimary,
@@ -183,7 +183,7 @@ export function CreateProductForm() {
             
             // Step 3: Update product with uploaded image URLs
             if (uploadedImages.length > 0) {
-              await updateProductImages(result.product.id, uploadedImages);
+              await updateProductImages(result.data.id, uploadedImages);
             }
           }
           

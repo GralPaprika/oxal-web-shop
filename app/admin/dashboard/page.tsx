@@ -20,7 +20,7 @@ export default async function AdminDashboard() {
   
   // Get product count from database
   const productCountResult = await getProductCount();
-  const totalProducts = productCountResult.success ? (productCountResult.count || 0) : 0;
+  const totalProducts = productCountResult.success ? (productCountResult.data || 0) : 0;
   
   // Create admin modules with dynamic stats
   const adminModules = [

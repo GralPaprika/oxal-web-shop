@@ -103,8 +103,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
     async function loadCategories() {
       try {
         const result = await getAllCategories();
-        if (result.success && result.categories) {
-          setCategories(result.categories);
+        if (result.success && result.data?.items) {
+          setCategories(result.data.items);
         }
       } catch (error) {
         console.error('Error loading categories:', error);
@@ -152,7 +152,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
         if (result.success) {
           router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
         } else {
-          setErrors({ general: 'error' in result ? result.error : t('error.updateFailed') });
+          setErrors({ general: result.error || t('error.updateFailed') });
         }
       } catch (error) {
         console.error('Error updating product:', error);

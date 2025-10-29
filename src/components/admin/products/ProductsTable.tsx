@@ -72,10 +72,10 @@ export function ProductsTable({
   useEffect(() => {
     startTransition(async () => {
       const result = await getPaginatedProducts(currentPage, pageSize);
-      if (result.success && result.products && typeof result.total === 'number') {
-        setPaginatedProducts(result.products);
-        setTotalProducts(result.total);
-        onProductCountChange?.(result.total);
+      if (result.success && result.data?.items && typeof result.data.total === 'number') {
+        setPaginatedProducts(result.data.items);
+        setTotalProducts(result.data.total);
+        onProductCountChange?.(result.data.total);
       } else {
         showError(
           translations('admin.products.notifications.updateError'),
@@ -94,10 +94,10 @@ export function ProductsTable({
     // Refresh the paginated data after deletion
     startTransition(async () => {
       const result = await getPaginatedProducts(currentPage, pageSize);
-      if (result.success && result.products && typeof result.total === 'number') {
-        setPaginatedProducts(result.products);
-        setTotalProducts(result.total);
-        onProductCountChange?.(result.total);
+      if (result.success && result.data?.items && typeof result.data.total === 'number') {
+        setPaginatedProducts(result.data.items);
+        setTotalProducts(result.data.total);
+        onProductCountChange?.(result.data.total);
       }
     });
   };

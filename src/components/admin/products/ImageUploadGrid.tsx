@@ -118,8 +118,8 @@ export function ImageUploadGrid({
 
           const result = await uploadProductImage(formData);
           
-          if (result.success && result.url) {
-            completeUpload(result.url);
+          if (result.success && result.data?.url) {
+            completeUpload(result.data.url);
           } else {
             setUploadErrors(prev => ({
               ...prev,

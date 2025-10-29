@@ -24,11 +24,11 @@ async function EditProductPage({ searchParams }: EditProductPageProps) {
   // Get the product data
   const productResult = await getProductById(productId);
   
-  if (!productResult.success || !productResult.product) {
+  if (!productResult.success || !productResult.data) {
     redirect(AUTH_CONFIG.ROUTES.PRODUCTS);
   }
   
-  const product = productResult.product;
+  const product = productResult.data;
   
   const breadcrumbs = [
     { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },

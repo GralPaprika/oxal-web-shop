@@ -7,109 +7,29 @@ import { CreateUserUseCase, CreateUserRequest } from '@/application/usecases/use
 import { DeleteUserUseCase } from '@/application/usecases/user/DeleteUserUseCase';
 import { TYPES } from '@/types/container.types';
 import type { User } from '@/domain/user/user.entity';
-import { checkAuthStatus, getCurrentUser } from '@/lib/auth';
+import { withAdminAuthOnly, withAdminAuth } from '@/lib/auth-wrapper';
+import type { ApiListResponse, ApiSingleResponse } from '@/lib/api-response';
+import { ApiResponse as Response } from '@/lib/api-response';
 
-async function verifyAdminAccess(): Promise<{ success: boolean; error?: string; currentUser?: User }> {
-  try {
-    const isAuthenticated = await checkAuthStatus();
-    if (!isAuthenticated) {
-      return {
-        success: false,
-        error: 'Unauthorized: Authentication required'
-      };
-    }
-
-    const currentUser = await getCurrentUser();
-    if (!currentUser || currentUser.role !== 'admin') {
-      return {
-        success: false,
-        error: 'Unauthorized: Admin privileges required'
-      };
-    }
-
-    return {
-      success: true,
-      currentUser
-    };
-  } catch (error) {
-    console.error('Error verifying admin access:', error);
-    return {
-      success: false,
-      error: 'Authentication verification failed'
-    };
-  }
-}
-
-function withAdminAuth<TArgs extends unknown[], TReturn>(
-  fn: (currentUser: User, ...args: TArgs) => Promise<TReturn>
-) {
-  return async (...args: TArgs): Promise<TReturn | { success: false; error: string }> => {
-    const authResult = await verifyAdminAccess();
-    if (!authResult.success) {
-      return { success: false, error: authResult.error! } as TReturn;
-    }
-    
-    try {
-      return await fn(authResult.currentUser!, ...args);
-    } catch (error) {
-      console.error('Error in authenticated function:', error);
-      return { 
-        success: false, 
-        error: 'Operation failed' 
-      } as TReturn;
-    }
-  };
-}
-
-function withAdminAuthOnly<TArgs extends unknown[], TReturn>(
-  fn: (...args: TArgs) => Promise<TReturn>
-) {
-  return async (...args: TArgs): Promise<TReturn | { success: false; error: string }> => {
-    const authResult = await verifyAdminAccess();
-    if (!authResult.success) {
-      return { success: false, error: authResult.error! } as TReturn;
-    }
-    
-    try {
-      return await fn(...args);
-    } catch (error) {
-      console.error('Error in authenticated function:', error);
-      return { 
-        success: false, 
-        error: 'Operation failed' 
-      } as TReturn;
-    }
-  };
-}
-
-export const getAllUsers = withAdminAuthOnly(async (): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+export const getAllUsers = withAdminAuthOnly(async (): Promise<ApiListResponse<User>> => {
   const getAllUsersUseCase = container.get<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase);
   const users = await getAllUsersUseCase.execute();
   
-  return {
-    success: true,
-    users
-  };
+  return Response.success({ items: users, total: users.length });
 });
 
-export const getUsersByRole = withAdminAuthOnly(async (role: User['role']): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+export const getUsersByRole = withAdminAuthOnly(async (role: User['role']): Promise<ApiListResponse<User>> => {
   const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
   const users = await getUsersByRoleUseCase.execute(role);
   
-  return {
-    success: true,
-    users
-  };
+  return Response.success({ items: users, total: users.length });
 });
 
-export const getAdminUsers = withAdminAuthOnly(async (): Promise<{ success: boolean; users?: User[]; error?: string }> => {
+export const getAdminUsers = withAdminAuthOnly(async (): Promise<ApiListResponse<User>> => {
   const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
   const admins = await getUsersByRoleUseCase.execute('admin');
   
-  return {
-    success: true,
-    users: admins
-  };
+  return Response.success({ items: admins, total: admins.length });
 });
 
 export const updateUser = withAdminAuth(async (currentUser: User, userData: {
@@ -118,48 +38,54 @@ export const updateUser = withAdminAuth(async (currentUser: User, userData: {
   email?: string;
   role?: 'admin' | 'cashier';
   status?: 'active' | 'inactive' | 'suspended';
-}): Promise<{ success: boolean; user?: User; error?: string }> => {
+}): Promise<ApiSingleResponse<User>> => {
   if (currentUser.id === userData.id && userData.role && userData.role !== 'admin') {
-    return {
-      success: false,
-      error: 'Cannot remove admin privileges from your own account'
-    };
+    return Response.error('Cannot remove admin privileges from your own account');
   }
 
   if (currentUser.id === userData.id && userData.status && userData.status !== 'active') {
-    return {
-      success: false,
-      error: 'Cannot change status of your own account'
-    };
+    return Response.error('Cannot change status of your own account');
   }
 
   const updateUserUseCase = container.get<UpdateUserUseCase>(TYPES.UpdateUserUseCase);
-  return await updateUserUseCase.execute(userData);
+  const result = await updateUserUseCase.execute(userData);
+  
+  if (result.success) {
+    return Response.success(result.user);
+  }
+  
+  return Response.error(result.error || 'Failed to update user');
 });
 
-export const createUser = withAdminAuth(async (currentUser: User, userData: CreateUserRequest) => {
+export const createUser = withAdminAuth(async (currentUser: User, userData: CreateUserRequest): Promise<ApiSingleResponse<User>> => {
   const createUserUseCase = container.get<CreateUserUseCase>(TYPES.CreateUserUseCase);
-  return await createUserUseCase.execute(userData);
+  const result = await createUserUseCase.execute(userData);
+  
+  if (result.success) {
+    return Response.success(result.user);
+  }
+  
+  return Response.error(result.error || 'Failed to create user');
 });
 
-export const deleteUser = withAdminAuth(async (currentUser: User, userId: string): Promise<{ success: boolean; error?: string }> => {
+export const deleteUser = withAdminAuth(async (currentUser: User, userId: string): Promise<ApiSingleResponse<{ deleted: boolean }>> => {
   if (currentUser.id === userId) {
-    return {
-      success: false,
-      error: 'Cannot delete your own account'
-    };
+    return Response.error('Cannot delete your own account');
   }
 
   const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
   const admins = await getUsersByRoleUseCase.execute('admin');
   
   if (admins.length === 1 && admins[0].id === userId) {
-    return {
-      success: false,
-      error: 'Cannot delete the last admin user'
-    };
+    return Response.error('Cannot delete the last admin user');
   }
 
   const deleteUserUseCase = container.get<DeleteUserUseCase>(TYPES.DeleteUserUseCase);
-  return await deleteUserUseCase.execute(userId);
+  const result = await deleteUserUseCase.execute(userId);
+  
+  if (result.success) {
+    return Response.success({ deleted: true });
+  }
+  
+  return Response.error(result.error || 'Failed to delete user');
 });

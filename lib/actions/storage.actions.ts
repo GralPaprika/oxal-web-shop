@@ -5,29 +5,24 @@ import { UploadFileUseCase, DeleteFileUseCase, FileUploadData } from '@/applicat
 import { TYPES } from '@/types/container.types';
 import { withAdminAuthOnly } from '@/lib/auth-wrapper';
 import { handleAndRespond } from '@/lib/error-handler';
-
-export interface UploadResult {
-  success: boolean;
-  url?: string;
-  path?: string;
-  error?: string;
-}
+import type { ApiResponse } from '@/lib/api-response';
+import { ApiResponse as Response } from '@/lib/api-response';
 
 // UPLOAD PRODUCT IMAGE
 export const uploadProductImage = withAdminAuthOnly(async (
   formData: FormData
-): Promise<UploadResult> => {
+): Promise<ApiResponse<{ url: string; path: string }>> => {
   return handleAndRespond(
     async () => {
       const file = formData.get('file') as File;
       const productId = formData.get('productId') as string;
       
       if (!file) {
-        return { success: false, error: 'No file provided' };
+        return Response.error('No file provided');
       }
 
       if (!productId) {
-        return { success: false, error: 'Product ID is required' };
+        return Response.error('Product ID is required');
       }
 
       const uploadFileUseCase = container.get<UploadFileUseCase>(TYPES.UploadFileUseCase);
@@ -39,11 +34,7 @@ export const uploadProductImage = withAdminAuthOnly(async (
 
       const result = await uploadFileUseCase.execute(uploadData);
       
-      return {
-        success: true,
-        url: result.url,
-        path: result.path,
-      };
+      return Response.success({ url: result.url, path: result.path });
     },
     'Upload product image',
     { productId: formData.get('productId') }
@@ -53,17 +44,17 @@ export const uploadProductImage = withAdminAuthOnly(async (
 // DELETE PRODUCT IMAGE
 export const deleteProductImage = withAdminAuthOnly(async (
   url: string
-): Promise<{ success: boolean; error?: string }> => {
+): Promise<ApiResponse> => {
   return handleAndRespond(
     async () => {
       if (!url) {
-        return { success: false, error: 'URL is required' };
+        return Response.error('URL is required');
       }
 
       const deleteFileUseCase = container.get<DeleteFileUseCase>(TYPES.DeleteFileUseCase);
       await deleteFileUseCase.execute(url);
       
-      return { success: true };
+      return Response.success();
     },
     'Delete product image',
     { url }

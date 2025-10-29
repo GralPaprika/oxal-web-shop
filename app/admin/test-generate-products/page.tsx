@@ -107,14 +107,14 @@ export default function GenerateFakeProductsPage() {
     try {
       // Get categories
       const categoriesResult = await getAllCategories();
-      if (!categoriesResult.success || !categoriesResult.categories) {
+      if (!categoriesResult.success || !categoriesResult.data?.items) {
         setStatus('❌ Error: No se pudieron cargar las categorías');
         setIsGenerating(false);
         return;
       }
 
       const categoryMap: Record<string, string> = {};
-      categoriesResult.categories.forEach((cat) => {
+      categoriesResult.data.items.forEach((cat) => {
         const key = cat.key as keyof typeof productNames;
         categoryMap[key] = cat.id;
       });

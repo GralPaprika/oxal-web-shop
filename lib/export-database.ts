@@ -35,9 +35,9 @@ export async function exportDatabase() {
       console.log('📥 Exporting categories...');
       const categoriesResult = await getAllCategories();
       
-      if (categoriesResult.success && categoriesResult.categories) {
-        exportData.data.categories = categoriesResult.categories;
-        console.log(`✅ Exported ${categoriesResult.categories.length} categories`);
+      if (categoriesResult.success && categoriesResult.data?.items) {
+        exportData.data.categories = categoriesResult.data.items;
+        console.log(`✅ Exported ${categoriesResult.data.items.length} categories`);
       } else {
         console.warn('⚠️ No categories found or error occurred');
         exportData.data.categories = [];

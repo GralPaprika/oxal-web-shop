@@ -16,10 +16,10 @@ async function AdminProductsPage() {
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
   
   const productsResult = await getAllProducts();
-  const products = productsResult.success ? productsResult.products || [] : [];
+  const products = productsResult.success ? productsResult.data?.items || [] : [];
   
   const categoriesResult = await getAllCategories();
-  const categories = categoriesResult.success ? categoriesResult.categories || [] : [];
+  const categories = categoriesResult.success ? categoriesResult.data?.items || [] : [];
 
   const breadcrumbs = [
     { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },
