@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
-import { TYPES } from '@/src/types/container.types';
-import type { IProductRepository } from '@/src/domain/product/product.repository';
-import type { ProductCategory } from '@/src/domain/product/product.entity';
+import { TYPES } from '@/types/container.types';
+import type { IProductRepository } from '@/domain/product/product.repository';
+import type { ProductCategory } from '@/domain/product/product.entity';
 
 @injectable()
 export class GetCategoriesUseCase {

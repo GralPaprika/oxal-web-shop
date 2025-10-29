@@ -1,8 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { UsersHeader } from '@/src/components/admin/users';
-import { EditProductForm } from '@/src/components/admin/products';
+import { UsersHeader } from '@/components/admin/users';
+import { EditProductForm } from '@/components/admin/products';
 import { getProductById } from '@/lib/actions/product.actions';
 
 interface EditProductPageProps {

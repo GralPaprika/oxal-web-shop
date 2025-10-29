@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { logoutAction } from '@/lib/auth';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { UsersHeader } from '@/src/components/admin/users';
+import { UsersHeader } from '@/components/admin/users';
 import { Button } from '@/components/ui/Button';
 import { getProductCount } from '@/lib/actions/product.actions';
 import Link from 'next/link';

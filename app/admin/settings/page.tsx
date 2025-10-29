@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { UsersHeader } from '@/src/components/admin/users';
+import { UsersHeader } from '@/components/admin/users';
 import { SectionCard } from '@/components/admin/layout';
 import { UserManagementSection } from '@/components/admin/users';
 import { AddUserModal } from '@/components/admin/users';

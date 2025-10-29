@@ -1,8 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { UsersHeader } from '@/src/components/admin/users';
-import { ProductsTableWrapper } from '@/src/components/admin/products';
+import { UsersHeader } from '@/components/admin/users';
+import { ProductsTableWrapper } from '@/components/admin/products';
 import { getAllProducts, getAllCategories } from '@/lib/actions/product.actions';
 import { 
   PlusIcon, 

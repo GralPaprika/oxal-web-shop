@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createProduct, getAllCategories } from '@/lib/actions/product.actions';
 import { Button } from '@/components/ui/Button';
-import type { CreateProductData } from '@/src/domain/product/product.entity';
+import type { CreateProductData } from '@/domain/product/product.entity';
 
 export default function GenerateFakeProductsPage() {
   const router = useRouter();

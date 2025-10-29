@@ -4,7 +4,7 @@ import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { CreateProductData, ProductCategory } from '@/src/domain/product/product.entity';
+import { CreateProductData, ProductCategory } from '@/domain/product/product.entity';
 import { createProduct, getAllCategories, updateProductImages, validateCanStarProduct } from '@/lib/actions/product.actions';
 import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
