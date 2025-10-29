@@ -9,7 +9,7 @@ import type {
   ProductCategory 
 } from '@/domain/product/product.entity';
 import { TYPES } from '@/types/container.types';
-import { matchesSearchTerm } from '@/utils/textUtils';
+import { matchesSearchTerm } from '@/lib/utils/textUtils';
 
 @injectable()
 export class FirestoreProductRepository implements IProductRepository {

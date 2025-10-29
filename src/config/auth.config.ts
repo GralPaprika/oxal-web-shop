@@ -8,6 +8,7 @@ export const AUTH_CONFIG = {
   // Route constants
   ROUTES: {
     ADMIN_BASE: '/admin',
+    API_ADMIN_BASE: '/api/admin',
     LOGIN: '/admin/login',
     DASHBOARD: '/admin/dashboard',
     PRODUCTS: '/admin/products',

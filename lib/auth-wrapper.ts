@@ -1,5 +1,7 @@
 import { checkAuthStatus, getCurrentUser } from '@/lib/auth';
 import type { User } from '@/domain/user/user.entity';
+import { NextRequest, NextResponse } from 'next/server';
+import { ApiResponse } from '@/lib/api-response';
 
 export interface AuthCheckResult {
   success: boolean;
@@ -106,6 +108,46 @@ export function withAdminAuthOnly<TArgs extends unknown[], TReturn extends { suc
         success: false,
         error: error instanceof Error ? error.message : 'An unexpected error occurred'
       } as TReturn;
+    }
+  };
+}
+
+/**
+ * Wraps API route handlers with admin authentication
+ * Returns NextResponse with error on auth failure
+ * 
+ * @example
+ * export async function GET(request: NextRequest) {
+ *   return withAdminAuthAPI(async (currentUser) => {
+ *     // Your API logic here
+ *     return NextResponse.json(ApiResponse.success(data));
+ *   });
+ * }
+ */
+export function withAdminAuthAPI<T extends NextResponse>(
+  handler: (currentUser: User, request: NextRequest) => Promise<T>,
+  context?: string
+) {
+  return async (request: NextRequest): Promise<T | NextResponse> => {
+    const authResult = await verifyAdminAccess();
+    if (!authResult.success) {
+      const errorContext = context ? `${context} - ` : '';
+      console.error(`${errorContext}API auth error:`, authResult.error);
+      return NextResponse.json(
+        ApiResponse.error(authResult.error || 'Unauthorized'),
+        { status: 401 }
+      );
+    }
+
+    try {
+      return await handler(authResult.currentUser!, request);
+    } catch (error) {
+      const errorContext = context ? `${context} - ` : '';
+      console.error(`${errorContext}API error:`, error);
+      return NextResponse.json(
+        ApiResponse.error(error instanceof Error ? error.message : 'An unexpected error occurred'),
+        { status: 500 }
+      );
     }
   };
 }
