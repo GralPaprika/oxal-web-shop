@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { PencilIcon, TrashIcon, StarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { DeleteProductDialog } from './DeleteProductDialog';
-import { updateProduct, validateCanStarProduct } from '@/lib/actions/product.actions';
+import { updateProduct, validateCanStarProduct, getPaginatedProducts } from '@/lib/actions/product.actions';
 import { NotificationContainer, useNotification } from '@/components/ui/NotificationContainer';
 import type { Product } from '@/domain/product/product.entity';
 
@@ -49,44 +49,57 @@ interface ProductsTableProps {
   };
   onEditProduct?: (product: Product) => void;
   onProductCountChange?: (count: number) => void;
-  showPagination?: boolean;
-  paginationTranslations?: {
-    showing: string;
-    of: string;
-    products: string;
-    previous: string;
-    next: string;
-  };
 }
 
 export function ProductsTable({
   products: initialProducts,
   translations: t,
   onEditProduct,
-  onProductCountChange,
-  showPagination = false,
-  paginationTranslations
+  onProductCountChange
 }: ProductsTableProps) {
   const translations = useTranslations();
-  const [products, setProducts] = useState(initialProducts);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isPending, startTransition] = useTransition();
+  const [paginatedProducts, setPaginatedProducts] = useState<Product[]>([]);
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(25);
+  const [totalProducts, setTotalProducts] = useState(initialProducts.length);
   const { notifications, removeNotification, showError } = useNotification();
 
-  // Update local state when props change
+  // Load paginated data when page or pageSize changes
   useEffect(() => {
-    setProducts(initialProducts);
-  }, [initialProducts]);
+    startTransition(async () => {
+      const result = await getPaginatedProducts(currentPage, pageSize);
+      if (result.success && result.products && typeof result.total === 'number') {
+        setPaginatedProducts(result.products);
+        setTotalProducts(result.total);
+        onProductCountChange?.(result.total);
+      } else {
+        showError(
+          translations('admin.products.notifications.updateError'),
+          'Failed to load products'
+        );
+      }
+    });
+  }, [currentPage, pageSize, translations, onProductCountChange, showError]);
 
   const handleDeleteProduct = (product: Product) => {
     setDeleteProduct(product);
     setIsDeleteDialogOpen(true);
   };
 
-  const handleProductDeleted = (productId: string) => {
-    const updatedProducts = products.filter(p => p.id !== productId);
-    setProducts(updatedProducts);
-    onProductCountChange?.(updatedProducts.length);
+  const handleProductDeleted = () => {
+    // Refresh the paginated data after deletion
+    startTransition(async () => {
+      const result = await getPaginatedProducts(currentPage, pageSize);
+      if (result.success && result.products && typeof result.total === 'number') {
+        setPaginatedProducts(result.products);
+        setTotalProducts(result.total);
+        onProductCountChange?.(result.total);
+      }
+    });
   };
 
   const handleCloseDeleteDialog = () => {
@@ -114,11 +127,11 @@ export function ProductsTable({
       });
       
       if (result.success) {
-        // Update the local products array
-        const updatedProducts = products.map(p => 
+        // Update the local paginated products array
+        const updatedProducts = paginatedProducts.map(p => 
           p.id === product.id ? { ...p, isStarred: !p.isStarred } : p
         );
-        setProducts(updatedProducts);
+        setPaginatedProducts(updatedProducts);
       }
     } catch (error) {
       console.error('Error toggling star:', error);
@@ -138,6 +151,20 @@ export function ProductsTable({
   const getCategoryName = (categoryKey: string) => {
     const key = categoryKey as keyof typeof t.categories;
     return t.categories[key] || categoryKey;
+  };
+
+  // Pagination calculations
+  const totalPages = Math.ceil(totalProducts / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = Math.min(startIndex + pageSize, totalProducts);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+  };
+
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setCurrentPage(1); // Reset to first page
   };
 
   return (
@@ -167,7 +194,7 @@ export function ProductsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
-            {products.map((product) => {
+            {paginatedProducts.map((product) => {
               const stockStatus = getStockStatus(product.stock);
               const primaryImage = product.images.find(img => img.isPrimary) || product.images[0];
               
@@ -280,7 +307,7 @@ export function ProductsTable({
         </table>
       </div>
       
-      {products.length === 0 && (
+      {totalProducts === 0 && (
         <div className="text-center py-12">
           <div className="text-neutral-400 text-lg mb-2">{t.empty.title}</div>
           <div className="text-neutral-500 text-sm">{t.empty.subtitle}</div>
@@ -296,21 +323,65 @@ export function ProductsTable({
       />
 
       {/* Pagination */}
-      {showPagination && paginationTranslations && products.length > 0 && (
-        <div className="flex items-center justify-between mt-6 px-6 pb-6">
-          <div className="flex items-center text-sm text-text-secondary">
-            {paginationTranslations.showing} 1-{products.length} {paginationTranslations.of} {products.length} {paginationTranslations.products}
+      {totalProducts > 0 && (
+        <div className="border-t border-neutral-200 p-6 flex items-center justify-between">
+          {/* Page Size Selector */}
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-text-secondary">Mostrar:</span>
+            <select
+              value={pageSize}
+              onChange={(e) => handlePageSizeChange(Number(e.target.value))}
+              className="px-3 py-2 border border-neutral-300 rounded-lg text-sm bg-white hover:border-neutral-400 transition-colors"
+            >
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+            <span className="text-sm text-text-secondary">
+              (Total: {totalProducts})
+            </span>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-              {paginationTranslations.previous}
-            </button>
-            <button className="px-3 py-2 bg-amber-600 text-white rounded-lg text-sm">
-              1
-            </button>
-            <button className="px-3 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-sm">
-              {paginationTranslations.next}
-            </button>
+
+          {/* Pagination Info and Controls */}
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-text-secondary">
+              {startIndex + 1}-{endIndex} de {totalProducts}
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+              >
+                ← Anterior
+              </button>
+
+              {/* Page Numbers */}
+              <div className="flex gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                      currentPage === page
+                        ? 'bg-amber-600 text-white'
+                        : 'border border-neutral-300 hover:bg-neutral-50'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-neutral-50 transition-colors"
+              >
+                Siguiente →
+              </button>
+            </div>
           </div>
         </div>
       )}

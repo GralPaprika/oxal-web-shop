@@ -46,6 +46,16 @@ export class FirestoreDatabase implements IDatabase {
     } as T));
   }
 
+  async getAllPaginated<T>(collectionName: string, pageSize: number, pageOffset: number): Promise<T[]> {
+    const querySnapshot = await getDocs(collection(this.db, collectionName));
+    const allDocs = querySnapshot.docs.map(doc => ({ 
+      id: doc.id, 
+      ...doc.data() 
+    } as T));
+    
+    return allDocs.slice(pageOffset, pageOffset + pageSize);
+  }
+
   async update<T>(collectionName: string, id: string, data: Partial<T>): Promise<void> {
     const docRef = doc(this.db, collectionName, id);
     await updateDoc(docRef, data as Record<string, unknown>);

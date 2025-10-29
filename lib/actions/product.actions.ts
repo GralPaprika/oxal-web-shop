@@ -119,6 +119,31 @@ export const updateProductImages = withAdminAuthOnly(async (
   return { success: true, product };
 });
 
+// GET PAGINATED PRODUCTS
+export const getPaginatedProducts = withAdminAuthOnly(async (
+  pageNumber: number = 1,
+  pageSize: number = 25,
+  options?: ProductListOptions
+): Promise<{ success: boolean; products?: Product[]; total?: number; error?: string }> => {
+  const getAllProductsUseCase = container.get<GetAllProductsUseCase>(TYPES.GetAllProductsUseCase);
+  const getProductCountUseCase = container.get<GetProductCountUseCase>(TYPES.GetProductCountUseCase);
+  
+  // Calculate offset based on page number and page size
+  const offset = (pageNumber - 1) * pageSize;
+  
+  // Fetch only the required page of products with server-side pagination
+  const paginatedOptions: ProductListOptions = {
+    ...options,
+    limit: pageSize,
+    offset: offset
+  };
+  
+  const products = await getAllProductsUseCase.execute(paginatedOptions);
+  const total = await getProductCountUseCase.execute(options);
+  
+  return { success: true, products, total };
+});
+
 // VALIDATE CAN STAR PRODUCT
 export const validateCanStarProduct = withAdminAuthOnly(async (productId: string): Promise<{ success: boolean; canStar?: boolean; currentStarredCount?: number; maxAllowed?: number; error?: string }> => {
   const validateCanStarUseCase = container.get<ValidateCanStarProductUseCase>(TYPES.ValidateCanStarProductUseCase);

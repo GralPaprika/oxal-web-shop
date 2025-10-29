@@ -21,7 +21,20 @@ export class FirestoreProductRepository implements IProductRepository {
 
   async getAllProducts(options?: ProductListOptions): Promise<Product[]> {
     try {
-      let products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);
+      let products: Product[];
+      
+      // Use paginated query if limit/offset are provided
+      if (options?.limit || options?.offset) {
+        const offset = options.offset || 0;
+        const limit = options.limit || 1000; // Default large limit if not specified
+        products = await this.database.getAllPaginated<Product>(
+          this.PRODUCTS_COLLECTION,
+          limit,
+          offset
+        );
+      } else {
+        products = await this.database.getAll<Product>(this.PRODUCTS_COLLECTION);
+      }
       
       // Apply filters if provided
       if (options?.filters) {
@@ -31,13 +44,6 @@ export class FirestoreProductRepository implements IProductRepository {
       // Apply sorting if provided
       if (options?.sort) {
         products = this.applySorting(products, options.sort);
-      }
-      
-      // Apply pagination if provided
-      if (options?.limit || options?.offset) {
-        const offset = options.offset || 0;
-        const limit = options.limit || products.length;
-        products = products.slice(offset, offset + limit);
       }
       
       return products;
@@ -89,6 +95,7 @@ export class FirestoreProductRepository implements IProductRepository {
         status: 'active' as const,
         tags: data.tags || [],
         metadata: data.metadata,
+        isStarred: data.isStarred || false,
         createdAt: now,
         updatedAt: now,
       };
