@@ -84,6 +84,14 @@ export function ProductsTable({
   const prevSearchRef = useRef<string | undefined>(searchTerm);
   const prevCategoryRef = useRef<string | undefined>(selectedCategory);
 
+  // Cache for storing API responses
+  const cacheRef = useRef<Map<string, { items: Product[]; total: number }>>(new Map());
+
+  // Generate cache key
+  const getCacheKey = (search: string | undefined, category: string | undefined, page: number, pageSize: number) => {
+    return `${search || ''}|${category || ''}|${page}|${pageSize}`;
+  };
+
   // Load paginated data when page or pageSize changes
   useEffect(() => {
     const searchChanged = prevSearchRef.current !== searchTerm;
@@ -97,30 +105,62 @@ export function ProductsTable({
       // If search or category changed, start from page 1
       const pageToLoad = (searchChanged || categoryChanged) ? 1 : currentPage;
 
-      // Always call the API endpoint for consistent data
+      // Generate cache key
+      const cacheKey = getCacheKey(searchTerm, selectedCategory, pageToLoad, pageSize);
+
+      // Check cache first
+      const cachedData = cacheRef.current.get(cacheKey);
+      if (cachedData) {
+        // Use cached data
+        setPaginatedProducts(cachedData.items);
+        setTotalProducts(cachedData.total);
+        onProductCountChange?.(cachedData.total);
+
+        // If we loaded page 1 due to filter change, update currentPage state
+        if (searchChanged || categoryChanged) {
+          setCurrentPage(1);
+        }
+        return;
+      }
+
+      // Cache miss - make API call
       const params = new URLSearchParams();
       if (searchTerm) params.set('search', searchTerm);
       if (selectedCategory) params.set('category', selectedCategory);
       params.set('page', pageToLoad.toString());
       params.set('pageSize', pageSize.toString());
 
-      const response = await fetch(`/api/admin/products?${params.toString()}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch products');
-      }
+      try {
+        const response = await fetch(`/api/admin/products?${params.toString()}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
 
-      const data = await response.json();
-      if (data.success && data.data) {
-        setPaginatedProducts(data.data.items || []);
-        setTotalProducts(data.data.total || 0);
-        onProductCountChange?.(data.data.total || 0);
-      } else {
-        throw new Error(data.error || 'Failed to load products');
-      }
+        const data = await response.json();
+        if (data.success && data.data) {
+          const items = data.data.items || [];
+          const total = data.data.total || 0;
 
-      // If we loaded page 1 due to filter change, update currentPage state
-      if (searchChanged || categoryChanged) {
-        setCurrentPage(1);
+          // Cache the result
+          cacheRef.current.set(cacheKey, {
+            items,
+            total
+          });
+
+          setPaginatedProducts(items);
+          setTotalProducts(total);
+          onProductCountChange?.(total);
+        } else {
+          throw new Error(data.error || 'Failed to load products');
+        }
+
+        // If we loaded page 1 due to filter change, update currentPage state
+        if (searchChanged || categoryChanged) {
+          setCurrentPage(1);
+        }
+      } catch (error) {
+        console.error('Error loading products:', error);
+        showError('Error', 'Failed to load products');
       }
     });
   }, [currentPage, pageSize, searchTerm, selectedCategory, translations, onProductCountChange, showError]);
