@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { SearchForm } from './SearchForm';
-import { ProductsTableWrapper } from './ProductsTableWrapper';
-import type { ProductCategory } from '@/domain/product/product.entity';
+import { ProductsTable } from './ProductsTable';
+import { AUTH_CONFIG } from '@/config/auth.config';
+import type { ProductCategory, Product } from '@/domain/product/product.entity';
 
 interface ProductsTableClientProps {
   initialCategories: ProductCategory[];
@@ -66,11 +68,16 @@ export function ProductsTableClient({
 }: ProductsTableClientProps) {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [selectedCategory, setSelectedCategory] = useState(initialSelectedCategory);
+  const router = useRouter();
 
   const handleSearch = (newSearchTerm: string, newCategory: string) => {
     setSearchTerm(newSearchTerm);
     setSelectedCategory(newCategory);
     // ProductsTable will handle the API call via its useEffect
+  };
+
+  const handleEditProduct = (product: Product) => {
+    router.push(`${AUTH_CONFIG.ROUTES.PRODUCTS_EDIT}?id=${product.id}`);
   };
 
   return (
@@ -91,7 +98,7 @@ export function ProductsTableClient({
       />
 
       {/* Products Table with Pagination */}
-      <ProductsTableWrapper
+      <ProductsTable
         searchTerm={searchTerm}
         selectedCategory={selectedCategory}
         showPagination={true}
@@ -104,6 +111,7 @@ export function ProductsTableClient({
           deleteDialog: translations.deleteDialog,
         }}
         paginationTranslations={translations.pagination}
+        onEditProduct={handleEditProduct}
       />
 
     </>

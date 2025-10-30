@@ -7,7 +7,6 @@ export { MetadataFields } from './MetadataFields';
 export { ProductFormFields } from './ProductFormFields';
 export { ProductsTable } from './ProductsTable';
 export { ProductsTableClient } from './ProductsTableClient';
-export { ProductsTableWrapper } from './ProductsTableWrapper';
 export { SearchForm } from './SearchForm';
 export { UploadStatus } from './UploadStatus';
 export { UploadZone } from './UploadZone';
