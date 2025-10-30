@@ -73,7 +73,6 @@ export function ProductsTableClient({
   const handleSearch = (newSearchTerm: string, newCategory: string) => {
     setSearchTerm(newSearchTerm);
     setSelectedCategory(newCategory);
-    // ProductsTable will handle the API call via its useEffect
   };
 
   const handleEditProduct = (product: Product) => {

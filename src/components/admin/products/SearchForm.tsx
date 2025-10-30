@@ -38,6 +38,7 @@ export function SearchForm({
 
   const handleCategoryChange = (value: string) => {
     setLocalSelectedCategory(value);
+    onSearch(localSearchTerm.trim(), value);
   };
 
   const handleClearFilters = () => {
