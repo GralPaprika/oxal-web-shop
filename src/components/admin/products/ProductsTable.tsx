@@ -11,7 +11,6 @@ import { NotificationContainer, useNotification } from '@/components/ui/Notifica
 import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableProps {
-  products: Product[];
   searchTerm?: string;
   selectedCategory?: string;
   showPagination?: boolean;
@@ -62,7 +61,6 @@ interface ProductsTableProps {
 }
 
 export function ProductsTable({
-  products: initialProducts,
   searchTerm,
   selectedCategory,
   showPagination,
@@ -72,20 +70,16 @@ export function ProductsTable({
   onProductCountChange
 }: ProductsTableProps) {
   const translations = useTranslations();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isPending, startTransition] = useTransition();
   const [paginatedProducts, setPaginatedProducts] = useState<Product[]>(() => {
-    // Initialize with first page of initialProducts if no search filters
-    if (!searchTerm && !selectedCategory && initialProducts.length > 0) {
-      return initialProducts.slice(0, 10); // First 10 items (default page size)
-    }
+    // Initialize with empty array - data will be loaded via API
     return [];
   });
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  const [totalProducts, setTotalProducts] = useState(initialProducts.length);
+  const [totalProducts, setTotalProducts] = useState(0);
   const { notifications, removeNotification, showError } = useNotification();
   const prevSearchRef = useRef<string | undefined>(searchTerm);
   const prevCategoryRef = useRef<string | undefined>(selectedCategory);
@@ -103,18 +97,7 @@ export function ProductsTable({
       // If search or category changed, start from page 1
       const pageToLoad = (searchChanged || categoryChanged) ? 1 : currentPage;
 
-      // If no search filters, use the initialProducts directly
-      if (!searchTerm && !selectedCategory) {
-        const startIdx = (pageToLoad - 1) * pageSize;
-        const endIdx = startIdx + pageSize;
-        const pageProducts = initialProducts.slice(startIdx, endIdx);
-        setPaginatedProducts(pageProducts);
-        setTotalProducts(initialProducts.length);
-        onProductCountChange?.(initialProducts.length);
-        return;
-      }
-
-      // Call the API endpoint
+      // Always call the API endpoint for consistent data
       const params = new URLSearchParams();
       if (searchTerm) params.set('search', searchTerm);
       if (selectedCategory) params.set('category', selectedCategory);
@@ -134,8 +117,13 @@ export function ProductsTable({
       } else {
         throw new Error(data.error || 'Failed to load products');
       }
+
+      // If we loaded page 1 due to filter change, update currentPage state
+      if (searchChanged || categoryChanged) {
+        setCurrentPage(1);
+      }
     });
-  }, [currentPage, pageSize, searchTerm, selectedCategory, initialProducts, translations, onProductCountChange, showError]);
+  }, [currentPage, pageSize, searchTerm, selectedCategory, translations, onProductCountChange, showError]);
 
   const handleDeleteProduct = (product: Product) => {
     setDeleteProduct(product);
@@ -260,120 +248,156 @@ export function ProductsTable({
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200">
-            {paginatedProducts.map((product) => {
-              const stockStatus = getStockStatus(product.stock);
-              const primaryImage = product.images.find(img => img.isPrimary) || product.images[0];
-              
-              return (
-                <tr key={product.id} className="hover:bg-neutral-50 transition-colors">
+            {isPending ? (
+              // Loading skeleton
+              Array.from({ length: pageSize }, (_, index) => (
+                <tr key={`skeleton-${index}`} className="animate-pulse">
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      <div className="h-12 w-12 flex-shrink-0">
-                        {primaryImage ? (
-                          <Image
-                            className="h-12 w-12 rounded-lg object-cover"
-                            src={primaryImage.url}
-                            alt={primaryImage.alt || product.name}
-                            width={48}
-                            height={48}
-                          />
-                        ) : (
-                          <div className="h-12 w-12 rounded-lg bg-neutral-200 flex items-center justify-center">
-                            <span className="text-xs text-neutral-500">No img</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="ml-4">
-                        <div className="flex items-center gap-2">
-                          <div className="text-sm font-medium text-text-primary">
-                            {product.name}
-                          </div>
-                          {product.isStarred && (
-                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                              ⭐ Destacado
-                            </span>
-                          )}
-                          {product.badge && (
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                              product.badge === 'new' 
-                                ? 'bg-green-100 text-green-800' 
-                                : product.badge === 'sale'
-                                ? 'bg-red-100 text-red-800'
-                                : ''
-                            }`}>
-                              {product.badge === 'new' ? 'Nuevo' : product.badge === 'sale' ? 'Oferta' : product.badge}
-                            </span>
-                          )}
-                        </div>
-                        <div className="text-sm text-text-secondary">
-                          {getCategoryName(product.category.key)}
-                        </div>
-                        {product.description && (
-                          <div className="text-xs text-text-muted mt-1 max-w-xs truncate">
-                            {product.description}
-                           </div>
-                        )}
+                      <div className="h-12 w-12 bg-neutral-200 rounded-lg"></div>
+                      <div className="ml-4 flex-1">
+                        <div className="h-4 bg-neutral-200 rounded w-3/4 mb-2"></div>
+                        <div className="h-3 bg-neutral-200 rounded w-1/2"></div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-sm font-mono text-text-primary bg-neutral-100 px-2 py-1 rounded">
-                      {product.code}
-                    </span>
+                    <div className="h-6 bg-neutral-200 rounded w-16"></div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-sm font-semibold text-text-primary">
-                      ${product.price.toFixed(2)}
-                    </span>
+                    <div className="h-4 bg-neutral-200 rounded w-12"></div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-sm font-medium text-text-primary">
-                      {product.stock} {t.units}
-                    </span>
+                    <div className="h-4 bg-neutral-200 rounded w-8"></div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${stockStatus.color}`}>
-                      {stockStatus.text}
-                    </span>
+                    <div className="h-6 bg-neutral-200 rounded w-20"></div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      {/* Star Toggle Button */}
-                      <button 
-                        onClick={() => handleToggleStar(product)}
-                        className="p-2 hover:bg-amber-50 rounded-lg transition-colors group"
-                        title={product.isStarred ? "Quitar de destacados" : "Marcar como destacado"}
-                      >
-                        {product.isStarred ? (
-                          <StarIconSolid className="h-4 w-4 text-yellow-500" />
-                        ) : (
-                          <StarIcon className="h-4 w-4 text-gray-400 group-hover:text-yellow-400" />
-                        )}
-                      </button>
-                      <button 
-                        onClick={() => onEditProduct?.(product)}
-                        className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
-                        title="Edit product"
-                      >
-                        <PencilIcon className="h-4 w-4" />
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteProduct(product)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Delete product"
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                      </button>
+                      <div className="h-8 w-8 bg-neutral-200 rounded"></div>
+                      <div className="h-8 w-8 bg-neutral-200 rounded"></div>
+                      <div className="h-8 w-8 bg-neutral-200 rounded"></div>
                     </div>
                   </td>
                 </tr>
-              );
-            })}
+              ))
+            ) : (
+              paginatedProducts.map((product) => {
+                const stockStatus = getStockStatus(product.stock);
+                const primaryImage = product.images.find(img => img.isPrimary) || product.images[0];
+                
+                return (
+                  <tr key={product.id} className="hover:bg-neutral-50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center">
+                        <div className="h-12 w-12 flex-shrink-0">
+                          {primaryImage ? (
+                            <Image
+                              className="h-12 w-12 rounded-lg object-cover"
+                              src={primaryImage.url}
+                              alt={primaryImage.alt || product.name}
+                              width={48}
+                              height={48}
+                            />
+                          ) : (
+                            <div className="h-12 w-12 rounded-lg bg-neutral-200 flex items-center justify-center">
+                              <span className="text-xs text-neutral-500">No img</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="ml-4">
+                          <div className="flex items-center gap-2">
+                            <div className="text-sm font-medium text-text-primary">
+                              {product.name}
+                            </div>
+                            {product.isStarred && (
+                              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                ⭐ Destacado
+                              </span>
+                            )}
+                            {product.badge && (
+                              <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                product.badge === 'new' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : product.badge === 'sale'
+                                  ? 'bg-red-100 text-red-800'
+                                  : ''
+                              }`}>
+                                {product.badge === 'new' ? 'Nuevo' : product.badge === 'sale' ? 'Oferta' : product.badge}
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-sm text-text-secondary">
+                            {getCategoryName(product.category.key)}
+                          </div>
+                          {product.description && (
+                            <div className="text-xs text-text-muted mt-1 max-w-xs truncate">
+                              {product.description}
+                             </div>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-sm font-mono text-text-primary bg-neutral-100 px-2 py-1 rounded">
+                        {product.code}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-sm font-semibold text-text-primary">
+                        ${product.price.toFixed(2)}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-sm font-medium text-text-primary">
+                        {product.stock} {t.units}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${stockStatus.color}`}>
+                        {stockStatus.text}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        {/* Star Toggle Button */}
+                        <button 
+                          onClick={() => handleToggleStar(product)}
+                          className="p-2 hover:bg-amber-50 rounded-lg transition-colors group"
+                          title={product.isStarred ? "Quitar de destacados" : "Marcar como destacado"}
+                        >
+                          {product.isStarred ? (
+                            <StarIconSolid className="h-4 w-4 text-yellow-500" />
+                          ) : (
+                            <StarIcon className="h-4 w-4 text-gray-400 group-hover:text-yellow-400" />
+                          )}
+                        </button>
+                        <button 
+                          onClick={() => onEditProduct?.(product)}
+                          className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                          title="Edit product"
+                        >
+                          <PencilIcon className="h-4 w-4" />
+                        </button>
+                        <button 
+                          onClick={() => handleDeleteProduct(product)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete product"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
       
-      {totalProducts === 0 && (
+      {totalProducts === 0 && !isPending && (
         <div className="text-center py-12">
           <div className="text-neutral-400 text-lg mb-2">{t.empty.title}</div>
           <div className="text-neutral-500 text-sm">{t.empty.subtitle}</div>

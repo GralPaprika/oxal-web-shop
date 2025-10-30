@@ -195,6 +195,7 @@
       "search": "Buscar",
       "searchPlaceholder": "Buscar productos...",
       "filters": "Filtros",
+      "clearFilters": "Limpiar Filtros",
       "allCategories": "Todas las categorías",
       "categories": {
         "jewelry": "Joyería",

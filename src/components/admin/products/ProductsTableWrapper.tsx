@@ -6,7 +6,6 @@ import { AUTH_CONFIG } from '@/config/auth.config';
 import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableWrapperProps {
-  products: Product[];
   searchTerm?: string;
   selectedCategory?: string;
   onSearch?: (search: string, category: string) => void;
@@ -56,7 +55,6 @@ interface ProductsTableWrapperProps {
 }
 
 export function ProductsTableWrapper({
-  products,
   searchTerm,
   selectedCategory,
   showPagination,
@@ -71,7 +69,6 @@ export function ProductsTableWrapper({
 
   return (
     <ProductsTable
-      products={products}
       searchTerm={searchTerm}
       selectedCategory={selectedCategory}
       showPagination={showPagination}

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { UsersHeader } from '@/components/admin/users';
 import { ProductsTableClient } from '@/components/admin/products';
-import { getAllProducts, getAllCategories } from '@/lib/actions/product.actions';
+import { getAllCategories } from '@/lib/actions/product.actions';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 
@@ -20,14 +20,6 @@ async function AdminProductsPage({
   const searchTerm = params.search || '';
   const selectedCategory = params.category || '';
 
-  const productsResult = await getAllProducts({
-    filters: {
-      search: searchTerm || undefined,
-      category: selectedCategory || undefined
-    }
-  });
-  const products = productsResult.success ? productsResult.data?.items || [] : [];
-  
   const categoriesResult = await getAllCategories();
   const categories = categoriesResult.success ? categoriesResult.data?.items || [] : [];
 
@@ -68,7 +60,6 @@ async function AdminProductsPage({
 
         {/* Products Table with Search and Pagination */}
         <ProductsTableClient
-          initialProducts={products}
           initialCategories={categories}
           searchTerm={searchTerm}
           selectedCategory={selectedCategory}
@@ -76,6 +67,7 @@ async function AdminProductsPage({
             searchPlaceholder: t('searchPlaceholder'),
             search: t('search'),
             filters: t('filters'),
+            clearFilters: t('clearFilters'),
             allCategories: t('allCategories'),
             table: {
               product: t('table.product'),

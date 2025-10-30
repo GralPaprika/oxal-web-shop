@@ -12,6 +12,7 @@ interface SearchFormProps {
     searchPlaceholder: string;
     search: string;
     filters: string;
+    clearFilters: string;
     allCategories: string;
   };
 }
@@ -39,6 +40,14 @@ export function SearchForm({
     setLocalSelectedCategory(value);
   };
 
+  const handleClearFilters = () => {
+    setLocalSearchTerm('');
+    setLocalSelectedCategory('');
+    onSearch('', '');
+  };
+
+  const hasActiveFilters = localSearchTerm.trim() !== '' || localSelectedCategory !== '';
+
   return (
     <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6 mb-6">
       <form
@@ -63,9 +72,18 @@ export function SearchForm({
             <MagnifyingGlassIcon className="h-4 w-4" />
             {translations.search}
           </button>
-          <button type="button" className="flex items-center gap-2 px-4 py-2 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors">
+          <button 
+            type="button" 
+            onClick={handleClearFilters}
+            disabled={!hasActiveFilters}
+            className={`flex items-center gap-2 px-4 py-2 border rounded-lg transition-colors ${
+              hasActiveFilters 
+                ? 'border-amber-500 bg-amber-50 text-amber-700 hover:bg-amber-100' 
+                : 'border-neutral-300 text-neutral-500 cursor-not-allowed'
+            }`}
+          >
             <FunnelIcon className="h-4 w-4" />
-            {translations.filters}
+            {hasActiveFilters ? translations.clearFilters : translations.filters}
           </button>
           <select
             name="category"
