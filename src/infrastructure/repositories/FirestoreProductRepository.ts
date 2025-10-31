@@ -10,6 +10,7 @@ import type {
 } from '@/domain/product/product.entity';
 import { TYPES } from '@/types/container.types';
 import { matchesSearchTerm } from '@/lib/utils/textUtils';
+import { PRODUCT_CONFIG } from '@/config/product.config';
 
 @injectable()
 export class FirestoreProductRepository implements IProductRepository {
@@ -279,7 +280,7 @@ export class FirestoreProductRepository implements IProductRepository {
       }
       
       if (filters.lowStock !== undefined) {
-        const isLowStock = product.stock <= 5;
+        const isLowStock = product.stock <= PRODUCT_CONFIG.LOW_STOCK_THRESHOLD;
         if (filters.lowStock !== isLowStock) {
           return false;
         }

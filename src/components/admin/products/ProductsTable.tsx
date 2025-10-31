@@ -8,6 +8,7 @@ import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { DeleteProductDialog } from './DeleteProductDialog';
 import { updateProduct, validateCanStarProduct } from '@/lib/actions/product.actions';
 import { NotificationContainer, useNotification } from '@/components/ui/NotificationContainer';
+import { PRODUCT_CONFIG } from '@/config/product.config';
 import type { Product } from '@/domain/product/product.entity';
 
 interface ProductsTableProps {
@@ -253,7 +254,7 @@ export function ProductsTable({
 
   const getStockStatus = (stock: number) => {
     if (stock === 0) return { text: t.stockStatus.outOfStock, color: 'text-red-600 bg-red-50' };
-    if (stock <= 5) return { text: t.stockStatus.lowStock, color: 'text-orange-600 bg-orange-50' };
+    if (stock <= PRODUCT_CONFIG.LOW_STOCK_THRESHOLD) return { text: t.stockStatus.lowStock, color: 'text-orange-600 bg-orange-50' };
     return { text: t.stockStatus.inStock, color: 'text-green-600 bg-green-50' };
   };
 
