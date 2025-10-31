@@ -197,6 +197,12 @@
       "filters": "Filtros",
       "clearFilters": "Limpiar Filtros",
       "allCategories": "Todas las categorías",
+      "filterOptions": {
+        "starred": "Destacados",
+        "new": "Nuevos",
+        "sale": "Oferta",
+        "lowStock": "Stock Bajo"
+      },
       "categories": {
         "jewelry": "Joyería",
         "clothing": "Ropa",

@@ -13,6 +13,12 @@ import type { Product } from '@/domain/product/product.entity';
 interface ProductsTableProps {
   searchTerm?: string;
   selectedCategory?: string;
+  selectedFilters?: {
+    starred: boolean;
+    new: boolean;
+    sale: boolean;
+    lowStock: boolean;
+  };
   showPagination?: boolean;
   translations: {
     table: {
@@ -63,6 +69,7 @@ interface ProductsTableProps {
 export function ProductsTable({
   searchTerm,
   selectedCategory,
+  selectedFilters,
   showPagination,
   translations: t,
   paginationTranslations,
@@ -83,30 +90,34 @@ export function ProductsTable({
   const { notifications, removeNotification, showError } = useNotification();
   const prevSearchRef = useRef<string | undefined>(searchTerm);
   const prevCategoryRef = useRef<string | undefined>(selectedCategory);
+  const prevFiltersRef = useRef<{ starred: boolean; new: boolean; sale: boolean; lowStock: boolean } | undefined>(selectedFilters);
 
   // Cache for storing API responses
   const cacheRef = useRef<Map<string, { items: Product[]; total: number }>>(new Map());
 
   // Generate cache key
-  const getCacheKey = (search: string | undefined, category: string | undefined, page: number, pageSize: number) => {
-    return `${search || ''}|${category || ''}|${page}|${pageSize}`;
+  const getCacheKey = (search: string | undefined, category: string | undefined, filters: { starred: boolean; new: boolean; sale: boolean; lowStock: boolean } | undefined, page: number, pageSize: number) => {
+    const filterStr = filters ? `${filters.starred}|${filters.new}|${filters.sale}|${filters.lowStock}` : '||||';
+    return `${search || ''}|${category || ''}|${filterStr}|${page}|${pageSize}`;
   };
 
   // Load paginated data when page or pageSize changes
   useEffect(() => {
     const searchChanged = prevSearchRef.current !== searchTerm;
     const categoryChanged = prevCategoryRef.current !== selectedCategory;
+    const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(selectedFilters);
 
     // Update refs
     prevSearchRef.current = searchTerm;
     prevCategoryRef.current = selectedCategory;
+    prevFiltersRef.current = selectedFilters;
 
     startTransition(async () => {
-      // If search or category changed, start from page 1
-      const pageToLoad = (searchChanged || categoryChanged) ? 1 : currentPage;
+      // If search, category, or filters changed, start from page 1
+      const pageToLoad = (searchChanged || categoryChanged || filtersChanged) ? 1 : currentPage;
 
       // Generate cache key
-      const cacheKey = getCacheKey(searchTerm, selectedCategory, pageToLoad, pageSize);
+      const cacheKey = getCacheKey(searchTerm, selectedCategory, selectedFilters, pageToLoad, pageSize);
 
       // Check cache first
       const cachedData = cacheRef.current.get(cacheKey);
@@ -117,7 +128,7 @@ export function ProductsTable({
         onProductCountChange?.(cachedData.total);
 
         // If we loaded page 1 due to filter change, update currentPage state
-        if (searchChanged || categoryChanged) {
+        if (searchChanged || categoryChanged || filtersChanged) {
           setCurrentPage(1);
         }
         return;
@@ -127,6 +138,10 @@ export function ProductsTable({
       const params = new URLSearchParams();
       if (searchTerm) params.set('search', searchTerm);
       if (selectedCategory) params.set('category', selectedCategory);
+      if (selectedFilters?.starred) params.set('starred', 'true');
+      if (selectedFilters?.new) params.set('new', 'true');
+      if (selectedFilters?.sale) params.set('sale', 'true');
+      if (selectedFilters?.lowStock) params.set('lowStock', 'true');
       params.set('page', pageToLoad.toString());
       params.set('pageSize', pageSize.toString());
 
@@ -155,7 +170,7 @@ export function ProductsTable({
         }
 
         // If we loaded page 1 due to filter change, update currentPage state
-        if (searchChanged || categoryChanged) {
+        if (searchChanged || categoryChanged || filtersChanged) {
           setCurrentPage(1);
         }
       } catch (error) {
@@ -163,7 +178,7 @@ export function ProductsTable({
         showError('Error', 'Failed to load products');
       }
     });
-  }, [currentPage, pageSize, searchTerm, selectedCategory, translations, onProductCountChange, showError]);
+  }, [currentPage, pageSize, searchTerm, selectedCategory, selectedFilters, translations, onProductCountChange, showError]);
 
   const handleDeleteProduct = (product: Product) => {
     setDeleteProduct(product);

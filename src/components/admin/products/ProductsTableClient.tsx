@@ -11,12 +11,24 @@ interface ProductsTableClientProps {
   initialCategories: ProductCategory[];
   searchTerm: string;
   selectedCategory: string;
+  selectedFilters: {
+    starred: boolean;
+    new: boolean;
+    sale: boolean;
+    lowStock: boolean;
+  };
   translations: {
     searchPlaceholder: string;
     search: string;
     filters: string;
     clearFilters: string;
     allCategories: string;
+    filterOptions: {
+      starred: string;
+      new: string;
+      sale: string;
+      lowStock: string;
+    };
     table: {
       product: string;
       code: string;
@@ -64,15 +76,18 @@ export function ProductsTableClient({
   initialCategories,
   searchTerm: initialSearchTerm,
   selectedCategory: initialSelectedCategory,
+  selectedFilters: initialSelectedFilters,
   translations
 }: ProductsTableClientProps) {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [selectedCategory, setSelectedCategory] = useState(initialSelectedCategory);
+  const [selectedFilters, setSelectedFilters] = useState(initialSelectedFilters);
   const router = useRouter();
 
-  const handleSearch = (newSearchTerm: string, newCategory: string) => {
+  const handleSearch = (newSearchTerm: string, newCategory: string, newFilters: { starred: boolean; new: boolean; sale: boolean; lowStock: boolean }) => {
     setSearchTerm(newSearchTerm);
     setSelectedCategory(newCategory);
+    setSelectedFilters(newFilters);
   };
 
   const handleEditProduct = (product: Product) => {
@@ -85,6 +100,7 @@ export function ProductsTableClient({
       <SearchForm
         searchTerm={searchTerm}
         selectedCategory={selectedCategory}
+        selectedFilters={selectedFilters}
         categories={initialCategories}
         onSearch={handleSearch}
         translations={{
@@ -93,6 +109,7 @@ export function ProductsTableClient({
           filters: translations.filters,
           clearFilters: translations.clearFilters || 'Clear Filters',
           allCategories: translations.allCategories,
+          filterOptions: translations.filterOptions,
         }}
       />
 

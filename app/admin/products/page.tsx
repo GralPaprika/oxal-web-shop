@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/Button';
 async function AdminProductsPage({
   searchParams
 }: {
-  searchParams: { search?: string; category?: string }
+  searchParams: { search?: string; category?: string; starred?: string; new?: string; sale?: string; lowStock?: string }
 }) {
   const t = await getTranslations('admin.products');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
@@ -19,6 +19,12 @@ async function AdminProductsPage({
   const params = await searchParams;
   const searchTerm = params.search || '';
   const selectedCategory = params.category || '';
+  const selectedFilters = {
+    starred: params.starred === 'true',
+    new: params.new === 'true',
+    sale: params.sale === 'true',
+    lowStock: params.lowStock === 'true',
+  };
 
   const categoriesResult = await getAllCategories();
   const categories = categoriesResult.success ? categoriesResult.data?.items || [] : [];
@@ -63,12 +69,19 @@ async function AdminProductsPage({
           initialCategories={categories}
           searchTerm={searchTerm}
           selectedCategory={selectedCategory}
+          selectedFilters={selectedFilters}
           translations={{
             searchPlaceholder: t('searchPlaceholder'),
             search: t('search'),
             filters: t('filters'),
             clearFilters: t('clearFilters'),
             allCategories: t('allCategories'),
+            filterOptions: {
+              starred: t('filterOptions.starred'),
+              new: t('filterOptions.new'),
+              sale: t('filterOptions.sale'),
+              lowStock: t('filterOptions.lowStock'),
+            },
             table: {
               product: t('table.product'),
               code: t('table.code'),
