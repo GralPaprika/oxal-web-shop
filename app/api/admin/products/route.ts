@@ -35,8 +35,8 @@ const productQueryParamDefs = {
   new: { type: 'boolean' as const, required: false },
   sale: { type: 'boolean' as const, required: false },
   lowStock: { type: 'boolean' as const, required: false },
-  sortField: { type: 'enum' as const, required: false, enumValues: ['name', 'price', 'stock', 'createdAt', 'updatedAt'] as const },
-  sortOrder: { type: 'enum' as const, required: false, enumValues: ['asc', 'desc'] as const, defaultValue: 'asc' }
+  sortField: { type: 'enum' as const, required: false, enumValues: ['name', 'price', 'stock', 'createdAt', 'updatedAt'] as const, defaultValue: 'updatedAt' },
+  sortOrder: { type: 'enum' as const, required: false, enumValues: ['asc', 'desc'] as const, defaultValue: 'desc' }
 } as const;
 
 export const GET = async (request: NextRequest) => {
@@ -70,12 +70,10 @@ export const GET = async (request: NextRequest) => {
       limit: pageSize,
       offset: (page - 1) * pageSize,
       filters: Object.keys(filters).length > 0 ? filters : undefined,
-      ...(sortField && {
-        sort: {
-          field: sortField,
-          direction: sortOrder
-        }
-      })
+      sort: {
+        field: sortField,
+        direction: sortOrder
+      }
     };
 
     // Get paginated products and total count
