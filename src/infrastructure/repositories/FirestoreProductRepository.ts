@@ -266,6 +266,25 @@ export class FirestoreProductRepository implements IProductRepository {
         }
       }
       
+      if (filters.starred !== undefined && product.isStarred !== filters.starred) {
+        return false;
+      }
+      
+      if (filters.new !== undefined && product.badge !== (filters.new ? 'new' : null)) {
+        return false;
+      }
+      
+      if (filters.sale !== undefined && product.badge !== (filters.sale ? 'sale' : null)) {
+        return false;
+      }
+      
+      if (filters.lowStock !== undefined) {
+        const isLowStock = product.stock <= 5;
+        if (filters.lowStock !== isLowStock) {
+          return false;
+        }
+      }
+      
       if (filters.search) {
         const searchableText = [
           product.name,

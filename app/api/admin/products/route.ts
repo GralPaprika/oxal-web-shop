@@ -31,6 +31,10 @@ const productQueryParamDefs = {
   minPrice: { type: 'number' as const, required: false, min: 0 },
   maxPrice: { type: 'number' as const, required: false, min: 0 },
   inStock: { type: 'boolean' as const, required: false },
+  starred: { type: 'boolean' as const, required: false },
+  new: { type: 'boolean' as const, required: false },
+  sale: { type: 'boolean' as const, required: false },
+  lowStock: { type: 'boolean' as const, required: false },
   sortField: { type: 'enum' as const, required: false, enumValues: ['name', 'price', 'stock', 'createdAt', 'updatedAt'] as const },
   sortOrder: { type: 'enum' as const, required: false, enumValues: ['asc', 'desc'] as const, defaultValue: 'asc' }
 } as const;
@@ -47,7 +51,7 @@ export const GET = async (request: NextRequest) => {
       );
     }
 
-    const { page, pageSize, search, category, status, minPrice, maxPrice, inStock, sortField, sortOrder } = paramResult.data;
+    const { page, pageSize, search, category, status, minPrice, maxPrice, inStock, starred, new: isNew, sale, lowStock, sortField, sortOrder } = paramResult.data;
 
     // Build options object
     const filters: Record<string, unknown> = {};
@@ -57,6 +61,10 @@ export const GET = async (request: NextRequest) => {
     if (minPrice !== undefined) filters.minPrice = minPrice;
     if (maxPrice !== undefined) filters.maxPrice = maxPrice;
     if (inStock !== undefined) filters.inStock = inStock;
+    if (starred !== undefined) filters.starred = starred;
+    if (isNew !== undefined) filters.new = isNew;
+    if (sale !== undefined) filters.sale = sale;
+    if (lowStock !== undefined) filters.lowStock = lowStock;
 
     const options: ProductListOptions = {
       limit: pageSize,

@@ -147,10 +147,14 @@ export function SearchForm({
                       const isSelected = localFilters[option.key];
                       
                       return (
-                        <div
+                        <button
                           key={option.key}
-                          onClick={() => handleFilterChange(option.key)}
-                          className={`flex items-center gap-2 px-2 py-1 rounded-md cursor-pointer transition-colors ${
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleFilterChange(option.key);
+                          }}
+                          className={`flex items-center gap-2 px-2 py-1 rounded-md cursor-pointer transition-colors w-full text-left ${
                             isSelected ? 'bg-amber-50 border border-amber-200' : 'hover:bg-neutral-50'
                           }`}
                         >
@@ -164,7 +168,7 @@ export function SearchForm({
                               {option.label}
                             </span>
                           </div>
-                        </div>
+                        </button>
                       );
                     })}
                   </div>

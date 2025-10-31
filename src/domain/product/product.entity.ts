@@ -74,6 +74,10 @@ export interface ProductFilters {
   maxPrice?: number;
   inStock?: boolean;
   search?: string;
+  starred?: boolean;
+  new?: boolean;
+  sale?: boolean;
+  lowStock?: boolean;
 }
 
 export interface ProductSort {

@@ -117,6 +117,7 @@ export function ProductsTableClient({
       <ProductsTable
         searchTerm={searchTerm}
         selectedCategory={selectedCategory}
+        selectedFilters={selectedFilters}
         showPagination={true}
         translations={{
           table: translations.table,
