@@ -447,5 +447,77 @@
         "suspended": "Suspendido"
       }
     }
+  },
+  "landing": {
+    "title": "Oxal",
+    "subtitle": "Artesanías Auténticas de Colima, México",
+    "description": "Joyas artesanales y ropa premium que celebran la herencia mexicana",
+    "comingSoon": "✨ Recién Lanzado - Próximamente",
+    "about": {
+      "title": "Lanzando Oxal",
+      "subtitle": "Nos emociona presentar Oxal, una nueva iniciativa dedicada a llevar la artesanía auténtica mexicana al mundo",
+      "vision": "Nuestra Visión",
+      "visionText": "Oxal nace de la pasión por celebrar la rica herencia cultural de Colima, México. Como marca nueva, nos comprometemos a construir algo significativo: una plataforma donde las técnicas artesanales tradicionales se encuentran con el diseño contemporáneo.",
+      "visionText2": "Nuestro nombre \"Oxal\" refleja nuestro compromiso de preservar el arte mexicano auténtico mientras llevamos calidad excepcional a tu vida cotidiana.",
+      "jewelry": {
+        "icon": "🎨",
+        "title": "Joyas Artesanales",
+        "description": "Cada pieza meticulosamente creada por artesanos locales usando técnicas tradicionales"
+      },
+      "clothing": {
+        "icon": "👗",
+        "title": "Ropa Premium",
+        "description": "Prendas diseñadas artísticamente que combinan herencia cultural con estilo moderno"
+      },
+      "ethics": {
+        "icon": "🌍",
+        "title": "Comercio Ético",
+        "description": "Apoyando artesanos locales y preservando la artesanía tradicional"
+      }
+    },
+    "collections": {
+      "title": "Lo que Está Por Venir",
+      "subtitle": "Obtén un vistazo de nuestras primeras colecciones que se lanzarán pronto",
+      "comingSoon": "Próximamente",
+      "jewelry": {
+        "title": "Joyas Artesanales",
+        "description": "Descubre piezas únicas que cuentan historias. Nuestros artesanos seleccionan cuidadosamente materiales premium y emplean técnicas tradicionales para crear joyas que celebran la herencia mexicana y el orgullo cultural."
+      },
+      "clothing": {
+        "title": "Ropa Premium",
+        "description": "Diseñado artísticamente con orgullo y propósito. Nuestra línea de ropa presenta colores vibrantes, patrones intrincados y calidad excepcional, llevando el espíritu de Colima a tu guardarropa."
+      }
+    },
+    "location": {
+      "title": "Raíces en Colima",
+      "description": "Ubicado en el estado vibrante de Colima en la costa del Pacífico de México, nuestro taller es donde la tradición se encuentra con la innovación. Estamos orgullosos de apoyar a artesanos locales y preservar la artesanía mexicana auténtica.",
+      "handcrafted": "Artesanal",
+      "handcraftedDesc": "Hecho por artesanos locales",
+      "sustainable": "Sostenible",
+      "sustainableDesc": "Prácticas éticas",
+      "authentic": "Auténtico",
+      "authenticDesc": "Herencia tradicional"
+    },
+    "contact": {
+      "title": "Ponte en Contacto",
+      "subtitle": "Nos encantaría saber de ti. Conéctate con nosotros para aprender más sobre Oxal y nuestra visión.",
+      "location": "Ubicación",
+      "locationText": "Colima, Colima, México",
+      "email": "Correo Electrónico",
+      "followUs": "Síguenos",
+      "instagram": "Instagram",
+      "facebook": "Facebook"
+    },
+    "footer": {
+      "description": "Artesanías auténticas de Colima, México. Celebrando la tradición, abrazando la calidad.",
+      "quickLinks": "Enlaces Rápidos",
+      "ourVision": "Nuestra Visión",
+      "collections": "Colecciones",
+      "contact": "Contacto",
+      "connect": "Conectar",
+      "emailUs": "Envíanos un Correo",
+      "copyright": "© 2025 Oxal. Todos los derechos reservados. Hecho con pasión en Colima, México.",
+      "badge": "🌟 Próximamente 🌟"
+    }
   }
 }

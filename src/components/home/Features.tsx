@@ -79,7 +79,7 @@ export function Features() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="mailto:hola@oxal.com"
+              href="mailto:hola@oxal.shop"
               className="border-2 border-primary-600 text-primary-600 px-6 py-3 rounded-full font-semibold hover:bg-primary-50 transition-colors"
             >
               {t('cta.email')}

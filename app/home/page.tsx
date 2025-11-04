@@ -1,0 +1,21 @@
+import { Header } from '@/components/layout/Header';
+import { Hero } from '@/components/home/Hero';
+import { FeaturedCategories } from '@/components/home/FeaturedCategories';
+import { FeaturedProducts } from '@/components/home/FeaturedProducts';
+import { AboutSection } from '@/components/home/AboutSection';
+import { Features } from '@/components/home/Features';
+import { Footer } from '@/components/layout/Footer';
+
+export default async function Home() {
+  return (
+    <div className="min-h-screen bg-background-primary">
+      <Header />
+      <Hero />
+      <FeaturedCategories />
+      <FeaturedProducts />
+      <AboutSection />
+      <Features />
+      <Footer />
+    </div>
+  );
+}
