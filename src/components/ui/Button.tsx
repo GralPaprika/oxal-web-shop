@@ -18,9 +18,9 @@ export function Button({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors';
   
   const variantClasses = {
-    primary: 'bg-amber-600 text-white hover:bg-amber-700 focus:ring-amber-500',
-    secondary: 'bg-neutral-600 text-white hover:bg-neutral-700 focus:ring-neutral-500',
-    outline: 'border border-neutral-300 bg-white text-text-primary hover:bg-neutral-50 focus:ring-amber-500',
+    primary: 'bg-oxal-verdigris text-white hover:bg-oxal-desert focus:ring-oxal-verdigris',
+    secondary: 'bg-oxal-sandstone text-gray-900 hover:bg-oxal-teak focus:ring-oxal-sandstone',
+    outline: 'border border-oxal-verdigris bg-white text-oxal-verdigris hover:bg-oxal-cream focus:ring-oxal-verdigris',
   };
   
   const sizeClasses = {

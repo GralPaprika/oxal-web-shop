@@ -20,10 +20,10 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, prefix, suffix, variant = 'default', className = '', ...props }, ref) => {
     const baseClasses = variant === 'small' 
-      ? 'w-full px-2 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors text-sm'
-      : 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors';
+      ? 'w-full px-2 py-2 border border-oxal-sandstone rounded-lg focus:outline-none focus:ring-2 focus:ring-oxal-verdigris transition-colors text-sm'
+      : 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-oxal-verdigris transition-colors';
     
-    const errorClasses = error ? 'border-red-300 bg-red-50' : 'border-neutral-300';
+    const errorClasses = error ? 'border-red-300 bg-red-50' : 'border-oxal-sandstone';
     const prefixClasses = prefix ? (variant === 'small' ? 'pl-8' : 'pl-8') : '';
     const suffixClasses = suffix ? (variant === 'small' ? 'pr-8' : 'pr-12') : '';
     const finalClasses = `${baseClasses} ${errorClasses} ${prefixClasses} ${suffixClasses} ${className}`;
@@ -31,13 +31,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div>
         {label && (
-          <label htmlFor={props.id} className="block text-sm font-medium text-text-primary mb-2">
+          <label htmlFor={props.id} className="block text-sm font-medium text-gray-900 mb-2">
             {label}
           </label>
         )}
         <div className={(prefix || suffix) ? 'relative' : undefined}>
           {prefix && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-oxal-teak">
               {prefix}
             </div>
           )}
@@ -47,7 +47,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {suffix && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-text-muted">
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-oxal-teak">
               {suffix}
             </div>
           )}
@@ -60,14 +60,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ label, error, className = '', ...props }, ref) => {
-    const baseClasses = 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors resize-none';
-    const errorClasses = error ? 'border-red-300 bg-red-50' : 'border-neutral-300';
+    const baseClasses = 'w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-oxal-verdigris transition-colors resize-none';
+    const errorClasses = error ? 'border-red-300 bg-red-50' : 'border-oxal-sandstone';
     const finalClasses = `${baseClasses} ${errorClasses} ${className}`;
 
     return (
       <div>
         {label && (
-          <label htmlFor={props.id} className="block text-sm font-medium text-text-primary mb-2">
+          <label htmlFor={props.id} className="block text-sm font-medium text-gray-900 mb-2">
             {label}
           </label>
         )}

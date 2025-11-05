@@ -67,7 +67,7 @@ export function LoginForm() {
       </Button>
 
       <div className="text-center">
-        <a href="#" className="text-sm text-amber-600 hover:text-amber-700 transition-colors">
+        <a href="#" className="text-sm text-oxal-verdigris hover:text-oxal-desert transition-colors">
           {t('forgotPassword')}
         </a>
       </div>
