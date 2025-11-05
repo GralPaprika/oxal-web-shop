@@ -15,29 +15,29 @@ export function AboutSection() {
   const t = useTranslations('about');
 
   return (
-    <section className="py-16 bg-background-primary">
+    <section className="py-16 bg-oxal-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="order-2 lg:order-1">
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary mb-6">
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-6">
               {t('title')}
             </h2>
-            <p className="text-lg text-text-secondary mb-6 leading-relaxed">
+            <p className="text-lg text-oxal-teak mb-6 leading-relaxed">
               {t('paragraph1')}
             </p>
-            <p className="text-lg text-text-secondary mb-8 leading-relaxed">
+            <p className="text-lg text-oxal-teak mb-8 leading-relaxed">
               {t('paragraph2')}
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                    <span className="text-primary-600 font-bold">✓</span>
+                  <div className="flex-shrink-0 w-8 h-8 bg-oxal-sandstone rounded-full flex items-center justify-center">
+                    <span className="text-gray-900 font-bold">✓</span>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-text-primary mb-1">{t(feature.titleKey)}</h4>
-                    <p className="text-sm text-text-secondary">{t(feature.descriptionKey)}</p>
+                    <h4 className="font-semibold text-gray-900 mb-1">{t(feature.titleKey)}</h4>
+                    <p className="text-sm text-oxal-teak">{t(feature.descriptionKey)}</p>
                   </div>
                 </div>
               ))}
@@ -45,7 +45,7 @@ export function AboutSection() {
 
             <Link
               href="/about"
-              className="inline-flex items-center text-primary-600 hover:text-primary-700 font-semibold transition-colors"
+              className="inline-flex items-center text-oxal-verdigris hover:text-oxal-desert font-semibold transition-colors"
             >
               {t('cta')}
               <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,8 +66,8 @@ export function AboutSection() {
                 />
               </div>
               
-              <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary-200 rounded-full opacity-20"></div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-secondary-200 rounded-full opacity-20"></div>
+              <div className="absolute -top-6 -left-6 w-24 h-24 bg-oxal-sandstone rounded-full opacity-20"></div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-oxal-teak rounded-full opacity-20"></div>
             </div>
           </div>
         </div>

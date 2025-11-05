@@ -29,13 +29,13 @@ export function FeaturedCategories() {
   const t = useTranslations('categories');
 
   return (
-    <section className="py-16 bg-background-secondary">
+    <section className="py-16 bg-oxal-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary mb-4">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">
             {t('title')}
           </h2>
-          <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+          <p className="text-lg text-oxal-teak max-w-2xl mx-auto">
             {t('subtitle')}
           </p>
         </div>
@@ -58,7 +58,7 @@ export function FeaturedCategories() {
                 </div>
                 <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
-              <h3 className="text-xl font-semibold text-text-primary text-center group-hover:text-primary-600 transition-colors duration-300">
+              <h3 className="text-xl font-semibold text-gray-900 text-center group-hover:text-oxal-verdigris transition-colors duration-300">
                 {t(`categories.${category.name}`)}
               </h3>
             </Link>

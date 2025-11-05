@@ -74,13 +74,13 @@ export function FeaturedProducts() {
   };
 
   return (
-    <section className="py-16 bg-background-secondary">
+    <section className="py-16 bg-oxal-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-text-primary mb-4">
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">
             Productos destacados
           </h2>
-          <p className="text-lg text-text-secondary max-w-2xl mx-auto">
+          <p className="text-lg text-oxal-teak max-w-2xl mx-auto">
             Descubre nuestros productos más populares, seleccionados especialmente para ti
           </p>
         </div>
@@ -104,21 +104,21 @@ export function FeaturedProducts() {
                   <span className={`absolute top-3 left-3 px-2 py-1 text-xs font-semibold rounded-full ${
                     product.badge === 'Oferta' ? 'bg-red-100 text-red-800' :
                     product.badge === 'Nuevo' ? 'bg-green-100 text-green-800' :
-                    'bg-primary-100 text-primary-800'
+                    'bg-oxal-sandstone text-gray-900'
                   }`}>
                     {product.badge}
                   </span>
                 )}
 
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <button className="bg-white text-primary-600 px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-primary-50 transition-colors">
+                  <button className="bg-white text-oxal-verdigris px-4 py-2 rounded-full font-semibold shadow-lg hover:bg-oxal-cream transition-colors">
                     Agregar al carrito
                   </button>
                 </div>
               </div>
 
               <div className="p-4">
-                <h3 className="font-semibold text-text-primary mb-2 line-clamp-2">
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                   {product.name}
                 </h3>
                 
@@ -126,18 +126,18 @@ export function FeaturedProducts() {
                   <div className="flex">
                     {renderStars(product.rating)}
                   </div>
-                  <span className="ml-2 text-sm text-text-secondary">
+                  <span className="ml-2 text-sm text-oxal-teak">
                     {product.rating} ({product.reviews})
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg font-bold text-primary-600">
+                    <span className="text-lg font-bold text-oxal-verdigris">
                       {product.price}
                     </span>
                     {product.originalPrice && (
-                      <span className="text-sm text-text-muted line-through">
+                      <span className="text-sm text-gray-500 line-through">
                         {product.originalPrice}
                       </span>
                     )}
@@ -151,7 +151,7 @@ export function FeaturedProducts() {
         <div className="text-center mt-12">
           <Link
             href="/products"
-            className="bg-amber-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-amber-700 transition-colors shadow-lg inline-block"
+            className="bg-oxal-verdigris text-white px-8 py-3 rounded-full font-semibold hover:bg-oxal-desert transition-colors shadow-lg inline-block"
           >
             Ver todos los productos
           </Link>

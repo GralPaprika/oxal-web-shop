@@ -17,11 +17,11 @@ export function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-amber-900 border-b border-amber-800 shadow-sm">
+    <header className="sticky top-0 z-50 bg-oxal-verdigris border-b border-oxal-desert shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold text-amber-50">
+            <Link href="/" className="text-2xl font-bold text-white">
               Oxal
             </Link>
           </div>
@@ -31,7 +31,7 @@ export function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-amber-100 hover:text-amber-50 px-3 py-2 text-sm font-medium transition-colors"
+                className="text-white hover:text-oxal-sandstone hover:bg-secondary-600 px-3 py-2 text-sm font-medium transition-all rounded-md"
               >
                 {item.name}
               </Link>
@@ -39,27 +39,27 @@ export function Header() {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <Link href="/auth/login" className="p-2 rounded-md text-amber-100 hover:text-amber-50">
+            <Link href="/auth/login" className="p-2 rounded-md text-white hover:text-oxal-sandstone hover:bg-secondary-600 transition-all">
               <UserIcon className="h-6 w-6" />
             </Link>
 
-            <button className="p-2 rounded-md text-amber-100 hover:text-amber-50 relative">
+            <button className="p-2 rounded-md text-white hover:text-oxal-sandstone hover:bg-secondary-600 transition-all relative">
               <HeartIcon className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-secondary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 0
               </span>
             </button>
 
-            <button className="p-2 rounded-md text-amber-100 hover:text-amber-50 relative">
+            <button className="p-2 rounded-md text-white hover:text-oxal-sandstone hover:bg-secondary-600 transition-all relative">
               <ShoppingCartIcon className="h-6 w-6" />
-              <span className="absolute -top-1 -right-1 bg-amber-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-secondary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 0
               </span>
             </button>
 
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2 rounded-md text-amber-100 hover:text-amber-50"
+              className="md:hidden p-2 rounded-md text-white hover:text-oxal-sandstone"
             >
               {isMenuOpen ? (
                 <XMarkIcon className="h-6 w-6" />
@@ -71,13 +71,13 @@ export function Header() {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden border-t border-amber-800 py-4">
+          <div className="md:hidden border-t border-oxal-desert py-4">
             <div className="space-y-1">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block px-3 py-2 text-base font-medium text-amber-100 hover:text-amber-50 hover:bg-amber-800 rounded-md"
+                  className="block px-3 py-2 text-base font-medium text-white hover:text-oxal-sandstone hover:bg-secondary-600 rounded-md transition-all"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}

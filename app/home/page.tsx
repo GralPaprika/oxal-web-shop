@@ -8,7 +8,7 @@ import { Footer } from '@/components/layout/Footer';
 
 export default async function Home() {
   return (
-    <div className="min-h-screen bg-background-primary">
+    <div className="min-h-screen bg-oxal-cream">
       <Header />
       <Hero />
       <FeaturedCategories />
