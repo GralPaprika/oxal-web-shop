@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 export default function Home() {
   const t = useTranslations('landing');
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-oxal-cream">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
@@ -20,7 +20,7 @@ export default function Home() {
         </div>
         <div className="relative z-10 text-center text-white px-4 max-w-3xl">
           <div className="mb-4 inline-block">
-            <span className="bg-amber-500/90 text-white px-4 py-2 rounded-full text-sm font-semibold">
+            <span className="bg-oxal-verdigris text-white px-4 py-2 rounded-full text-sm font-semibold">
               {t('comingSoon')}
             </span>
           </div>
@@ -31,14 +31,14 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-gradient-to-br from-amber-50 to-orange-50">
+      <section id="about" className="py-20 bg-oxal-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <span className="inline-block bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            {/* <span className="inline-block bg-oxal-sandstone text-gray-900 px-4 py-2 rounded-full text-sm font-semibold mb-4">
               {t('about.title')}
-            </span>
+            </span> */}
             <h3 className="text-4xl font-bold text-gray-900 mb-6">{t('about.title')}</h3>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-xl text-oxal-teak max-w-2xl mx-auto">
               {t('about.subtitle')}
             </p>
           </div>
@@ -54,21 +54,21 @@ export default function Home() {
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <span className="text-amber-600 text-2xl mr-4">{t('about.jewelry.icon')}</span>
+                  <span className="text-oxal-verdigris text-2xl mr-4">{t('about.jewelry.icon')}</span>
                   <div>
                     <h5 className="font-semibold text-gray-900">{t('about.jewelry.title')}</h5>
                     <p className="text-gray-600">{t('about.jewelry.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-amber-600 text-2xl mr-4">{t('about.clothing.icon')}</span>
+                  <span className="text-oxal-verdigris text-2xl mr-4">{t('about.clothing.icon')}</span>
                   <div>
                     <h5 className="font-semibold text-gray-900">{t('about.clothing.title')}</h5>
                     <p className="text-gray-600">{t('about.clothing.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-amber-600 text-2xl mr-4">{t('about.ethics.icon')}</span>
+                  <span className="text-oxal-verdigris text-2xl mr-4">{t('about.ethics.icon')}</span>
                   <div>
                     <h5 className="font-semibold text-gray-900">{t('about.ethics.title')}</h5>
                     <p className="text-gray-600">{t('about.ethics.description')}</p>
@@ -89,7 +89,7 @@ export default function Home() {
       </section>
 
       {/* Collections Section */}
-      <section id="collections" className="py-20 bg-white">
+      <section id="collections" className="py-20 bg-oxal-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-bold text-gray-900 mb-4">{t('collections.title')}</h3>
@@ -107,7 +107,7 @@ export default function Home() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
-                <span className="absolute top-4 right-4 bg-amber-500 text-white px-3 py-1 rounded-full text-sm font-semibold">{t('collections.comingSoon')}</span>
+                <span className="absolute top-4 right-4 badge-oxal">{t('collections.comingSoon')}</span>
               </div>
               <h4 className="text-2xl font-bold text-gray-900 mb-3">{t('collections.jewelry.title')}</h4>
               <p className="text-gray-600 text-lg">
@@ -125,7 +125,7 @@ export default function Home() {
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
-                <span className="absolute top-4 right-4 bg-amber-500 text-white px-3 py-1 rounded-full text-sm font-semibold">{t('collections.comingSoon')}</span>
+                <span className="absolute top-4 right-4 badge-oxal">{t('collections.comingSoon')}</span>
               </div>
               <h4 className="text-2xl font-bold text-gray-900 mb-3">{t('collections.clothing.title')}</h4>
               <p className="text-gray-600 text-lg">
@@ -137,11 +137,11 @@ export default function Home() {
       </section>
 
       {/* Location Section */}
-      <section className="py-20 bg-gradient-to-br from-orange-50 to-amber-50">
+      <section className="py-20 bg-oxal-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h3 className="text-4xl font-bold text-gray-900 mb-6">{t('location.title')}</h3>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-oxal-teak mb-8 max-w-2xl mx-auto">
               {t('location.description')}
             </p>
             <div className="relative h-96 rounded-lg overflow-hidden shadow-lg">
@@ -157,19 +157,19 @@ export default function Home() {
             </div>
             <div className="mt-12 grid grid-cols-3 gap-8">
               <div className="text-center">
-                <p className="text-4xl font-bold text-amber-600 mb-2">📍</p>
+                <p className="text-4xl font-bold mb-2 text-oxal-verdigris">📍</p>
                 <h4 className="font-semibold text-gray-900 mb-1">{t('location.handcrafted')}</h4>
-                <p className="text-gray-600 text-sm">{t('location.handcraftedDesc')}</p>
+                <p className="text-oxal-teak text-sm">{t('location.handcraftedDesc')}</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-amber-600 mb-2">🌿</p>
+                <p className="text-4xl font-bold mb-2 text-oxal-verdigris">🌿</p>
                 <h4 className="font-semibold text-gray-900 mb-1">{t('location.sustainable')}</h4>
-                <p className="text-gray-600 text-sm">{t('location.sustainableDesc')}</p>
+                <p className="text-oxal-teak text-sm">{t('location.sustainableDesc')}</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-amber-600 mb-2">✨</p>
+                <p className="text-4xl font-bold mb-2 text-oxal-verdigris">✨</p>
                 <h4 className="font-semibold text-gray-900 mb-1">{t('location.authentic')}</h4>
-                <p className="text-gray-600 text-sm">{t('location.authenticDesc')}</p>
+                <p className="text-oxal-teak text-sm">{t('location.authenticDesc')}</p>
               </div>
             </div>
           </div>
@@ -177,11 +177,11 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-oxal-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h3 className="text-4xl font-bold text-gray-900 mb-6">{t('contact.title')}</h3>
-            <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
+            <p className="text-xl text-oxal-teak mb-12 max-w-2xl mx-auto">
               {t('contact.subtitle')}
             </p>
 
@@ -189,12 +189,12 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{t('contact.location')}</h4>
-                <p className="text-gray-600">Colima, Colima, Mexico</p>
+                <p className="text-oxal-teak">Colima, Colima, Mexico</p>
               </div>
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{t('contact.email')}</h4>
-                <p className="text-gray-600">
-                  <a href="mailto:info@oxal.shop" className="text-amber-600 hover:text-amber-700">
+                <p className="text-oxal-teak">
+                  <a href="mailto:info@oxal.shop" className="text-oxal-verdigris hover:opacity-80">
                     info@oxal.shop
                   </a>
                 </p>
@@ -202,13 +202,13 @@ export default function Home() {
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{t('contact.followUs')}</h4>
                 <div className="flex gap-4 justify-center md:justify-start">
-                  <a href="#" className="text-gray-600 hover:text-amber-600 transition inline-flex items-center gap-2">
+                  <a href="#" className="text-oxal-teak hover:text-oxal-verdigris transition inline-flex items-center gap-2">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siInstagram.path} />
                     </svg>
                     <span>{t('contact.instagram')}</span>
                   </a>
-                  <a href="#" className="text-gray-600 hover:text-amber-600 transition inline-flex items-center gap-2">
+                  <a href="#" className="text-oxal-teak hover:text-oxal-verdigris transition inline-flex items-center gap-2">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siFacebook.path} />
                     </svg>
@@ -222,29 +222,29 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
+      <footer className="bg-oxal-verdigris text-yellow-50 py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-gray-800">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-oxal-verdigris">
             <div>
               <h2 className="text-2xl font-bold mb-2">Oxal</h2>
-              <p className="text-gray-400">
+              <p className="text-yellow-100">
                 {t('footer.description')}
               </p>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h4>
               <ul className="space-y-2">
-                <li><a href="#about" className="text-gray-400 hover:text-white transition">{t('footer.ourVision')}</a></li>
-                <li><a href="#collections" className="text-gray-400 hover:text-white transition">{t('footer.collections')}</a></li>
-                <li><a href="#contact" className="text-gray-400 hover:text-white transition">{t('footer.contact')}</a></li>
+                <li><a href="#about" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.ourVision')}</a></li>
+                <li><a href="#collections" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.collections')}</a></li>
+                <li><a href="#contact" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.contact')}</a></li>
               </ul>
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-4">{t('footer.connect')}</h4>
               <ul className="space-y-2">
-                <li><a href="mailto:info@oxal.shop" className="text-gray-400 hover:text-white transition">{t('footer.emailUs')}</a></li>
+                <li><a href="mailto:info@oxal.shop" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.emailUs')}</a></li>
                 <li className="flex gap-4">
-                  <a href="#" className="text-gray-400 hover:text-white transition inline-flex items-center gap-2">
+                  <a href="#" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siInstagram.path} />
                     </svg>
@@ -252,7 +252,7 @@ export default function Home() {
                   </a>
                 </li>
                 <li className="flex gap-4">
-                  <a href="#" className="text-gray-400 hover:text-white transition inline-flex items-center gap-2">
+                  <a href="#" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siFacebook.path} />
                     </svg>
@@ -262,7 +262,7 @@ export default function Home() {
               </ul>
             </div>
           </div>
-          <div className="text-center text-gray-400 text-sm">
+          <div className="text-center text-yellow-100 text-sm pt-8">
             <p>{t('footer.copyright')}</p>
             <p className="mt-2">{t('footer.badge')}</p>
           </div>

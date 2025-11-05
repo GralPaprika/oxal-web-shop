@@ -1,0 +1,136 @@
+/* Oxal Brand Color Palette */
+:root {
+  /* Primary Colors */
+  --oxal-cream: #f4f0ea;           /* Porcelain Mist - Main background */
+  --oxal-sandstone: #cbb8a3;       /* Soft Sandstone - Light accent */
+  --oxal-teak: #b29167;            /* Teak - Secondary accent */
+  --oxal-verdigris: #525934;       /* Verdigris - Primary accent */
+  --oxal-desert: #9f691e;          /* Desert - Alternative accent */
+
+  /* Semantic Aliases */
+  --color-primary: var(--oxal-verdigris);
+  --color-secondary: var(--oxal-sandstone);
+  --color-accent: var(--oxal-teak);
+  --color-background: var(--oxal-cream);
+  --color-footer: var(--oxal-verdigris);
+
+  /* Text Colors */
+  --color-text-primary: #2d2d2d;
+  --color-text-secondary: #666666;
+  --color-text-light: #999999;
+  --color-text-white: #ffffff;
+
+  /* Border Colors */
+  --color-border: var(--oxal-sandstone);
+  --color-border-light: #e0d5c7;
+}
+
+/* Background Utilities */
+.bg-oxal-cream {
+  background-color: var(--oxal-cream);
+}
+
+.bg-oxal-sandstone {
+  background-color: var(--oxal-sandstone);
+}
+
+.bg-oxal-teak {
+  background-color: var(--oxal-teak);
+}
+
+.bg-oxal-verdigris {
+  background-color: var(--oxal-verdigris);
+}
+
+.bg-oxal-desert {
+  background-color: var(--oxal-desert);
+}
+
+/* Text Color Utilities */
+.text-oxal-primary {
+  color: var(--oxal-verdigris);
+}
+
+.text-oxal-secondary {
+  color: var(--oxal-sandstone);
+}
+
+.text-oxal-accent {
+  color: var(--oxal-teak);
+}
+
+.text-oxal-desert {
+  color: var(--oxal-desert);
+}
+
+/* Border Color Utilities */
+.border-oxal-primary {
+  border-color: var(--oxal-verdigris);
+}
+
+.border-oxal-secondary {
+  border-color: var(--oxal-sandstone);
+}
+
+.border-oxal-accent {
+  border-color: var(--oxal-teak);
+}
+
+/* Button Styles */
+.btn-oxal-primary {
+  background-color: var(--oxal-verdigris);
+  color: var(--oxal-cream);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.btn-oxal-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-oxal-secondary {
+  background-color: var(--oxal-sandstone);
+  color: var(--color-text-primary);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.btn-oxal-secondary:hover {
+  opacity: 0.9;
+}
+
+/* Link Styles */
+.link-oxal {
+  color: var(--oxal-verdigris);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.link-oxal:hover {
+  opacity: 0.8;
+}
+
+/* Badge Styles */
+.badge-oxal {
+  display: inline-block;
+  background-color: var(--oxal-verdigris);
+  color: var(--oxal-cream);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.badge-oxal-secondary {
+  display: inline-block;
+  background-color: var(--oxal-sandstone);
+  color: var(--color-text-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
