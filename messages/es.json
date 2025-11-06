@@ -519,5 +519,22 @@
       "copyright": "© 2025 Oxal. Todos los derechos reservados. Hecho con pasión en Colima, México.",
       "badge": "🌟 Próximamente 🌟"
     }
-  }
+  },
+  "linktree": {
+      "tagline": "Artesanías Auténticas",
+      "description": "Descubre las creaciones únicas de Colima, México. Joyería y ropa hecha con amor y pasión.",
+      "website": {
+        "title": "Visita nuestro sitio",
+        "description": "Descubre nuestras colecciones"
+      },
+      "instagram": {
+        "title": "Síguenos en Instagram",
+        "description": "Las últimas novedades y inspiración"
+      },
+      "facebook": {
+        "title": "Síguenos en Facebook",
+        "description": "Conecta con nuestra comunidad"
+      },
+      "copyright": "© 2025 Oxal"
+    }
 }
