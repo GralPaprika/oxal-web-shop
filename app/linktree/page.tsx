@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FiGlobe } from 'react-icons/fi';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
+import OxalLogo from '../../src/components/OxalLogo';
 
 export default function Linktree() {
   const t = useTranslations('linktree');
@@ -39,26 +40,15 @@ export default function Linktree() {
 
   return (
     <div className="min-h-screen bg-oxal-cream py-12 px-4">
-      <div className="max-w-lg mx-auto overflow-hidden bg-oxal-sandstone rounded-3xl shadow-lg">
+      <div className="max-w-xl mx-auto overflow-hidden bg-oxal-sandstone rounded-3xl shadow-lg">
         {/* Profile Header */}
-        <div className="pt-8 pb-6 px-4 text-center bg-gradient-to-b from-oxal-verdigris to-oxal-desert">
-          {/* Avatar */}
+        <div className="pt-8 pb-6 px-8 text-center bg-gradient-to-b from-oxal-verdigris to-oxal-desert">
           <div className="mb-6">
-            <div className="w-32 h-32 mx-auto rounded-full bg-white shadow-xl flex items-center justify-center overflow-hidden">
-              <Image
-                src="/oxal.png"
-                alt="Oxal Logo"
-                width={128}
-                height={128}
-                className="w-full h-full object-cover"
-              />
+            <div className="w-64 h-64 mx-auto flex items-center justify-center overflow-hidden">
+              <OxalLogo width={480} height={480} fill="#f4f0ea" />
             </div>
           </div>
 
-          {/* Brand Name */}
-          <h1 className="text-5xl font-bold text-white mb-2">Oxal</h1>
-
-          {/* Tagline */}
           <p className="text-2xl text-oxal-sandstone mb-2">
             {t('tagline')}
           </p>
@@ -70,7 +60,7 @@ export default function Linktree() {
         </div>
 
         {/* Links Section */}
-        <div className="px-4 py-8 bg-oxal-sandstone">
+        <div className="px-8 py-8 bg-oxal-sandstone">
           <div className="space-y-3">
             {links.map((link) => (
               <a
@@ -96,9 +86,9 @@ export default function Linktree() {
                     <h3 className="font-bold text-lg mb-1 group-hover:translate-x-1 transition-transform">
                       {t(link.titleKey)}
                     </h3>
-                    <p className="text-sm opacity-90">
+                    {/* <p className="text-sm opacity-90">
                       {t(link.descriptionKey)}
-                    </p>
+                    </p> */}
                   </div>
                   <div className="text-xl flex-shrink-0 group-hover:translate-x-2 transition-transform">
                     →
@@ -137,7 +127,7 @@ export default function Linktree() {
 
       {/* QR Code - Bottom Right Corner */}
       <div className="hidden lg:flex fixed bottom-6 right-6 flex-col items-center">
-        <p className="text-xs text-oxal-verdigris font-semibold mb-2">View in mobile</p>
+        <p className="text-xs text-oxal-verdigris font-semibold mb-2">{t('viewInMobile')}</p>
         <div className="w-40 h-40 bg-oxal-cream rounded-lg p-2 flex items-center justify-center">
           <Image
             src="/linktree-qr-code.png"
