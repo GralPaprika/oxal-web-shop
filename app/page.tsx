@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { siInstagram, siFacebook } from 'simple-icons';
 import { useTranslations } from 'next-intl';
+import OxalLogo from '@/components/OxalLogo';
 
 export default function Home() {
   const t = useTranslations('landing');
@@ -10,7 +11,7 @@ export default function Home() {
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=1200&h=600&fit=crop"
+            src="/landing-background.png"
             alt="Handcrafted jewelry and textiles"
             fill
             className="object-cover"
@@ -19,12 +20,9 @@ export default function Home() {
           <div className="absolute inset-0 bg-black/40"></div>
         </div>
         <div className="relative z-10 text-center text-white px-4 max-w-3xl">
-          <div className="mb-4 inline-block">
-            <span className="bg-oxal-verdigris text-white px-4 py-2 rounded-full text-sm font-semibold">
-              {t('comingSoon')}
-            </span>
+          <div className="flex justify-center mb-6">
+            <OxalLogo width={564} height={564} fill="#f4f0ea"/>
           </div>
-          <h2 className="text-6xl font-bold mb-6">{t('title')}</h2>
           <p className="text-2xl mb-4">{t('subtitle')}</p>
           <p className="text-xl text-gray-100">{t('description')}</p>
         </div>
@@ -78,7 +76,7 @@ export default function Home() {
             </div>
             <div className="relative h-96">
               <Image
-                src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=600&fit=crop"
+                src="/landing-store.jpg"
                 alt="Mexican artisan crafts"
                 fill
                 className="object-cover rounded-lg shadow-lg"
@@ -101,7 +99,7 @@ export default function Home() {
             <div className="group cursor-pointer relative">
               <div className="relative h-80 overflow-hidden rounded-lg mb-6 shadow-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&h=600&fit=crop"
+                  src="/landing-jewelry.jpg"
                   alt={t('collections.jewelry.title')}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -119,7 +117,7 @@ export default function Home() {
             <div className="group cursor-pointer relative">
               <div className="relative h-80 overflow-hidden rounded-lg mb-6 shadow-lg">
                 <Image
-                  src="https://images.unsplash.com/photo-1595777712802-d2a8de308a85?w=600&h=600&fit=crop"
+                  src="/landing-clothes.jpg"
                   alt={t('collections.clothing.title')}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"

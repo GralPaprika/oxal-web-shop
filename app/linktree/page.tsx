@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FiGlobe } from 'react-icons/fi';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
-import OxalLogo from '../../src/components/OxalLogo';
+import OxalLogo from '@/components/OxalLogo';
 
 export default function Linktree() {
   const t = useTranslations('linktree');
