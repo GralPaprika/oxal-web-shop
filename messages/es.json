@@ -13,6 +13,7 @@
     },
     "subtitle": "Descubre nuestra colección única de productos artesanales que combinan elegancia y espíritu libre",
     "cta": "Explorar colección",
+    "alt": "Joyas y textiles artesanales",
     "features": {
       "natural": {
         "title": "Naturales",
@@ -149,7 +150,8 @@
       "description": "Piezas exclusivas que no encontrarás en otro lugar"
     },
     "cta": "Conoce más sobre nosotros",
-    "imageAlt": "Taller de artesanías"
+    "imageAlt": "Taller de artesanías",
+    "storeAlt": "Artesanías mexicanas auténticas"
   },
   "footer": {
     "description": "Descubre nuestra colección de productos únicos y elegantes. Calidad excepcional con un toque bohemio para tu estilo de vida.",
@@ -502,8 +504,9 @@
       "title": "Ponte en Contacto",
       "subtitle": "Nos encantaría saber de ti. Conéctate con nosotros para aprender más sobre Oxal y nuestra visión.",
       "location": "Ubicación",
-      "locationText": "Colima, Colima, México",
+      "locationText": "Av. Constitución 552, Guadalajarita, 28030 Colima, Col.",
       "email": "Correo Electrónico",
+      "emailAddress": "info@oxal.shop",
       "followUs": "Síguenos",
       "instagram": "Instagram",
       "facebook": "Facebook"
@@ -516,6 +519,8 @@
       "contact": "Contacto",
       "connect": "Conectar",
       "emailUs": "Envíanos un Correo",
+      "instagram": "Instagram",
+      "facebook": "Facebook",
       "copyright": "© 2025 Oxal. Todos los derechos reservados. Hecho con pasión en Colima, México.",
       "badge": "🌟 Próximamente 🌟"
     }

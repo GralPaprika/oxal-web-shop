@@ -12,7 +12,7 @@ export default function Home() {
         <div className="absolute inset-0">
           <Image
             src="/landing-background.png"
-            alt="Handcrafted jewelry and textiles"
+            alt={t('hero.alt')}
             fill
             className="object-cover"
             priority
@@ -77,7 +77,7 @@ export default function Home() {
             <div className="relative h-96">
               <Image
                 src="/landing-store.jpg"
-                alt="Mexican artisan crafts"
+                alt={t('about.storeAlt')}
                 fill
                 className="object-cover rounded-lg shadow-lg"
               />
@@ -187,26 +187,30 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{t('contact.location')}</h4>
-                <p className="text-oxal-teak">Colima, Colima, Mexico</p>
+                <p className="text-oxal-teak">
+                  <a href="https://maps.app.goo.gl/2qAGT62fBnyojRBq9" target="_blank" rel="noopener noreferrer" className="text-oxal-verdigris hover:opacity-80">
+                    {t('contact.locationText')}
+                  </a>
+                </p>
               </div>
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{t('contact.email')}</h4>
                 <p className="text-oxal-teak">
-                  <a href="mailto:info@oxal.shop" className="text-oxal-verdigris hover:opacity-80">
-                    info@oxal.shop
+                  <a href={`mailto:${t('contact.emailAddress')}`} className="text-oxal-verdigris hover:opacity-80">
+                    {t('contact.emailAddress')}
                   </a>
                 </p>
               </div>
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{t('contact.followUs')}</h4>
                 <div className="flex gap-4 justify-center md:justify-start">
-                  <a href="#" className="text-oxal-teak hover:text-oxal-verdigris transition inline-flex items-center gap-2">
+                  <a href="https://www.instagram.com/shop.oxal/" target="_blank" rel="noopener noreferrer" className="text-oxal-teak hover:text-oxal-verdigris transition inline-flex items-center gap-2">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siInstagram.path} />
                     </svg>
                     <span>{t('contact.instagram')}</span>
                   </a>
-                  <a href="#" className="text-oxal-teak hover:text-oxal-verdigris transition inline-flex items-center gap-2">
+                  <a href="https://www.facebook.com/accesoriosOxal/" target="_blank" rel="noopener noreferrer" className="text-oxal-teak hover:text-oxal-verdigris transition inline-flex items-center gap-2">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siFacebook.path} />
                     </svg>
@@ -242,19 +246,19 @@ export default function Home() {
               <ul className="space-y-2">
                 <li><a href="mailto:info@oxal.shop" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.emailUs')}</a></li>
                 <li className="flex gap-4">
-                  <a href="#" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
+                  <a href="https://www.instagram.com/shop.oxal/" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siInstagram.path} />
                     </svg>
-                    <span>Instagram</span>
+                    <span>{t('footer.instagram')}</span>
                   </a>
                 </li>
                 <li className="flex gap-4">
-                  <a href="#" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
+                  <a href="https://www.facebook.com/accesoriosOxal/" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                       <path d={siFacebook.path} />
                     </svg>
-                    <span>Facebook</span>
+                    <span>{t('footer.facebook')}</span>
                   </a>
                 </li>
               </ul>

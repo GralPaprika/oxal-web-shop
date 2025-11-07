@@ -97,6 +97,20 @@ export default function Linktree() {
               </a>
             ))}
           </div>
+          
+          <div className="mt-8">
+            <div className="relative h-80 rounded-lg overflow-hidden shadow-lg">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3746.2451234567!2d-103.7227271!3d19.2520727!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x84255b0011d44dc5%3A0x904cf5eabf521d5d!2sOxal!5e0!3m2!1sen!2smx!4v1730000000000"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+          </div>
 
           {/* Social Icons Footer */}
           <div className="mt-8 pt-6 border-t border-oxal-sandstone flex justify-center gap-6">
