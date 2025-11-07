@@ -13,8 +13,7 @@ export default function Home() {
           <Image
             src="/landing-background.png"
             alt="Handcrafted jewelry and textiles"
-            width={2732}
-            height={1992}
+            fill
             className="object-cover"
             priority
           />
@@ -22,7 +21,7 @@ export default function Home() {
         </div>
         <div className="relative z-10 text-center text-white px-4 max-w-3xl">
           <div className="flex justify-center mb-6">
-            <OxalLogo width={564} height={564} fill="#f4f0ea"/>
+            <OxalLogo width={400} height={400} className="sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-128 lg:h-128 xl:w-144 xl:h-144" fill="#f4f0ea"/>
           </div>
           <p className="text-2xl mb-4">{t('subtitle')}</p>
           <p className="text-xl text-gray-100">{t('description')}</p>
