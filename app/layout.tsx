@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Oxal Web Shop",
-  description: "E-commerce web shop with admin panel",
+  title: "Oxal - Artesanías Auténticas",
+  description: "Descubre joyas y ropa artesanal premium de Colima, México",
 };
 
 export default async function RootLayout({

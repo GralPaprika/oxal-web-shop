@@ -455,12 +455,16 @@
     "subtitle": "Artesanías Auténticas de Colima, México",
     "description": "Joyas artesanales y ropa premium que celebran la herencia mexicana",
     "comingSoon": "✨ Recién Lanzado - Próximamente",
+    "hero": {
+      "alt": "Joyas y textiles artesanales"
+    },
     "about": {
       "title": "Lanzando Oxal",
       "subtitle": "Nos emociona presentar Oxal, una nueva iniciativa dedicada a llevar la artesanía auténtica mexicana al mundo",
       "vision": "Nuestra Visión",
       "visionText": "Oxal nace de la pasión por celebrar la rica herencia cultural de Colima, México. Como marca nueva, nos comprometemos a construir algo significativo: una plataforma donde las técnicas artesanales tradicionales se encuentran con el diseño contemporáneo.",
       "visionText2": "Nuestro nombre \"Oxal\" refleja nuestro compromiso de preservar el arte mexicano auténtico mientras llevamos calidad excepcional a tu vida cotidiana.",
+      "storeAlt": "Artesanías mexicanas auténticas",
       "jewelry": {
         "icon": "🎨",
         "title": "Joyas Artesanales",
