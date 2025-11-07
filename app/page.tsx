@@ -2,8 +2,13 @@ import Image from 'next/image';
 import { siInstagram, siFacebook } from 'simple-icons';
 import { useTranslations } from 'next-intl';
 import OxalLogo from '@/components/OxalLogo';
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { getLocalBusinessSchema, getOrganizationSchema } from '@/lib/schema';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://oxal.shop"),
@@ -11,7 +16,6 @@ export const metadata: Metadata = {
   description: "Descubre joyas y ropa artesanal premium de Colima, México",
   keywords: ["artesanías", "joyería artesanal", "ropa premium", "Colima", "México", "comercio justo", "productos únicos"],
   robots: "index, follow",
-  viewport: "width=device-width, initial-scale=1.0",
   openGraph: {
     title: "Oxal - Artesanías Auténticas",
     description: "Descubre joyas y ropa artesanal premium de Colima, México",
