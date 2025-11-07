@@ -13,7 +13,8 @@ export default function Home() {
           <Image
             src="/landing-background.png"
             alt="Handcrafted jewelry and textiles"
-            fill
+            width={2732}
+            height={1992}
             className="object-cover"
             priority
           />
