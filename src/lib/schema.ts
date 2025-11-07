@@ -1,0 +1,76 @@
+// Structured Data (JSON-LD) schemas for SEO
+
+export const getLocalBusinessSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Oxal",
+  "description": "Artesanías auténticas de Colima, México - Joyería y ropa artesanal premium",
+  "image": "https://oxal.shop/landing-background.png",
+  "url": "https://oxal.shop",
+  "telephone": "+52-312-231-3591",
+  "email": "info@oxal.shop",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Av. Constitución 552, Guadalajarita",
+    "addressLocality": "Colima",
+    "addressRegion": "Colima",
+    "postalCode": "28030",
+    "addressCountry": "MX"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 19.2520727,
+    "longitude": -103.7227271
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    "opens": "09:00",
+    "closes": "21:00"
+  },
+  "sameAs": [
+    "https://www.instagram.com/shop.oxal/",
+    "https://www.facebook.com/accesoriosOxal/"
+  ],
+  "priceRange": "$$"
+});
+
+export const getOrganizationSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Oxal",
+  "url": "https://oxal.shop",
+  "logo": "https://oxal.shop/oxal-logo-name.svg",
+  "description": "Artesanías auténticas de Colima, México",
+  "sameAs": [
+    "https://www.instagram.com/shop.oxal/",
+    "https://www.facebook.com/accesoriosOxal/"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "email": "info@oxal.shop"
+  },
+  "location": {
+    "@type": "PostalAddress",
+    "addressCountry": "MX",
+    "addressRegion": "Colima"
+  }
+});
+
+export const getProductSchema = (name: string, description: string, image: string) => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": name,
+  "description": description,
+  "image": image,
+  "brand": {
+    "@type": "Brand",
+    "name": "Oxal"
+  },
+  "offers": {
+    "@type": "AggregateOffer",
+    "availability": "https://schema.org/PreOrder",
+    "priceCurrency": "MXN"
+  }
+});

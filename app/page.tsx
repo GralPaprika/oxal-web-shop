@@ -2,11 +2,73 @@ import Image from 'next/image';
 import { siInstagram, siFacebook } from 'simple-icons';
 import { useTranslations } from 'next-intl';
 import OxalLogo from '@/components/OxalLogo';
+import { Metadata } from 'next';
+import { getLocalBusinessSchema, getOrganizationSchema } from '@/lib/schema';
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://oxal.shop"),
+  title: "Oxal - Artesanías Auténticas",
+  description: "Descubre joyas y ropa artesanal premium de Colima, México",
+  keywords: ["artesanías", "joyería artesanal", "ropa premium", "Colima", "México", "comercio justo", "productos únicos"],
+  robots: "index, follow",
+  viewport: "width=device-width, initial-scale=1.0",
+  openGraph: {
+    title: "Oxal - Artesanías Auténticas",
+    description: "Descubre joyas y ropa artesanal premium de Colima, México",
+    type: "website",
+    locale: "es_MX",
+    url: "https://oxal.shop",
+    siteName: "Oxal",
+    images: [
+      {
+        url: "/landing-background.png",
+        width: 1200,
+        height: 630,
+        alt: "Oxal - Artesanías Auténticas",
+        type: "image/png"
+      }
+    ],
+    countryName: "Mexico",
+    determiner: "the"
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Oxal - Artesanías Auténticas",
+    description: "Descubre joyas y ropa artesanal premium de Colima, México",
+    images: ["/landing-background.png"],
+    creator: "@shop_oxal"
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Oxal"
+  },
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true
+  },
+  alternates: {
+    canonical: "https://oxal.shop"
+  }
+};
 
 export default function Home() {
   const t = useTranslations('landing');
+  
+  const structuredData = getLocalBusinessSchema();
+  const organizationSchema = getOrganizationSchema();
+
   return (
     <div className="min-h-screen bg-oxal-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c') }}
+      />
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
