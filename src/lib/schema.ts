@@ -4,6 +4,7 @@ export const getLocalBusinessSchema = () => ({
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "name": "Oxal",
+  "alternateName": "Oxal Artesanías",
   "description": "Artesanías auténticas de Colima, México - Joyería y ropa artesanal premium",
   "image": "https://oxal.shop/landing-background.png",
   "url": "https://oxal.shop",
@@ -17,6 +18,14 @@ export const getLocalBusinessSchema = () => ({
     "postalCode": "28030",
     "addressCountry": "MX"
   },
+  "areaServed": {
+    "@type": "City",
+    "name": "Colima"
+  },
+  "serviceArea": {
+    "@type": "City",
+    "name": "Colima, Mexico"
+  },
   "geo": {
     "@type": "GeoCoordinates",
     "latitude": 19.2520727,
@@ -27,6 +36,17 @@ export const getLocalBusinessSchema = () => ({
     "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     "opens": "09:00",
     "closes": "21:00"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "telephone": "+52-312-231-3591",
+    "email": "info@oxal.shop",
+    "url": "https://oxal.shop/#contact"
+  },
+  "founder": {
+    "@type": "Organization",
+    "name": "Oxal"
   },
   "sameAs": [
     "https://www.instagram.com/shop.oxal/",
