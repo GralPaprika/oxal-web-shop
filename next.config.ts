@@ -128,8 +128,8 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/linktree.html',
-        destination: '/linktree',
+        source: '/links.html',
+        destination: '/links',
         permanent: true,
       }
     ]

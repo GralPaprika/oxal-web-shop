@@ -6,8 +6,8 @@ import { FiGlobe } from 'react-icons/fi';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import OxalLogo from '@/components/OxalLogo';
 
-export default function Linktree() {
-  const t = useTranslations('linktree');
+export default function Links() {
+  const t = useTranslations('links');
 
   const links = [
     {
@@ -144,8 +144,8 @@ export default function Linktree() {
         <p className="text-xs text-oxal-verdigris font-semibold mb-2">{t('viewInMobile')}</p>
         <div className="w-40 h-40 bg-oxal-cream rounded-lg p-2 flex items-center justify-center">
           <Image
-            src="/linktree-qr-code.png"
-            alt="Linktree QR Code"
+            src="/links-qr-code.png"
+            alt="Links QR Code"
             width={120}
             height={120}
             className="w-full h-full object-contain"
