@@ -44,8 +44,6 @@ Submit your business to these directories:
 - Apple Maps
 - Facebook Business Page
 - Instagram Business Profile
-- Yellow Pages Mexico: https://www.paginasamarillas.com.mx
-- Tripadvisor (if tourism/experience)
 
 **Pro Tip:** Ensure NAP consistency everywhere:
 - **N**ame: Oxal
@@ -83,9 +81,9 @@ Already optimized:
 
 ## 📊 Local SEO Checklist
 
-- [ ] Google Business Profile created & verified
+- [✅] Google Business Profile created & verified
 - [ ] Business info on 5+ local directories
-- [ ] NAP consistency across all platforms
+- [✅] NAP consistency across all platforms
 - [ ] Local keywords in content
 - [ ] Obtained 10+ customer reviews
 - [ ] Local backlinks from authority sites
