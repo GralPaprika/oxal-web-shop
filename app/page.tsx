@@ -1,5 +1,11 @@
 import Image from 'next/image';
 import { siInstagram, siFacebook } from 'simple-icons';
+import { GiGemNecklace } from "react-icons/gi";
+import { PiCoatHangerFill } from "react-icons/pi";
+import { LuHeartHandshake } from "react-icons/lu";
+import { BsShop } from "react-icons/bs";
+import { GiGinkgoLeaf } from "react-icons/gi";
+import { BiSolidBadgeCheck } from "react-icons/bi";
 import { useTranslations } from 'next-intl';
 import OxalLogo from '@/components/OxalLogo';
 import LocationMap from '@/components/LocationMap';
@@ -119,21 +125,27 @@ export default function Home() {
               </p>
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <span className="text-oxal-verdigris text-2xl mr-4">{t('about.jewelry.icon')}</span>
+                  <span className="text-oxal-verdigris text-2xl mr-4">
+                    <GiGemNecklace />
+                  </span>
                   <div>
                     <h5 className="font-semibold text-gray-900">{t('about.jewelry.title')}</h5>
                     <p className="text-gray-600">{t('about.jewelry.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-oxal-verdigris text-2xl mr-4">{t('about.clothing.icon')}</span>
+                  <span className="text-oxal-verdigris text-2xl mr-4">
+                    <PiCoatHangerFill />
+                  </span>
                   <div>
                     <h5 className="font-semibold text-gray-900">{t('about.clothing.title')}</h5>
                     <p className="text-gray-600">{t('about.clothing.description')}</p>
                   </div>
                 </div>
                 <div className="flex items-start">
-                  <span className="text-oxal-verdigris text-2xl mr-4">{t('about.ethics.icon')}</span>
+                  <span className="text-oxal-verdigris text-2xl mr-4">
+                    <LuHeartHandshake />
+                  </span>
                   <div>
                     <h5 className="font-semibold text-gray-900">{t('about.ethics.title')}</h5>
                     <p className="text-gray-600">{t('about.ethics.description')}</p>
@@ -212,17 +224,23 @@ export default function Home() {
             <LocationMap height="h-96" />
             <div className="mt-12 grid grid-cols-3 gap-8">
               <div className="text-center">
-                <p className="text-4xl font-bold mb-2 text-oxal-verdigris">📍</p>
+                <div className="flex justify-center mb-2">
+                  <p className="text-4xl text-oxal-verdigris"><BsShop /></p>
+                </div>
                 <h4 className="font-semibold text-gray-900 mb-1">{t('location.handcrafted')}</h4>
                 <p className="text-oxal-teak text-sm">{t('location.handcraftedDesc')}</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold mb-2 text-oxal-verdigris">🌿</p>
+                <div className="flex justify-center mb-2">
+                  <p className="text-4xl text-oxal-verdigris"><GiGinkgoLeaf /></p>
+                </div>
                 <h4 className="font-semibold text-gray-900 mb-1">{t('location.sustainable')}</h4>
                 <p className="text-oxal-teak text-sm">{t('location.sustainableDesc')}</p>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold mb-2 text-oxal-verdigris">✨</p>
+                <div className="flex justify-center mb-2">
+                  <p className="text-4xl text-oxal-verdigris"><BiSolidBadgeCheck /></p>
+                </div>
                 <h4 className="font-semibold text-gray-900 mb-1">{t('location.authentic')}</h4>
                 <p className="text-oxal-teak text-sm">{t('location.authenticDesc')}</p>
               </div>

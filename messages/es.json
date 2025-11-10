@@ -466,17 +466,14 @@
       "visionText2": "Nuestro nombre \"Oxal\" refleja nuestro compromiso de preservar el arte mexicano auténtico mientras llevamos calidad excepcional a tu vida cotidiana.",
       "storeAlt": "Artesanías mexicanas auténticas",
       "jewelry": {
-        "icon": "🎨",
         "title": "Joyas Artesanales",
         "description": "Cada pieza meticulosamente creada por artesanos locales usando técnicas tradicionales"
       },
       "clothing": {
-        "icon": "👗",
         "title": "Ropa Premium",
         "description": "Prendas diseñadas artísticamente que combinan herencia cultural con estilo moderno"
       },
       "ethics": {
-        "icon": "🌍",
         "title": "Comercio Ético",
         "description": "Apoyando artesanos locales y preservando la artesanía tradicional"
       }
