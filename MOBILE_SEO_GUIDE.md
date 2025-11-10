@@ -35,7 +35,7 @@
 
 ### 5. **Mobile-Friendly Elements**
 - ✅ Clickable phone numbers (+52-312-231-3591)
-- ✅ Clickable email links (info@oxal.shop)
+- ✅ Clickable email links (contact@oxal.shop)
 - ✅ Clickable addresses with Maps links
 - ✅ Large touch targets (buttons, links)
 

@@ -319,7 +319,7 @@ export default function Home() {
             <div>
               <h4 className="text-lg font-semibold mb-4">{t('footer.connect')}</h4>
               <ul className="space-y-2">
-                <li><a href="mailto:info@oxal.shop" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.emailUs')}</a></li>
+                <li><a href="mailto:contact@oxal.shop" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.emailUs')}</a></li>
                 <li className="flex gap-4">
                   <a href="https://www.instagram.com/shop.oxal/" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">

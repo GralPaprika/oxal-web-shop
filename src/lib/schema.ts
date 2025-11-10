@@ -9,7 +9,7 @@ export const getLocalBusinessSchema = () => ({
   "image": "https://oxal.shop/landing-background.png",
   "url": "https://oxal.shop",
   "telephone": "+52-312-231-3591",
-  "email": "info@oxal.shop",
+  "email": "contact@oxal.shop",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Av. Constitución 552, Guadalajarita",
@@ -41,7 +41,7 @@ export const getLocalBusinessSchema = () => ({
     "@type": "ContactPoint",
     "contactType": "Customer Service",
     "telephone": "+52-312-231-3591",
-    "email": "info@oxal.shop",
+    "email": "contact@oxal.shop",
     "url": "https://oxal.shop/#contact"
   },
   "founder": {
@@ -69,7 +69,7 @@ export const getOrganizationSchema = () => ({
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "Customer Service",
-    "email": "info@oxal.shop"
+    "email": "contact@oxal.shop"
   },
   "location": {
     "@type": "PostalAddress",
