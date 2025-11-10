@@ -3,6 +3,10 @@
 @import "../src/styles/oxal-colors.css";
 
 :root {
+  /* Font families */
+  --font-serif-heading: var(--font-lora);
+  --font-serif-body: var(--font-merriweather);
+
   /* Oxal Brand Color Palette */
   --oxal-cream: #f4f0ea;           /* Porcelain Mist - Main background */
   --oxal-sandstone: #cbb8a3;       /* Soft Sandstone - Light accent */
@@ -53,13 +57,18 @@
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-serif-body);
   background-color: rgb(var(--color-bg-primary));
   color: rgb(var(--color-text-primary));
 }
 
+/* Apply serif font to headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif-heading);
+}
+
 .font-display {
-  font-family: var(--font-display);
+  font-family: var(--font-serif-heading);
 }
 
 .font-accent {

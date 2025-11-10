@@ -64,9 +64,10 @@ const config: Config = {
         'oxal-desert': '#9f691e',
       },
       fontFamily: {
-        display: ['var(--font-display)', 'serif'],
-        body: ['var(--font-body)', 'sans-serif'],
+        display: ['var(--font-lora)', 'serif'],
+        body: ['var(--font-merriweather)', 'serif'],
         accent: ['var(--font-accent)', 'cursive'],
+        serif: ['var(--font-lora)', 'var(--font-merriweather)', 'serif'],
       },
       backgroundImage: {
         'hero-pattern': "url('https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=1000')",
