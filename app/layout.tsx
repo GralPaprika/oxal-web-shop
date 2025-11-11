@@ -7,25 +7,29 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const lora = Lora({
   variable: "--font-lora",
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  weight: ["400", "700"],
   display: "swap",
+  preload: true,
 });
 
 const merriweather = Merriweather({
   variable: "--font-merriweather",
-  subsets: ["latin", "latin-ext"],
-  weight: ["300", "400", "700"],
+  subsets: ["latin"],
+  weight: ["400"],
   display: "swap",
+  preload: true,
 });
 
 export const viewport: Viewport = {
@@ -36,7 +40,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://oxal.shop"),
-  title: "Oxal - Artesanías Auténticas",
+  title: "Oxal - Boutique Artesanal",
   description: "Descubre joyas y ropa artesanal premium de Colima, México",
   keywords: ["artesanías", "joyería artesanal", "ropa premium", "Colima", "México"],
   robots: "index, follow",

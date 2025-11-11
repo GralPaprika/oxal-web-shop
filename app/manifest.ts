@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Oxal - Artesanías Auténticas',
+    name: 'Oxal - Boutique Artesanal',
     short_name: 'Oxal',
     description: 'Descubre joyas y ropa artesanal premium de Colima, México',
     start_url: '/',

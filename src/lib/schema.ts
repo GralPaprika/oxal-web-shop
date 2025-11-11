@@ -5,7 +5,7 @@ export const getLocalBusinessSchema = () => ({
   "@type": "LocalBusiness",
   "name": "Oxal",
   "alternateName": "Oxal Artesanías",
-  "description": "Artesanías auténticas de Colima, México - Joyería y ropa artesanal premium",
+  "description": "Boutique artesanal de Colima, México - Joyería y ropa artesanal premium",
   "image": "https://oxal.shop/landing-background.png",
   "url": "https://oxal.shop",
   "telephone": "+52-312-231-3591",
@@ -61,7 +61,7 @@ export const getOrganizationSchema = () => ({
   "name": "Oxal",
   "url": "https://oxal.shop",
   "logo": "https://oxal.shop/oxal-logo-name.svg",
-  "description": "Artesanías auténticas de Colima, México",
+  "description": "Boutique artesanal de Colima, México",
   "sameAs": [
     "https://www.instagram.com/shop.oxal/",
     "https://www.facebook.com/accesoriosOxal/"
@@ -85,7 +85,7 @@ export const getLogoSchema = () => ({
   "width": "512",
   "height": "512",
   "name": "Oxal Logo",
-  "description": "Logo de Oxal - Artesanías Auténticas"
+  "description": "Logo de Oxal - Boutique Artesanal"
 });
 
 export const getProductSchema = (name: string, description: string, image: string) => ({

@@ -12,6 +12,9 @@ import LocationMap from '@/components/LocationMap';
 import { Metadata, Viewport } from 'next';
 import { getLocalBusinessSchema, getOrganizationSchema, getLogoSchema } from '@/lib/schema';
 
+// Revalidate every hour for better performance caching
+export const revalidate = 3600;
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1.0,
@@ -19,12 +22,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://oxal.shop"),
-  title: "Oxal - Artesanías Auténticas",
+  title: "Oxal - Boutique Artesanal",
   description: "Descubre joyas y ropa artesanal premium de Colima, México",
   keywords: ["artesanías", "joyería artesanal", "ropa premium", "Colima", "México", "comercio justo", "productos únicos"],
   robots: "index, follow",
   openGraph: {
-    title: "Oxal - Artesanías Auténticas",
+    title: "Oxal - Boutique Artesanal",
     description: "Descubre joyas y ropa artesanal premium de Colima, México",
     type: "website",
     locale: "es_MX",
@@ -35,7 +38,7 @@ export const metadata: Metadata = {
         url: "/landing-background.png",
         width: 1200,
         height: 630,
-        alt: "Oxal - Artesanías Auténticas",
+        alt: "Oxal - Boutique Artesanal",
         type: "image/png"
       }
     ],
@@ -44,7 +47,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Oxal - Artesanías Auténticas",
+    title: "Oxal - Boutique Artesanal",
     description: "Descubre joyas y ropa artesanal premium de Colima, México",
     images: ["/landing-background.png"],
     creator: "@shop_oxal"
