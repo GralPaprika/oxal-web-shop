@@ -78,6 +78,16 @@ export const getOrganizationSchema = () => ({
   }
 });
 
+export const getLogoSchema = () => ({
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "url": "https://oxal.shop/oxal-logo-default.png",
+  "width": "512",
+  "height": "512",
+  "name": "Oxal Logo",
+  "description": "Logo de Oxal - Artesanías Auténticas"
+});
+
 export const getProductSchema = (name: string, description: string, image: string) => ({
   "@context": "https://schema.org",
   "@type": "Product",

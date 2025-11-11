@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl';
 import OxalLogo from '@/components/OxalLogo';
 import LocationMap from '@/components/LocationMap';
 import { Metadata, Viewport } from 'next';
-import { getLocalBusinessSchema, getOrganizationSchema } from '@/lib/schema';
+import { getLocalBusinessSchema, getOrganizationSchema, getLogoSchema } from '@/lib/schema';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -69,6 +69,7 @@ export default function Home() {
   
   const structuredData = getLocalBusinessSchema();
   const organizationSchema = getOrganizationSchema();
+  const logoSchema = getLogoSchema();
 
   return (
     <div className="min-h-screen bg-oxal-cream">
@@ -79,6 +80,10 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema).replace(/</g, '\\u003c') }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(logoSchema).replace(/</g, '\\u003c') }}
       />
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
