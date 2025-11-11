@@ -121,7 +121,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-6">{t('about.vision')}</h4>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">{t('about.vision')}</h3>
               <p className="text-lg text-gray-700 mb-4">
                 {t('about.visionText')}
               </p>
@@ -134,7 +134,7 @@ export default function Home() {
                     <GiGemNecklace />
                   </span>
                   <div>
-                    <h5 className="font-semibold text-gray-900">{t('about.jewelry.title')}</h5>
+                    <h4 className="font-semibold text-gray-900">{t('about.jewelry.title')}</h4>
                     <p className="text-gray-600">{t('about.jewelry.description')}</p>
                   </div>
                 </div>
@@ -143,7 +143,7 @@ export default function Home() {
                     <PiCoatHangerFill />
                   </span>
                   <div>
-                    <h5 className="font-semibold text-gray-900">{t('about.clothing.title')}</h5>
+                    <h4 className="font-semibold text-gray-900">{t('about.clothing.title')}</h4>
                     <p className="text-gray-600">{t('about.clothing.description')}</p>
                   </div>
                 </div>
@@ -152,7 +152,7 @@ export default function Home() {
                     <LuHeartHandshake />
                   </span>
                   <div>
-                    <h5 className="font-semibold text-gray-900">{t('about.ethics.title')}</h5>
+                    <h4 className="font-semibold text-gray-900">{t('about.ethics.title')}</h4>
                     <p className="text-gray-600">{t('about.ethics.description')}</p>
                   </div>
                 </div>
@@ -163,6 +163,8 @@ export default function Home() {
                 src="/landing-store.jpg"
                 alt={t('about.storeAlt')}
                 fill
+                priority
+                quality={75}
                 className="object-cover rounded-lg shadow-lg"
               />
             </div>
@@ -186,6 +188,7 @@ export default function Home() {
                   src="/landing-jewelry.jpg"
                   alt={t('collections.jewelry.title')}
                   fill
+                  quality={75}
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
@@ -204,6 +207,7 @@ export default function Home() {
                   src="/landing-clothes.jpg"
                   alt={t('collections.clothing.title')}
                   fill
+                  quality={75}
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300"></div>
@@ -226,7 +230,7 @@ export default function Home() {
             <p className="text-xl text-oxal-teak mb-8 max-w-2xl mx-auto">
               {t('location.description')}
             </p>
-            <LocationMap height="h-96" />
+            <LocationMap height="h-96" ariaLabel={t('location.mapAriaLabel')} />
             <div className="mt-12 grid grid-cols-3 gap-8">
               <div className="text-center">
                 <div className="flex justify-center mb-2">
@@ -314,28 +318,28 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h4>
+              <h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
               <ul className="space-y-2">
-                <li><a href="#about" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.ourVision')}</a></li>
-                <li><a href="#collections" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.collections')}</a></li>
-                <li><a href="#contact" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.contact')}</a></li>
+                <li><a href="#about" className="text-yellow-100 hover:text-yellow-50 transition" aria-label={t('footer.ariaLabels.goToAbout')}>{t('footer.ourVision')}</a></li>
+                <li><a href="#collections" className="text-yellow-100 hover:text-yellow-50 transition" aria-label={t('footer.ariaLabels.goToCollections')}>{t('footer.collections')}</a></li>
+                <li><a href="#contact" className="text-yellow-100 hover:text-yellow-50 transition" aria-label={t('footer.ariaLabels.goToContact')}>{t('footer.contact')}</a></li>
               </ul>
             </div>
             <div>
-              <h4 className="text-lg font-semibold mb-4">{t('footer.connect')}</h4>
+              <h3 className="text-lg font-semibold mb-4">{t('footer.connect')}</h3>
               <ul className="space-y-2">
-                <li><a href="mailto:contact@oxal.shop" className="text-yellow-100 hover:text-yellow-50 transition">{t('footer.emailUs')}</a></li>
+                <li><a href="mailto:contact@oxal.shop" className="text-yellow-100 hover:text-yellow-50 transition" aria-label={t('footer.ariaLabels.sendEmail')}>{t('footer.emailUs')}</a></li>
                 <li className="flex gap-4">
-                  <a href="https://www.instagram.com/shop.oxal/" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <a href="https://www.instagram.com/shop.oxal/" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2" aria-label={t('footer.ariaLabels.visitInstagram')}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                       <path d={siInstagram.path} />
                     </svg>
                     <span>{t('footer.instagram')}</span>
                   </a>
                 </li>
                 <li className="flex gap-4">
-                  <a href="https://www.facebook.com/accesoriosOxal/" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                  <a href="https://www.facebook.com/accesoriosOxal/" target="_blank" rel="noopener noreferrer" className="text-yellow-100 hover:text-yellow-50 transition inline-flex items-center gap-2" aria-label={t('footer.ariaLabels.visitFacebook')}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                       <path d={siFacebook.path} />
                     </svg>
                     <span>{t('footer.facebook')}</span>

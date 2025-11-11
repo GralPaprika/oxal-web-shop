@@ -499,7 +499,8 @@
       "sustainable": "Sostenible",
       "sustainableDesc": "Prácticas éticas",
       "authentic": "Auténtico",
-      "authenticDesc": "Herencia tradicional"
+      "authenticDesc": "Herencia tradicional",
+      "mapAriaLabel": "Mapa de ubicación de Oxal en Google Maps"
     },
     "contact": {
       "title": "Ponte en Contacto",
@@ -523,7 +524,15 @@
       "instagram": "Instagram",
       "facebook": "Facebook",
       "copyright": "© 2025 Oxal. Todos los derechos reservados. Hecho con pasión en Colima, México.",
-      "badge": "🌟 Próximamente 🌟"
+      "badge": "🌟 Próximamente 🌟",
+      "ariaLabels": {
+        "goToAbout": "Ir a la sección de nuestra visión",
+        "goToCollections": "Ir a la sección de colecciones",
+        "goToContact": "Ir a la sección de contacto",
+        "sendEmail": "Enviar correo electrónico a Oxal",
+        "visitInstagram": "Visita Oxal en Instagram",
+        "visitFacebook": "Visita Oxal en Facebook"
+      }
     }
   },
   "links": {

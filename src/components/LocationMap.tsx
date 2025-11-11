@@ -6,6 +6,7 @@ interface LocationMapProps {
   title?: string;
   height?: string;
   showLabel?: boolean;
+  ariaLabel?: string;
 }
 
 export default function LocationMap({
@@ -14,6 +15,7 @@ export default function LocationMap({
   title = 'Oxal',
   height = 'h-80',
   showLabel = false,
+  ariaLabel = 'Location map',
 }: LocationMapProps) {
   const embedUrl = `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3746.2451234567!2d${longitude}!3d${latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x84255b0011d44dc5%3A0x904cf5eabf521d5d!2s${title}!5e0!3m2!1sen!2smx!4v1730000000000`;
 
@@ -39,6 +41,8 @@ export default function LocationMap({
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
           className="pointer-events-none"
+          title={`${title} location map on Google Maps`}
+          aria-label={ariaLabel}
         ></iframe>
       </a>
     </div>
