@@ -2,17 +2,6 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "env": {
-    "NEXT_PUBLIC_SITE_URL": {
-      "description": "The public URL of the site",
-      "required": false
-    }
-  },
-  "git": {
-    "deploymentEnabled": {
-      "main": true
-    }
-  },
   "functions": {
     "api/**/*.ts": {
       "maxDuration": 60
