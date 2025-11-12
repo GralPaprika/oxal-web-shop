@@ -550,6 +550,9 @@
         "title": "Síguenos en Facebook",
         "description": "Conecta con nuestra comunidad"
       },
+      "location": {
+        "mapAriaLabel": "Mapa de ubicación de Oxal en Google Maps"
+      },
       "copyright": "© 2025 Oxal",
       "viewInMobile": "Ver en móvil"
     }

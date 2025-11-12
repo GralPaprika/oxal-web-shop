@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: ['/admin', '/api', '/*.json$'],
+        crawlDelay: 1,
       },
       {
         userAgent: 'MJ12bot',

@@ -1,10 +1,29 @@
-'use client';
-
+import type { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { FiGlobe } from 'react-icons/fi';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
 import OxalLogo from '@/components/OxalLogo';
+import LocationMap from '@/components/LocationMap';
+
+export const metadata: Metadata = {
+  title: 'Oxal - Todos Nuestros Enlaces',
+  description: 'Descubre todos nuestros canales: tienda web, Instagram, Facebook y ubicación.',
+  keywords: 'Oxal, accesorios, enlaces, tienda, redes sociales',
+  openGraph: {
+    title: 'Oxal - Todos Nuestros Enlaces',
+    description: 'Descubre todos nuestros canales: tienda web, Instagram, Facebook y ubicación.',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Oxal - Todos Nuestros Enlaces',
+      },
+    ],
+  },
+};
 
 export default function Links() {
   const t = useTranslations('links');
@@ -16,7 +35,7 @@ export default function Links() {
       descriptionKey: 'website.description',
       href: '/',
       icon: 'globe',
-      color: 'bg-oxal-teak text-oxal-cream',
+      color: 'bg-oxal-teak text-white',
     },
     {
       id: 2,
@@ -24,7 +43,7 @@ export default function Links() {
       descriptionKey: 'instagram.description',
       href: 'https://www.instagram.com/shop.oxal/',
       icon: 'instagram',
-      color: 'bg-oxal-verdigris text-oxal-cream',
+      color: 'bg-oxal-verdigris text-white',
       external: true,
     },
     {
@@ -33,7 +52,7 @@ export default function Links() {
       descriptionKey: 'facebook.description',
       href: 'https://www.facebook.com/accesoriosOxal/',
       icon: 'facebook',
-      color: 'bg-oxal-desert text-oxal-cream',
+      color: 'bg-oxal-desert text-white',
       external: true,
     },
   ];
@@ -49,12 +68,12 @@ export default function Links() {
             </div>
           </div>
 
-          <p className="text-2xl text-oxal-sandstone mb-2">
+          <p className="text-2xl text-oxal-accent mb-2">
             {t('tagline')}
           </p>
 
           {/* Description */}
-          <p className="text-oxal-sandstone text-base leading-relaxed">
+          <p className="text-oxal-accent leading-relaxed">
             {t('description')}
           </p>
         </div>
@@ -86,9 +105,6 @@ export default function Links() {
                     <h3 className="font-bold text-lg mb-1 group-hover:translate-x-1 transition-transform">
                       {t(link.titleKey)}
                     </h3>
-                    {/* <p className="text-sm opacity-90">
-                      {t(link.descriptionKey)}
-                    </p> */}
                   </div>
                   <div className="text-xl flex-shrink-0 group-hover:translate-x-2 transition-transform">
                     →
@@ -99,41 +115,33 @@ export default function Links() {
           </div>
           
           <div className="mt-8">
-            <div className="relative h-80 rounded-lg overflow-hidden shadow-lg">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3746.2451234567!2d-103.7227271!3d19.2520727!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x84255b0011d44dc5%3A0x904cf5eabf521d5d!2sOxal!5e0!3m2!1sen!2smx!4v1730000000000"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
+            <LocationMap height="h-80" ariaLabel={t('location.mapAriaLabel')} />
           </div>
 
           {/* Social Icons Footer */}
-          <div className="mt-8 pt-6 border-t border-oxal-sandstone flex justify-center gap-6">
+          <div className="mt-8 pt-6 border-t border-oxal-accent flex justify-center gap-6">
             <a
-              href="https://instagram.com/accesoriosOxal"
+              href="https://www.instagram.com/shop.oxal/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-oxal-verdigris hover:text-oxal-desert transition-colors"
+              className="text-oxal-accent hover:text-oxal-desert transition-colors"
+              aria-label="Instagram"
             >
               <FaInstagram size={24} />
             </a>
             <a
-              href="https://facebook.com/shop.oxal"
+              href="https://www.facebook.com/accesoriosOxal/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-oxal-verdigris hover:text-oxal-desert transition-colors"
+              className="text-oxal-accent hover:text-oxal-desert transition-colors"
+              aria-label="Facebook"
             >
               <FaFacebook size={24} />
             </a>
           </div>
 
           {/* Footer */}
-          <div className="mt-6 text-center text-sm text-oxal-teak">
+          <div className="mt-6 text-center text-sm text-oxal-accent">
             <p>{t('copyright')}</p>
           </div>
         </div>
@@ -141,13 +149,15 @@ export default function Links() {
 
       {/* QR Code - Bottom Right Corner */}
       <div className="hidden lg:flex fixed bottom-6 right-6 flex-col items-center">
-        <p className="text-xs text-oxal-verdigris font-semibold mb-2">{t('viewInMobile')}</p>
+        <p className="text-xs text-oxal-primary font-semibold mb-2">{t('viewInMobile')}</p>
         <div className="w-40 h-40 bg-oxal-cream rounded-lg p-2 flex items-center justify-center">
           <Image
             src="/links-qr-code.png"
             alt="Links QR Code"
             width={120}
             height={120}
+            quality={75}
+            priority
             className="w-full h-full object-contain"
           />
         </div>
