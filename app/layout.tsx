@@ -67,8 +67,8 @@ export default async function RootLayout({
   return (
     <html lang="es">
       <head>
-        {/* Preconnect to Google Fonts to reduce critical path latency */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* Preconnect to Google Fonts CDN - establish connection before fonts needed */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body
