@@ -60,7 +60,12 @@ export const getOrganizationSchema = () => ({
   "@type": "Organization",
   "name": "Oxal",
   "url": "https://oxal.shop",
-  "logo": "https://oxal.shop/oxal-logo-name.svg",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://oxal.shop/oxal-logo-default.png",
+    "width": "512",
+    "height": "512"
+  },
   "description": "Boutique artesanal de Colima, México",
   "sameAs": [
     "https://www.instagram.com/shop.oxal/",
