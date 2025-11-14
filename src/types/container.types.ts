@@ -3,6 +3,7 @@ export const TYPES = {
   // Database
   Database: Symbol.for('Database'),
   FirebaseService: Symbol.for('FirebaseService'),
+  SupabaseService: Symbol.for('SupabaseService'),
   
   // Storage
   StorageService: Symbol.for('StorageService'),
