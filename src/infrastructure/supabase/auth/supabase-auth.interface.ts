@@ -7,12 +7,12 @@ export interface ISupabaseAuth {
   /**
    * Sign up a new user
    */
-  signup(email: string, password: string, displayName?: string): Promise<{ userId: string; email: string }>;
+  signup(email: string, password: string, displayName?: string, role?: number): Promise<{ userId: string; email: string; role: number }>;
 
   /**
    * Sign in an existing user
    */
-  signin(email: string, password: string): Promise<{ userId: string; email: string; token: string }>;
+  signin(email: string, password: string): Promise<{ userId: string; email: string; role: number; token: string }>;
 
   /**
    * Sign out the current user
@@ -22,7 +22,7 @@ export interface ISupabaseAuth {
   /**
    * Get the currently authenticated user
    */
-  getCurrentUser(): Promise<{ userId: string; email: string; displayName?: string; photoURL?: string } | null>;
+  getCurrentUser(): Promise<{ userId: string; email: string; role: number; displayName?: string; photoURL?: string } | null>;
 
   /**
    * Update user profile
@@ -52,7 +52,7 @@ export interface ISupabaseAuth {
   /**
    * Get user by ID
    */
-  getUserById(userId: string): Promise<{ userId: string; email: string; displayName?: string; photoURL?: string } | null>;
+  getUserById(userId: string): Promise<{ userId: string; email: string; role: number; displayName?: string; photoURL?: string } | null>;
 
   /**
    * Delete user account

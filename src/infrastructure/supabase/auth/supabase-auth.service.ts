@@ -28,7 +28,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
   /**
    * Sign up a new user
    */
-  async signup(email: string, password: string, displayName?: string): Promise<{ userId: string; email: string }> {
+  async signup(email: string, password: string, displayName?: string, role: number = 3): Promise<{ userId: string; email: string; role: number }> {
     try {
       const { data, error } = await this.supabaseClient.auth.signUp({
         email,
@@ -48,6 +48,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
         id: data.user.id,
         email: data.user.email,
         displayName: displayName || null,
+        role,
         emailVerified: false,
         status: 1, // ACTIVE
       });
@@ -57,6 +58,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
       return {
         userId: data.user.id,
         email: data.user.email || email,
+        role,
       };
     } catch (error) {
       console.error('Signup error:', error);
@@ -67,7 +69,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
   /**
    * Sign in an existing user
    */
-  async signin(email: string, password: string): Promise<{ userId: string; email: string; token: string }> {
+  async signin(email: string, password: string): Promise<{ userId: string; email: string; role: number; token: string }> {
     try {
       const { data, error } = await this.supabaseClient.auth.signInWithPassword({
         email,
@@ -77,9 +79,21 @@ export class SupabaseAuthService implements ISupabaseAuth {
       if (error) throw error;
       if (!data.user || !data.session) throw new Error('Failed to sign in');
 
+      // Fetch user details including role
+      const { data: userData, error: fetchError } = await this.supabaseClient
+        .from('users')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+      if (fetchError) {
+        console.warn('Failed to fetch user role:', fetchError);
+      }
+
       return {
         userId: data.user.id,
         email: data.user.email || email,
+        role: userData?.role || 3, // Default to CLIENT if not found
         token: data.session.access_token,
       };
     } catch (error) {
@@ -107,6 +121,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
   async getCurrentUser(): Promise<{
     userId: string;
     email: string;
+    role: number;
     displayName?: string;
     photoURL?: string;
   } | null> {
@@ -121,7 +136,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
       // Fetch user details from users table
       const { data, error: fetchError } = await this.supabaseClient
         .from('users')
-        .select('displayName, photoURL')
+        .select('role, displayName, photoURL')
         .eq('id', user.id)
         .single();
 
@@ -130,12 +145,14 @@ export class SupabaseAuthService implements ISupabaseAuth {
         return {
           userId: user.id,
           email: user.email || '',
+          role: 3, // Default to CLIENT
         };
       }
 
       return {
         userId: user.id,
         email: user.email || '',
+        role: data?.role || 3,
         displayName: data?.displayName || undefined,
         photoURL: data?.photoURL || undefined,
       };
@@ -244,13 +261,14 @@ export class SupabaseAuthService implements ISupabaseAuth {
   async getUserById(userId: string): Promise<{
     userId: string;
     email: string;
+    role: number;
     displayName?: string;
     photoURL?: string;
   } | null> {
     try {
       const { data, error } = await this.supabaseClient
         .from('users')
-        .select('id, email, displayName, photoURL')
+        .select('id, email, role, displayName, photoURL')
         .eq('id', userId)
         .single();
 
@@ -262,6 +280,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
       return {
         userId: data.id,
         email: data.email,
+        role: data.role || 3,
         displayName: data.displayName || undefined,
         photoURL: data.photoURL || undefined,
       };
