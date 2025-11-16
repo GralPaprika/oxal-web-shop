@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@supabase/supabase-js": "^2.81.1",
     "drizzle-orm": "^0.44.7",
     "firebase": "^12.4.0",
     "inversify": "^7.10.3",

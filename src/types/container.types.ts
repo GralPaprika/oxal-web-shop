@@ -5,16 +5,17 @@ export const TYPES = {
   FirebaseService: Symbol.for('FirebaseService'),
   SupabaseService: Symbol.for('SupabaseService'),
   
+  // Authentication
+  AuthRepository: Symbol.for('AuthRepository'),
+  SupabaseAuth: Symbol.for('SupabaseAuth'),
+  LoginUseCase: Symbol.for('LoginUseCase'),
+  LogoutUseCase: Symbol.for('LogoutUseCase'),
+  GetCurrentUserUseCase: Symbol.for('GetCurrentUserUseCase'),
+  
   // Storage
   StorageService: Symbol.for('StorageService'),
   UploadFileUseCase: Symbol.for('UploadFileUseCase'),
   DeleteFileUseCase: Symbol.for('DeleteFileUseCase'),
-  
-  // Authentication
-  AuthRepository: Symbol.for('AuthRepository'),
-  LoginUseCase: Symbol.for('LoginUseCase'),
-  LogoutUseCase: Symbol.for('LogoutUseCase'),
-  GetCurrentUserUseCase: Symbol.for('GetCurrentUserUseCase'),
   
   // User Management
   UserRepository: Symbol.for('UserRepository'),
