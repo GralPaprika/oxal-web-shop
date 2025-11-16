@@ -8,14 +8,14 @@ export { users } from './users.table';
 export { products } from './products.table';
 export { productsMetadata } from './products-metadata.table';
 export { productImages } from './product-images.table';
-export { categories } from './categories.table';
+export { productCategories as categories } from './product-categories.table';
 export { sessions } from './sessions.table';
 
 import { users } from './users.table';
 import { products } from './products.table';
 import { productsMetadata } from './products-metadata.table';
 import { productImages } from './product-images.table';
-import { categories } from './categories.table';
+import { productCategories } from './product-categories.table';
 import { sessions } from './sessions.table';
 
 /**
@@ -28,7 +28,7 @@ export const schemaMap = {
   products,
   productsMetadata,
   productImages,
-  categories,
+  productCategories,
   sessions,
 } as const;
 

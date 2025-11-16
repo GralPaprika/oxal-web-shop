@@ -1,4 +1,5 @@
 import { pgTable, uuid, decimal, jsonb, timestamp } from 'drizzle-orm/pg-core';
+import { products } from './products.table';
 
 /**
  * Products Metadata table
@@ -7,12 +8,13 @@ import { pgTable, uuid, decimal, jsonb, timestamp } from 'drizzle-orm/pg-core';
  */
 export const productsMetadata = pgTable('products_metadata', {
   id: uuid('id').primaryKey().defaultRandom(),
-  productId: uuid('product_id').notNull(),
+  productId: uuid('product_id').notNull().references(() => products.id),
   weight: decimal('weight', { precision: 10, scale: 2 }),
   length: decimal('length', { precision: 10, scale: 2 }),
   width: decimal('width', { precision: 10, scale: 2 }),
   height: decimal('height', { precision: 10, scale: 2 }),
   materials: jsonb('materials').default([]),
+  tags: jsonb('tags').default([]),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 });

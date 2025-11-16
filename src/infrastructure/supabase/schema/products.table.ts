@@ -1,4 +1,5 @@
-import { pgTable, varchar, text, integer, boolean, jsonb, uuid, timestamp, smallint } from 'drizzle-orm/pg-core';
+import { pgTable, varchar, text, integer, boolean, uuid, timestamp, smallint } from 'drizzle-orm/pg-core';
+import { productCategories } from './product-categories.table';
 
 /**
  * Products table
@@ -11,11 +12,10 @@ export const products = pgTable('products', {
   description: text('description'),
   price: integer('price').notNull(),
   stock: integer('stock').notNull(),
-  category: varchar('category', { length: 100 }).notNull(),
+  categoryId: integer('category_id').notNull().references(() => productCategories.id),
   isStarred: boolean('is_starred').default(false),
   badge: smallint('badge'), // 1 = new, 2 = sale, null = no badge
   status: smallint('status').default(1), // 1 = active, 2 = inactive, 3 = discontinued
-  tags: jsonb('tags').default([]),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow(),
 });

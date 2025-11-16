@@ -1,4 +1,5 @@
 import { pgTable, uuid, varchar, text, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
+import { products } from './products.table';
 
 /**
  * Product Images table
@@ -6,7 +7,7 @@ import { pgTable, uuid, varchar, text, integer, boolean, timestamp } from 'drizz
  */
 export const productImages = pgTable('product_images', {
   id: uuid('id').primaryKey().defaultRandom(),
-  productId: uuid('product_id').notNull(),
+  productId: uuid('product_id').notNull().references(() => products.id),
   url: varchar('url', { length: 500 }).notNull(),
   alt: text('alt'),
   order: integer('order').default(0),

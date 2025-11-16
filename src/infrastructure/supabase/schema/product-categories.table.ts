@@ -1,11 +1,11 @@
-import { pgTable, uuid, varchar, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, serial, varchar, text, timestamp } from 'drizzle-orm/pg-core';
 
 /**
- * Categories table
+ * Product Categories table
  * Stores product categories
  */
-export const categories = pgTable('categories', {
-  id: uuid('id').primaryKey().defaultRandom(),
+export const productCategories = pgTable('product_categories', {
+  id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull().unique(),
   description: text('description'),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
