@@ -23,9 +23,9 @@ export class SupabaseAuthRepository implements IAuthRepository {
       user: {
         uid: result.userId,
         email: result.email,
-        displayName: undefined,
-        photoURL: undefined,
-        emailVerified: false,
+        displayName: result.displayName,
+        photoURL: result.photoURL,
+        emailVerified: result.emailVerified,
         role: this.getRoleLabel(result.role),
       },
       token: result.token,

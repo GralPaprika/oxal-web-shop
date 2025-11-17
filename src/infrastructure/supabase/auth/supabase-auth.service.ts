@@ -7,7 +7,7 @@
 import { injectable } from 'inversify';
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { ISupabaseAuth } from './supabase-auth.interface';
+import type { ISupabaseAuth, AuthSignupResult, AuthSigninResult, AuthUserData } from './supabase-auth.interface';
 
 @injectable()
 export class SupabaseAuthService implements ISupabaseAuth {
@@ -28,7 +28,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
   /**
    * Sign up a new user
    */
-  async signup(email: string, password: string, displayName?: string, role: number = 3): Promise<{ userId: string; email: string; role: number }> {
+  async signup(email: string, password: string, displayName?: string, role: number = 3): Promise<AuthSignupResult> {
     try {
       const { data, error } = await this.supabaseClient.auth.signUp({
         email,
@@ -58,7 +58,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
   /**
    * Sign in an existing user
    */
-  async signin(email: string, password: string): Promise<{ userId: string; email: string; role: number; token: string }> {
+  async signin(email: string, password: string): Promise<AuthSigninResult> {
     try {
       const { data, error } = await this.supabaseClient.auth.signInWithPassword({
         email,
@@ -68,14 +68,17 @@ export class SupabaseAuthService implements ISupabaseAuth {
       if (error) throw error;
       if (!data.user || !data.session) throw new Error('Failed to sign in');
 
-      // Get role from user metadata
+      // Get role and displayName from user metadata
       const role = (data.user.user_metadata?.role as number) || 3; // Default to CLIENT if not found
+      const displayName = data.user.user_metadata?.display_name as string | undefined;
 
       return {
         userId: data.user.id,
         email: data.user.email || email,
         role,
         token: data.session.access_token,
+        displayName,
+        emailVerified: !!data.user.email_confirmed_at,
       };
     } catch (error) {
       console.error('Signin error:', error);
@@ -99,13 +102,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
   /**
    * Get the currently authenticated user
    */
-  async getCurrentUser(): Promise<{
-    userId: string;
-    email: string;
-    role: number;
-    displayName?: string;
-    photoURL?: string;
-  } | null> {
+  async getCurrentUser(): Promise<AuthUserData | null> {
     try {
       const {
         data: { user },
@@ -219,13 +216,7 @@ export class SupabaseAuthService implements ISupabaseAuth {
   /**
    * Get user by ID
    */
-  async getUserById(userId: string): Promise<{
-    userId: string;
-    email: string;
-    role: number;
-    displayName?: string;
-    photoURL?: string;
-  } | null> {
+  async getUserById(userId: string): Promise<AuthUserData | null> {
     try {
       // Note: This requires admin access or is used in server context
       // In a production app, you might need the admin API for this

@@ -3,16 +3,46 @@
  * Defines the contract for authentication operations with Supabase
  */
 
+/**
+ * User authentication data returned from signup
+ */
+export interface AuthSignupResult {
+  userId: string;
+  email: string;
+  role: number;
+}
+
+/**
+ * User authentication data returned from signin
+ */
+export interface AuthSigninResult extends AuthSignupResult {
+  token: string;
+  displayName?: string;
+  photoURL?: string;
+  emailVerified: boolean;
+}
+
+/**
+ * User data retrieved from getCurrentUser or getUserById
+ */
+export interface AuthUserData {
+  userId: string;
+  email: string;
+  role: number;
+  displayName?: string;
+  photoURL?: string;
+}
+
 export interface ISupabaseAuth {
   /**
    * Sign up a new user
    */
-  signup(email: string, password: string, displayName?: string, role?: number): Promise<{ userId: string; email: string; role: number }>;
+  signup(email: string, password: string, displayName?: string, role?: number): Promise<AuthSignupResult>;
 
   /**
    * Sign in an existing user
    */
-  signin(email: string, password: string): Promise<{ userId: string; email: string; role: number; token: string }>;
+  signin(email: string, password: string): Promise<AuthSigninResult>;
 
   /**
    * Sign out the current user
@@ -22,7 +52,7 @@ export interface ISupabaseAuth {
   /**
    * Get the currently authenticated user
    */
-  getCurrentUser(): Promise<{ userId: string; email: string; role: number; displayName?: string; photoURL?: string } | null>;
+  getCurrentUser(): Promise<AuthUserData | null>;
 
   /**
    * Update user profile
@@ -52,7 +82,7 @@ export interface ISupabaseAuth {
   /**
    * Get user by ID
    */
-  getUserById(userId: string): Promise<{ userId: string; email: string; role: number; displayName?: string; photoURL?: string } | null>;
+  getUserById(userId: string): Promise<AuthUserData | null>;
 
   /**
    * Delete user account
