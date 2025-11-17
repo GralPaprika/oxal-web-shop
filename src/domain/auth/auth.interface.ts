@@ -5,6 +5,7 @@ export interface User {
   displayName?: string;
   photoURL?: string;
   emailVerified: boolean;
+  role?: string;
 }
 
 export interface LoginCredentials {

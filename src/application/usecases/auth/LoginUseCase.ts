@@ -29,8 +29,8 @@ export class LoginUseCase {
       throw new Error('Invalid email format');
     }
     
-    if (credentials.password.length < 6) {
-      throw new Error('Password must be at least 6 characters');
+    if (credentials.password.length < 8) {
+      throw new Error('Password must be at least 8 characters');
     }
   }
 

@@ -6,7 +6,9 @@ import { FirestoreDatabase } from '@/infrastructure/firebase/firestore.database'
 import { IFirebaseService } from '@/infrastructure/firebase/firebase.interface';
 import { FirebaseService } from '@/infrastructure/firebase/firebase.config';
 import type { IAuthRepository } from '@/domain/auth/auth.interface';
-import { FirebaseAuthRepository } from '@/infrastructure/auth/FirebaseAuthRepository';
+import { SupabaseAuthRepository } from '@/infrastructure/auth/SupabaseAuthRepository';
+import type { ISupabaseAuth } from '@/infrastructure/supabase/auth';
+import { SupabaseAuthService } from '@/infrastructure/supabase/auth';
 import { LoginUseCase } from '@/application/usecases/auth/LoginUseCase';
 import { LogoutUseCase } from '@/application/usecases/auth/LogoutUseCase';
 import { GetCurrentUserUseCase } from '@/application/usecases/auth/GetCurrentUserUseCase';
@@ -47,8 +49,11 @@ container.bind<IDatabase>(TYPES.Database).to(FirestoreDatabase).inSingletonScope
 // Storage service binding
 container.bind<IStorageService>(TYPES.StorageService).to(FirebaseStorageService).inSingletonScope();
 
-// Authentication repository binding
-container.bind<IAuthRepository>(TYPES.AuthRepository).to(FirebaseAuthRepository).inSingletonScope();
+// Supabase Auth service binding
+container.bind<ISupabaseAuth>(TYPES.SupabaseAuth).to(SupabaseAuthService).inSingletonScope();
+
+// Authentication repository binding (uses Supabase implementation)
+container.bind<IAuthRepository>(TYPES.AuthRepository).to(SupabaseAuthRepository).inSingletonScope();
 
 // Authentication use cases binding
 container.bind<LoginUseCase>(TYPES.LoginUseCase).to(LoginUseCase);
