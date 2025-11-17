@@ -36,24 +36,13 @@ export class SupabaseAuthService implements ISupabaseAuth {
         options: {
           data: {
             display_name: displayName,
+            role,
           },
         },
       });
 
       if (error) throw error;
       if (!data.user) throw new Error('Failed to create user');
-
-      // Create user record in users table
-      const { error: insertError } = await this.supabaseClient.from('users').insert({
-        id: data.user.id,
-        email: data.user.email,
-        displayName: displayName || null,
-        role,
-        emailVerified: false,
-        status: 1, // ACTIVE
-      });
-
-      if (insertError) throw insertError;
 
       return {
         userId: data.user.id,
@@ -79,21 +68,13 @@ export class SupabaseAuthService implements ISupabaseAuth {
       if (error) throw error;
       if (!data.user || !data.session) throw new Error('Failed to sign in');
 
-      // Fetch user details including role
-      const { data: userData, error: fetchError } = await this.supabaseClient
-        .from('users')
-        .select('role')
-        .eq('id', data.user.id)
-        .single();
-
-      if (fetchError) {
-        console.warn('Failed to fetch user role:', fetchError);
-      }
+      // Get role from user metadata
+      const role = (data.user.user_metadata?.role as number) || 3; // Default to CLIENT if not found
 
       return {
         userId: data.user.id,
         email: data.user.email || email,
-        role: userData?.role || 3, // Default to CLIENT if not found
+        role,
         token: data.session.access_token,
       };
     } catch (error) {
@@ -133,28 +114,16 @@ export class SupabaseAuthService implements ISupabaseAuth {
 
       if (error || !user) return null;
 
-      // Fetch user details from users table
-      const { data, error: fetchError } = await this.supabaseClient
-        .from('users')
-        .select('role, displayName, photoURL')
-        .eq('id', user.id)
-        .single();
-
-      if (fetchError) {
-        console.warn('Failed to fetch user details:', fetchError);
-        return {
-          userId: user.id,
-          email: user.email || '',
-          role: 3, // Default to CLIENT
-        };
-      }
+      // Get user metadata from Supabase Auth
+      const displayName = user.user_metadata?.display_name as string | undefined;
+      const role = (user.user_metadata?.role as number) || 3; // Default to CLIENT
 
       return {
         userId: user.id,
         email: user.email || '',
-        role: data?.role || 3,
-        displayName: data?.displayName || undefined,
-        photoURL: data?.photoURL || undefined,
+        role,
+        displayName,
+        photoURL: undefined,
       };
     } catch (error) {
       console.error('Get current user error:', error);
@@ -167,21 +136,13 @@ export class SupabaseAuthService implements ISupabaseAuth {
    */
   async updateProfile(displayName?: string, photoURL?: string): Promise<void> {
     try {
-      const {
-        data: { user },
-        error: authError,
-      } = await this.supabaseClient.auth.getUser();
-
-      if (authError || !user) throw new Error('Not authenticated');
-
       const updateData: Record<string, unknown> = {};
-      if (displayName !== undefined) updateData.displayName = displayName;
+      if (displayName !== undefined) updateData.display_name = displayName;
       if (photoURL !== undefined) updateData.photoURL = photoURL;
 
-      const { error } = await this.supabaseClient
-        .from('users')
-        .update(updateData)
-        .eq('id', user.id);
+      const { error } = await this.supabaseClient.auth.updateUser({
+        data: updateData,
+      });
 
       if (error) throw error;
     } catch (error) {
@@ -266,27 +227,27 @@ export class SupabaseAuthService implements ISupabaseAuth {
     photoURL?: string;
   } | null> {
     try {
-      const { data, error } = await this.supabaseClient
-        .from('users')
-        .select('id, email, role, displayName, photoURL')
-        .eq('id', userId)
-        .single();
+      // Note: This requires admin access or is used in server context
+      // In a production app, you might need the admin API for this
+      const { data, error } = await this.supabaseClient.auth.admin.getUserById(userId);
 
-      if (error) {
-        if (error.code === 'PGRST116') return null; // Not found
-        throw error;
+      if (error || !data.user) {
+        return null;
       }
 
+      const displayName = data.user.user_metadata?.display_name as string | undefined;
+      const role = (data.user.user_metadata?.role as number) || 3;
+
       return {
-        userId: data.id,
-        email: data.email,
-        role: data.role || 3,
-        displayName: data.displayName || undefined,
-        photoURL: data.photoURL || undefined,
+        userId: data.user.id,
+        email: data.user.email || '',
+        role,
+        displayName,
+        photoURL: undefined,
       };
     } catch (error) {
       console.error('Get user by ID error:', error);
-      throw this.handleAuthError(error);
+      return null;
     }
   }
 
@@ -295,14 +256,12 @@ export class SupabaseAuthService implements ISupabaseAuth {
    */
   async deleteUser(userId: string): Promise<void> {
     try {
-      // Delete user record from users table
-      const { error: deleteUserError } = await this.supabaseClient.from('users').delete().eq('id', userId);
+      // Supabase Auth handles user deletion via admin API
+      const { error } = await this.supabaseClient.auth.admin.deleteUser(userId);
 
-      if (deleteUserError) throw deleteUserError;
+      if (error) throw error;
 
-      // Delete auth user (requires admin key or user to be authenticated)
-      // This is typically done through Supabase admin API
-      console.log(`User ${userId} deleted from users table`);
+      console.log(`User ${userId} deleted from Supabase Auth`);
     } catch (error) {
       console.error('Delete user error:', error);
       throw this.handleAuthError(error);
