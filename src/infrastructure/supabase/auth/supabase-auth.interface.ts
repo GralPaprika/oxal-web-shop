@@ -33,6 +33,20 @@ export interface AuthUserData {
   photoURL?: string;
 }
 
+/**
+ * Auth state change event
+ */
+export interface AuthStateChangeEvent {
+  event: 'SIGNED_IN' | 'SIGNED_OUT' | 'TOKEN_REFRESHED' | 'USER_UPDATED';
+  user: AuthUserData | null;
+  token?: string;
+}
+
+/**
+ * Auth state change listener
+ */
+export type AuthStateChangeListener = (event: AuthStateChangeEvent) => void;
+
 export interface ISupabaseAuth {
   /**
    * Sign up a new user
@@ -55,37 +69,8 @@ export interface ISupabaseAuth {
   getCurrentUser(): Promise<AuthUserData | null>;
 
   /**
-   * Update user profile
+   * Listen to auth state changes
+   * Returns unsubscribe function
    */
-  updateProfile(displayName?: string, photoURL?: string): Promise<void>;
-
-  /**
-   * Change user password
-   */
-  changePassword(newPassword: string): Promise<void>;
-
-  /**
-   * Send password reset email
-   */
-  sendPasswordResetEmail(email: string): Promise<void>;
-
-  /**
-   * Reset password with token
-   */
-  resetPassword(token: string, newPassword: string): Promise<void>;
-
-  /**
-   * Verify email
-   */
-  verifyEmail(token: string): Promise<void>;
-
-  /**
-   * Get user by ID
-   */
-  getUserById(userId: string): Promise<AuthUserData | null>;
-
-  /**
-   * Delete user account
-   */
-  deleteUser(userId: string): Promise<void>;
+  onAuthStateChange(listener: AuthStateChangeListener): () => void;
 }

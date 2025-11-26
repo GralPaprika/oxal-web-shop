@@ -7,19 +7,20 @@
 import { injectable } from 'inversify';
 import { createClient } from '@supabase/supabase-js';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { ISupabaseAuth, AuthSignupResult, AuthSigninResult, AuthUserData } from './supabase-auth.interface';
+import type { ISupabaseAuth, AuthSignupResult, AuthSigninResult, AuthUserData, AuthStateChangeListener, AuthStateChangeEvent } from './supabase-auth.interface';
 
 @injectable()
 export class SupabaseAuthService implements ISupabaseAuth {
   private supabaseClient: SupabaseClient;
+  private listeners: Set<AuthStateChangeListener> = new Set();
 
   constructor() {
-    // Get the Postgres client and create a Supabase client
-    const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_ANON_KEY;
+    // Get Supabase credentials from environment
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Missing Supabase environment variables');
+      throw new Error('Missing Supabase environment variables (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)');
     }
 
     this.supabaseClient = createClient(supabaseUrl, supabaseKey);
@@ -129,134 +130,44 @@ export class SupabaseAuthService implements ISupabaseAuth {
   }
 
   /**
-   * Update user profile
+   * Listen to auth state changes
+   * Sets up internal Supabase listener and calls registered listeners
    */
-  async updateProfile(displayName?: string, photoURL?: string): Promise<void> {
-    try {
-      const updateData: Record<string, unknown> = {};
-      if (displayName !== undefined) updateData.display_name = displayName;
-      if (photoURL !== undefined) updateData.photoURL = photoURL;
+  onAuthStateChange(listener: AuthStateChangeListener): () => void {
+    this.listeners.add(listener);
 
-      const { error } = await this.supabaseClient.auth.updateUser({
-        data: updateData,
-      });
+    // Subscribe to Supabase auth state changes if not already subscribed
+    const { data } = this.supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      let user: AuthUserData | null = null;
 
-      if (error) throw error;
-    } catch (error) {
-      console.error('Update profile error:', error);
-      throw this.handleAuthError(error);
-    }
-  }
+      if (session?.user) {
+        const displayName = session.user.user_metadata?.display_name as string | undefined;
+        const role = (session.user.user_metadata?.role as number) || 3;
 
-  /**
-   * Change user password
-   */
-  async changePassword(newPassword: string): Promise<void> {
-    try {
-      const { error } = await this.supabaseClient.auth.updateUser({
-        password: newPassword,
-      });
-
-      if (error) throw error;
-    } catch (error) {
-      console.error('Change password error:', error);
-      throw this.handleAuthError(error);
-    }
-  }
-
-  /**
-   * Send password reset email
-   */
-  async sendPasswordResetEmail(email: string): Promise<void> {
-    try {
-      const { error } = await this.supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password`,
-      });
-
-      if (error) throw error;
-    } catch (error) {
-      console.error('Send reset email error:', error);
-      throw this.handleAuthError(error);
-    }
-  }
-
-  /**
-   * Reset password with token
-   */
-  async resetPassword(token: string, newPassword: string): Promise<void> {
-    try {
-      const { error } = await this.supabaseClient.auth.updateUser({
-        password: newPassword,
-      });
-
-      if (error) throw error;
-    } catch (error) {
-      console.error('Reset password error:', error);
-      throw this.handleAuthError(error);
-    }
-  }
-
-  /**
-   * Verify email
-   */
-  async verifyEmail(token: string): Promise<void> {
-    try {
-      const { error } = await this.supabaseClient.auth.verifyOtp({
-        token_hash: token,
-        type: 'email',
-      });
-
-      if (error) throw error;
-    } catch (error) {
-      console.error('Verify email error:', error);
-      throw this.handleAuthError(error);
-    }
-  }
-
-  /**
-   * Get user by ID
-   */
-  async getUserById(userId: string): Promise<AuthUserData | null> {
-    try {
-      // Note: This requires admin access or is used in server context
-      // In a production app, you might need the admin API for this
-      const { data, error } = await this.supabaseClient.auth.admin.getUserById(userId);
-
-      if (error || !data.user) {
-        return null;
+        user = {
+          userId: session.user.id,
+          email: session.user.email || '',
+          role,
+          displayName,
+          photoURL: undefined,
+        };
       }
 
-      const displayName = data.user.user_metadata?.display_name as string | undefined;
-      const role = (data.user.user_metadata?.role as number) || 3;
-
-      return {
-        userId: data.user.id,
-        email: data.user.email || '',
-        role,
-        displayName,
-        photoURL: undefined,
+      // Notify all listeners
+      const authEvent: AuthStateChangeEvent = {
+        event: event as AuthStateChangeEvent['event'],
+        user,
+        token: session?.access_token,
       };
-    } catch (error) {
-      console.error('Get user by ID error:', error);
-      return null;
-    }
-  }
 
-  /**
-   * Delete user account
-   */
-  async deleteUser(userId: string): Promise<void> {
-    try {
-      // Supabase Auth handles user deletion via admin API
-      const { error } = await this.supabaseClient.auth.admin.deleteUser(userId);
+      this.listeners.forEach((cb) => cb(authEvent));
+    });
 
-      if (error) throw error;
-
-      console.log(`User ${userId} deleted from Supabase Auth`);
-    } catch (error) {
-      console.error('Delete user error:', error);
-      throw this.handleAuthError(error);
-    }
+    // Return unsubscribe function
+    return () => {
+      this.listeners.delete(listener);
+      data?.subscription?.unsubscribe();
+    };
   }
 
   /**

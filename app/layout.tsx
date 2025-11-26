@@ -2,6 +2,7 @@ import type { Viewport } from "next";
 import { Geist, Geist_Mono, Lora, Merriweather } from "next/font/google";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { SessionProvider } from "@/infrastructure/auth/SessionProvider";
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -60,9 +61,11 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${lora.variable} ${merriweather.variable} antialiased`}
       >
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        <SessionProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );
