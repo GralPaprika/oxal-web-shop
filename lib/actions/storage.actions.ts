@@ -3,15 +3,21 @@
 import { container } from '@/container/container.config';
 import { UploadFileUseCase, DeleteFileUseCase, FileUploadData } from '@/application/usecases/storage/FileUploadUseCase';
 import { TYPES } from '@/types/container.types';
-import { withAdminAuthOnly } from '@/lib/auth-wrapper';
 import { handleAndRespond } from '@/lib/error-handler';
 import type { ApiResponse } from '@/lib/api-response';
 import { ApiResponse as Response } from '@/lib/api-response';
 
+/**
+ * Storage Server Actions
+ *
+ * Auth is handled by middleware (auth.middleware.ts protects /admin/* routes)
+ * These actions assume the caller is already authenticated and admin
+ */
+
 // UPLOAD PRODUCT IMAGE
-export const uploadProductImage = withAdminAuthOnly(async (
+export async function uploadProductImage(
   formData: FormData
-): Promise<ApiResponse<{ url: string; path: string }>> => {
+): Promise<ApiResponse<{ url: string; path: string }>> {
   return handleAndRespond(
     async () => {
       const file = formData.get('file') as File;
@@ -39,12 +45,12 @@ export const uploadProductImage = withAdminAuthOnly(async (
     'Upload product image',
     { productId: formData.get('productId') }
   );
-});
+}
 
 // DELETE PRODUCT IMAGE
-export const deleteProductImage = withAdminAuthOnly(async (
+export async function deleteProductImage(
   url: string
-): Promise<ApiResponse> => {
+): Promise<ApiResponse> {
   return handleAndRespond(
     async () => {
       if (!url) {
@@ -59,4 +65,4 @@ export const deleteProductImage = withAdminAuthOnly(async (
     'Delete product image',
     { url }
   );
-});
+}

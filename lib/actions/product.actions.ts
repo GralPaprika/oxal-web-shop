@@ -9,18 +9,24 @@ import { GetCategoriesUseCase } from '@/application/usecases/product/GetCategori
 import { ValidateCanStarProductUseCase } from '@/application/usecases/product/ValidateCanStarProductUseCase';
 import { TYPES } from '@/types/container.types';
 import type { Product, ProductListOptions, CreateProductData, UpdateProductData, ProductCategory } from '@/domain/product/product.entity';
-import { withAdminAuthOnly } from '@/lib/auth-wrapper';
 import type { ApiSingleResponse, ApiListResponse, ApiPaginatedResponse, ApiResponse } from '@/lib/api-response';
 import { ApiResponse as Response } from '@/lib/api-response';
 
+/**
+ * Product Server Actions
+ * 
+ * Auth is handled by middleware (auth.middleware.ts protects /admin/* routes)
+ * These actions assume the caller is already authenticated and admin
+ */
+
 // GET PRODUCTS
-export const getAllProducts = withAdminAuthOnly(async (options?: ProductListOptions): Promise<ApiListResponse<Product>> => {
+export async function getAllProducts(options?: ProductListOptions): Promise<ApiListResponse<Product>> {
   const getAllProductsUseCase = container.get<GetAllProductsUseCase>(TYPES.GetAllProductsUseCase);
   const products = await getAllProductsUseCase.execute(options);
   return Response.success({ items: products, total: products.length });
-});
+}
 
-export const getProductById = withAdminAuthOnly(async (id: string): Promise<ApiSingleResponse<Product>> => {
+export async function getProductById(id: string): Promise<ApiSingleResponse<Product>> {
   const getProductByIdUseCase = container.get<GetProductByIdUseCase>(TYPES.GetProductByIdUseCase);
   const product = await getProductByIdUseCase.execute(id);
   
@@ -29,51 +35,51 @@ export const getProductById = withAdminAuthOnly(async (id: string): Promise<ApiS
   }
   
   return Response.success(product);
-});
+}
 
-export const getProductCount = withAdminAuthOnly(async (options?: ProductListOptions): Promise<ApiResponse<number>> => {
+export async function getProductCount(options?: ProductListOptions): Promise<ApiResponse<number>> {
   const getProductCountUseCase = container.get<GetProductCountUseCase>(TYPES.GetProductCountUseCase);
   const count = await getProductCountUseCase.execute(options);
   return Response.success(count);
-});
+}
 
 // CREATE PRODUCT
-export const createProduct = withAdminAuthOnly(async (productData: CreateProductData): Promise<ApiSingleResponse<Product>> => {
+export async function createProduct(productData: CreateProductData): Promise<ApiSingleResponse<Product>> {
   const createProductUseCase = container.get<CreateProductUseCase>(TYPES.CreateProductUseCase);
   const product = await createProductUseCase.execute(productData);
   return Response.success(product);
-});
+}
 
 // UPDATE PRODUCT
-export const updateProduct = withAdminAuthOnly(async (productId: string, productData: UpdateProductData): Promise<ApiSingleResponse<Product>> => {
+export async function updateProduct(productId: string, productData: UpdateProductData): Promise<ApiSingleResponse<Product>> {
   const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
   const product = await updateProductUseCase.execute(productId, productData);
   return Response.success(product);
-});
+}
 
 // DELETE PRODUCT
-export const deleteProduct = withAdminAuthOnly(async (productId: string): Promise<ApiResponse> => {
+export async function deleteProduct(productId: string): Promise<ApiResponse> {
   const deleteProductUseCase = container.get<DeleteProductUseCase>(TYPES.DeleteProductUseCase);
   await deleteProductUseCase.execute(productId);
   return Response.success();
-});
+}
 
 // UPDATE PRODUCT IMAGES
-export const updateProductImages = withAdminAuthOnly(async (
+export async function updateProductImages(
   productId: string, 
   images: CreateProductData['images']
-): Promise<ApiSingleResponse<Product>> => {
+): Promise<ApiSingleResponse<Product>> {
   const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
   const product = await updateProductUseCase.execute(productId, { images });
   return Response.success(product);
-});
+}
 
 // GET PAGINATED PRODUCTS
-export const getPaginatedProducts = withAdminAuthOnly(async (
+export async function getPaginatedProducts(
   pageNumber: number = 1,
   pageSize: number = 25,
   options?: ProductListOptions
-): Promise<ApiPaginatedResponse<Product>> => {
+): Promise<ApiPaginatedResponse<Product>> {
   const getAllProductsUseCase = container.get<GetAllProductsUseCase>(TYPES.GetAllProductsUseCase);
   const getProductCountUseCase = container.get<GetProductCountUseCase>(TYPES.GetProductCountUseCase);
   
@@ -91,10 +97,10 @@ export const getPaginatedProducts = withAdminAuthOnly(async (
   const total = await getProductCountUseCase.execute(options);
   
   return Response.success({ items: products, total, page: pageNumber, pageSize });
-});
+}
 
 // VALIDATE CAN STAR PRODUCT
-export const validateCanStarProduct = withAdminAuthOnly(async (productId: string): Promise<ApiResponse<{ canStar: boolean; currentStarredCount: number; maxAllowed: number; message?: string }>> => {
+export async function validateCanStarProduct(productId: string): Promise<ApiResponse<{ canStar: boolean; currentStarredCount: number; maxAllowed: number; message?: string }>> {
   const validateCanStarUseCase = container.get<ValidateCanStarProductUseCase>(TYPES.ValidateCanStarProductUseCase);
   const validationResult = await validateCanStarUseCase.execute(productId);
   
@@ -107,7 +113,7 @@ export const validateCanStarProduct = withAdminAuthOnly(async (productId: string
     currentStarredCount: validationResult.currentStarredCount,
     maxAllowed: validationResult.maxAllowed
   });
-});
+}
 
 // GET ALL CATEGORIES
 export async function getAllCategories(): Promise<ApiListResponse<ProductCategory>> {
