@@ -1,4 +1,4 @@
-import type { DrizzleConfig } from 'drizzle-orm';
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
 /**
  * Supabase Service Interface
@@ -9,7 +9,7 @@ export interface ISupabaseService {
   /**
    * Get the Drizzle database instance
    */
-  getDrizzleInstance(): DrizzleConfig;
+  getDrizzleInstance(): PostgresJsDatabase<Record<string, unknown>>;
 
   /**
    * Get the raw PostgreSQL client

@@ -48,7 +48,6 @@ export interface CreateProductData {
   categoryId: string;
   isStarred?: boolean;
   badge?: 'new' | 'sale' | null;
-  images?: Omit<ProductImage, 'id'>[];
   tags?: string[];
   metadata?: Product['metadata'];
 }

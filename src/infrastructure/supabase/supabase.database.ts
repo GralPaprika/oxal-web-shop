@@ -41,7 +41,7 @@ export class SupabaseDatabase implements IDatabase {
       }).returning({ id: table.id });
 
       if (result.length > 0 && result[0].id) {
-        return result[0].id;
+        return String(result[0].id);
       }
 
       throw new Error('Failed to create document');

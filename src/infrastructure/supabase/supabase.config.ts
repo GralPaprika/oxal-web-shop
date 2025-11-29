@@ -2,6 +2,7 @@ import { injectable } from 'inversify';
 import { sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
+import type { ISupabaseService } from './supabase.interface';
 
 /**
  * Supabase database service
@@ -9,7 +10,7 @@ import postgres from 'postgres';
  * Follows Dependency Injection pattern - exported as singleton
  */
 @injectable()
-export class SupabaseService {
+export class SupabaseService implements ISupabaseService {
   private client: ReturnType<typeof postgres>;
   private db: ReturnType<typeof drizzle>;
 

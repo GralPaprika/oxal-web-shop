@@ -38,21 +38,13 @@ export async function getAdminUsers(): Promise<ApiListResponse<User>> {
   return Response.success({ items: admins, total: admins.length });
 }
 
-export async function updateUser(currentUser: User, userData: {
+export async function updateUser(userData: {
   id: string;
   displayName?: string;
   email?: string;
   role?: 'admin' | 'cashier';
   status?: 'active' | 'inactive' | 'suspended';
 }): Promise<ApiSingleResponse<User>> {
-  if (currentUser.id === userData.id && userData.role && userData.role !== 'admin') {
-    return Response.error('Cannot remove admin privileges from your own account');
-  }
-
-  if (currentUser.id === userData.id && userData.status && userData.status !== 'active') {
-    return Response.error('Cannot change status of your own account');
-  }
-
   const updateUserUseCase = container.get<UpdateUserUseCase>(TYPES.UpdateUserUseCase);
   const result = await updateUserUseCase.execute(userData);
   
@@ -63,7 +55,8 @@ export async function updateUser(currentUser: User, userData: {
   return Response.error(result.error || 'Failed to update user');
 }
 
-export async function createUser(currentUser: User, userData: CreateUserRequest): Promise<ApiSingleResponse<User>> {
+export async function createUser(userData: CreateUserRequest): Promise<ApiSingleResponse<User>> {
+  // Note: Authentication is handled by auth.middleware.ts
   const createUserUseCase = container.get<CreateUserUseCase>(TYPES.CreateUserUseCase);
   const result = await createUserUseCase.execute(userData);
   
@@ -74,10 +67,8 @@ export async function createUser(currentUser: User, userData: CreateUserRequest)
   return Response.error(result.error || 'Failed to create user');
 }
 
-export async function deleteUser(currentUser: User, userId: string): Promise<ApiSingleResponse<{ deleted: boolean }>> {
-  if (currentUser.id === userId) {
-    return Response.error('Cannot delete your own account');
-  }
+export async function deleteUser(userId: string): Promise<ApiSingleResponse<{ deleted: boolean }>> {
+  // Note: Authentication is handled by auth.middleware.ts
 
   const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
   const admins = await getUsersByRoleUseCase.execute('admin');

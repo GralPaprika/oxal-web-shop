@@ -23,7 +23,6 @@ interface ProductImage {
 
 export function CreateProductForm() {
   const t = useTranslations('admin.products.create');
-  const translations = useTranslations();
   const categoriesT = useTranslations('admin.products.categories');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -41,7 +40,6 @@ export function CreateProductForm() {
     categoryId: '',
     isStarred: false,
     badge: null,
-    images: [],
     tags: [],
     metadata: {
       weight: 0,
@@ -60,6 +58,55 @@ export function CreateProductForm() {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
 
+  const validateForm = (): boolean => {
+    const validations = [
+      { condition: !formData.name.trim(), message: t('validation.nameRequired') },
+      { condition: !formData.code.trim(), message: t('validation.codeRequired') },
+      { condition: formData.price <= 0, message: t('validation.priceRequired') },
+      { condition: formData.stock < 0, message: t('validation.stockRequired') },
+      { condition: !formData.categoryId, message: t('validation.categoryRequired') },
+    ];
+
+    for (const validation of validations) {
+      if (validation.condition) {
+        setError(validation.message);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const uploadImage = async (image: ProductImage, index: number, productId: string): Promise<{ url: string; alt?: string; order: number; isPrimary: boolean } | null> => {
+    // Only process data URLs (local uploads)
+    if (!image.url.startsWith('data:image')) {
+      return null;
+    }
+
+    try {
+      const response = await fetch(image.url);
+      const blob = await response.blob();
+      const file = new File([blob], image.alt || `image-${index}.jpg`, { type: blob.type });
+      
+      const formDataObj = new FormData();
+      formDataObj.append('file', file);
+      formDataObj.append('productId', productId);
+      
+      const uploadResult = await uploadProductImage(formDataObj);
+      
+      if (uploadResult.success && uploadResult.data?.url) {
+        return {
+          url: uploadResult.data.url,
+          alt: image.alt,
+          order: image.order,
+          isPrimary: image.isPrimary,
+        };
+      }
+    } catch (uploadError) {
+      console.error(`Error uploading image ${index}:`, uploadError);
+    }
+    return null;
+  };
+
   const handleStarToggle = async (newStarState: boolean): Promise<boolean> => {
     // Only validate if trying to star (newStarState === true)
     if (!newStarState) {
@@ -72,8 +119,8 @@ export function CreateProductForm() {
     
     if (!validationResult.success) {
       showError(
-        translations('admin.products.notifications.limitReached'),
-        translations('admin.products.notifications.limitReachedMessage')
+        t('notifications.starLimitReachedTitle'),
+        t('notifications.starLimitReachedMessage')
       );
       return false;
     }
@@ -106,25 +153,8 @@ export function CreateProductForm() {
     setError('');
     setSuccess('');
 
-    // Validation
-    if (!formData.name.trim()) {
-      setError(t('validation.nameRequired'));
-      return;
-    }
-    if (!formData.code.trim()) {
-      setError(t('validation.codeRequired'));
-      return;
-    }
-    if (formData.price <= 0) {
-      setError(t('validation.priceRequired'));
-      return;
-    }
-    if (formData.stock < 0) {
-      setError(t('validation.stockRequired'));
-      return;
-    }
-    if (!formData.categoryId) {
-      setError(t('validation.categoryRequired'));
+    // Validation using helper
+    if (!validateForm()) {
       return;
     }
 
@@ -138,7 +168,6 @@ export function CreateProductForm() {
             ...formData.metadata,
             materials,
           },
-          images: [], // Empty images array initially
         };
 
         const result = await createProduct(productData);
@@ -149,35 +178,9 @@ export function CreateProductForm() {
             const uploadedImages: Array<{ url: string; alt?: string; order: number; isPrimary: boolean }> = [];
             
             for (let i = 0; i < images.length; i++) {
-              const image = images[i];
-              
-              // Only upload if it's a preview URL (data:image)
-              if (image.url.startsWith('data:image')) {
-                try {
-                  // Convert data URL back to File
-                  const response = await fetch(image.url);
-                  const blob = await response.blob();
-                  const file = new File([blob], image.alt || `image-${i}.jpg`, { type: blob.type });
-                  
-                  // Upload to Firebase Storage
-                  const formData = new FormData();
-                  formData.append('file', file);
-                  formData.append('productId', result.data.id);
-                  
-                  const uploadResult = await uploadProductImage(formData);
-                  
-                  if (uploadResult.success && uploadResult.data?.url) {
-                    uploadedImages.push({
-                      url: uploadResult.data.url,
-                      alt: image.alt,
-                      order: image.order,
-                      isPrimary: image.isPrimary,
-                    });
-                  }
-                } catch (uploadError) {
-                  console.error('Error uploading image:', uploadError);
-                  // Continue with other images even if one fails
-                }
+              const uploadedImage = await uploadImage(images[i], i, result.data.id);
+              if (uploadedImage) {
+                uploadedImages.push(uploadedImage);
               }
             }
             

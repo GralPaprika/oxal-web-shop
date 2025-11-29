@@ -66,8 +66,8 @@ export async function deleteProduct(productId: string): Promise<ApiResponse> {
 
 // UPDATE PRODUCT IMAGES
 export async function updateProductImages(
-  productId: string, 
-  images: CreateProductData['images']
+  productId: string,
+  images: UpdateProductData['images']
 ): Promise<ApiSingleResponse<Product>> {
   const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
   const product = await updateProductUseCase.execute(productId, { images });
