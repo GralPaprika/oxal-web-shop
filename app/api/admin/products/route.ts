@@ -4,7 +4,6 @@ import { GetAllProductsUseCase, GetProductCountUseCase } from '@/application/use
 import { TYPES } from '@/types/container.types';
 import type { ProductListOptions } from '@/domain/product/product.entity';
 import { ApiResponse } from '@/lib/api-response';
-import { logError } from '@/lib/error-handler';
 import { parseQueryParams } from '@/lib/utils/queryParams';
 
 const productQueryParamDefs = {
@@ -82,7 +81,7 @@ export const GET = async (request: NextRequest) => {
     }));
 
   } catch (error) {
-    logError('API - Get Admin Products', error, { url: request.url });
+    console.error('Error in GET /api/admin/products:', error);
     return NextResponse.json(
       ApiResponse.error(error instanceof Error ? error.message : 'An unexpected error occurred'),
       { status: 500 }

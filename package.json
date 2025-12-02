@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "refresh-baseline-browser-mapping": "npm i --save-dev baseline-browser-mapping@latest"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
