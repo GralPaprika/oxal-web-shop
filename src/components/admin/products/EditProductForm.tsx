@@ -4,8 +4,9 @@ import { useState, useTransition, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AUTH_CONFIG } from '@/config/auth.config';
-import { CreateProductData, ProductCategory, Product } from '@/domain/product/product.entity';
+import { UpdateProductData, ProductCategory, Product } from '@/domain/product/product.entity';
 import { updateProduct, getAllCategories, validateCanStarProduct } from '@/lib/actions/product.actions';
+import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
 import { StringArrayInput } from '@/components/ui/StringArrayInput';
 import { ImageUploadGrid } from './ImageUploadGrid';
@@ -26,7 +27,6 @@ interface EditProductFormProps {
 
 export function EditProductForm({ product }: EditProductFormProps) {
   const t = useTranslations('admin.products.edit');
-  const translations = useTranslations();
   const categoriesT = useTranslations('admin.products.categories');
   const imagesT = useTranslations('admin.products.images');
   const router = useRouter();
@@ -36,8 +36,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   
-  // Initialize form data with product values
-  const [formData, setFormData] = useState<CreateProductData>({
+  // Form data - mirrors CreateProductForm but with optional fields
+  const [formData, setFormData] = useState<UpdateProductData>({
     code: product.code,
     name: product.name,
     description: product.description || '',
@@ -46,7 +46,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
     categoryId: product.category.id,
     isStarred: product.isStarred || false,
     badge: product.badge || null,
-    images: product.images || [],
     tags: product.tags || [],
     metadata: {
       weight: product.metadata?.weight || 0,
@@ -70,7 +69,80 @@ export function EditProductForm({ product }: EditProductFormProps) {
   
   const [tags, setTags] = useState<string[]>(product.tags || []);
   const [materials, setMaterials] = useState<string[]>(product.metadata?.materials || []);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
+
+  // Helper to detect if images have changed
+  const hasImagesChanged = (): boolean => {
+    const originalImages = product.images?.map((img, index) => ({
+      url: img.url,
+      alt: img.alt || '',
+      order: img.order || index,
+      isPrimary: img.isPrimary || index === 0
+    })) || [];
+
+    // Different length means changed
+    if (images.length !== originalImages.length) {
+      return true;
+    }
+
+    // Check if any image details changed
+    return images.some((img, index) => {
+      const orig = originalImages[index];
+      return img.url !== orig.url || img.alt !== orig.alt || img.isPrimary !== orig.isPrimary;
+    });
+  };
+
+  // Validation helper - consolidates field checks
+  const validateForm = (): boolean => {
+    const validations = [
+      { condition: !formData.code?.trim(), message: t('validation.codeRequired') },
+      { condition: !formData.name?.trim(), message: t('validation.nameRequired') },
+      { condition: formData.price! <= 0, message: t('validation.priceRequired') },
+      { condition: formData.stock! < 0, message: t('validation.stockRequired') },
+      { condition: !formData.categoryId, message: t('validation.categoryRequired') },
+    ];
+
+    for (const validation of validations) {
+      if (validation.condition) {
+        setError(validation.message);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  // Image upload helper - extracts upload logic
+  const uploadImage = async (image: ProductImage, index: number, productId: string): Promise<{ url: string; alt?: string; order: number; isPrimary: boolean } | null> => {
+    // Only process data URLs (local uploads)
+    if (!image.url.startsWith('data:image')) {
+      return null;
+    }
+
+    try {
+      const response = await fetch(image.url);
+      const blob = await response.blob();
+      const file = new File([blob], image.alt || `image-${index}.jpg`, { type: blob.type });
+      
+      const formDataObj = new FormData();
+      formDataObj.append('file', file);
+      formDataObj.append('productId', productId);
+      
+      const uploadResult = await uploadProductImage(formDataObj);
+      
+      if (uploadResult.success && uploadResult.data?.url) {
+        return {
+          url: uploadResult.data.url,
+          alt: image.alt,
+          order: image.order,
+          isPrimary: image.isPrimary,
+        };
+      }
+    } catch (uploadError) {
+      console.error(`Error uploading image ${index}:`, uploadError);
+    }
+    return null;
+  };
 
   const handleStarToggle = async (newStarState: boolean): Promise<boolean> => {
     // Only validate if trying to star (newStarState === true)
@@ -84,13 +156,13 @@ export function EditProductForm({ product }: EditProductFormProps) {
       return true;
     }
 
-    // Trying to star a new product, validate the limit
+    // Trying to star a product, validate the limit
     const validationResult = await validateCanStarProduct(product.id);
     
     if (!validationResult.success) {
       showError(
-        translations('admin.products.notifications.limitReached'),
-        translations('admin.products.notifications.limitReachedMessage')
+        t('notifications.starLimitReachedTitle'),
+        t('notifications.starLimitReachedMessage')
       );
       return false;
     }
@@ -118,64 +190,121 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({});
+    setError('');
+    setSuccess('');
 
-    // Basic validation
-    const newErrors: Record<string, string> = {};
-    if (!formData.code.trim()) newErrors.code = t('validation.codeRequired');
-    if (!formData.name.trim()) newErrors.name = t('validation.nameRequired');
-    if (!formData.description?.trim()) newErrors.description = t('validation.descriptionRequired');
-    if (formData.price <= 0) newErrors.price = t('validation.priceRequired');
-    if (formData.stock < 0) newErrors.stock = t('validation.stockRequired');
-    if (!formData.categoryId) newErrors.categoryId = t('validation.categoryRequired');
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    // Validation using helper
+    if (!validateForm()) {
       return;
     }
 
     startTransition(async () => {
       try {
-        // Update product with current form data
-        const updateData = {
-          ...formData,
-          images,
+        // Check if images have changed
+        const imagesChanged = hasImagesChanged();
+
+        // Step 1: Update product with current form data
+        const updateData: UpdateProductData = {
+          code: formData.code,
+          name: formData.name,
+          description: formData.description,
+          price: formData.price,
+          stock: formData.stock,
+          categoryId: formData.categoryId,
+          isStarred: formData.isStarred,
+          badge: formData.badge,
           tags,
           metadata: {
-            ...formData.metadata,
+            weight: formData.metadata?.weight || 0,
+            dimensions: {
+              length: formData.metadata?.dimensions?.length || 0,
+              width: formData.metadata?.dimensions?.width || 0,
+              height: formData.metadata?.dimensions?.height || 0,
+            },
             materials,
           },
+          shouldUpdateImages: imagesChanged,
         };
+
+        // Step 2: If images changed, collect all images (new and existing)
+        if (imagesChanged) {
+          const finalImages: Array<{ url: string; alt?: string; order: number; isPrimary: boolean }> = [];
+          
+          for (let i = 0; i < images.length; i++) {
+            const uploadedImage = await uploadImage(images[i], i, product.id);
+            // If upload happened (new image), use the uploaded result
+            if (uploadedImage) {
+              finalImages.push(uploadedImage);
+            } else {
+              // If no upload (existing image), keep the original
+              finalImages.push({
+                url: images[i].url,
+                alt: images[i].alt,
+                order: images[i].order,
+                isPrimary: images[i].isPrimary
+              });
+            }
+          }
+          updateData.images = finalImages;
+        }
 
         const result = await updateProduct(product.id, updateData);
 
         if (result.success) {
-          router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
+          setSuccess(t('success.updated'));
+          setTimeout(() => {
+            router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
+          }, 1500);
         } else {
-          setErrors({ general: result.error || t('error.updateFailed') });
+          setError(result.error || t('error.updateFailed'));
         }
       } catch (error) {
         console.error('Error updating product:', error);
-        setErrors({ general: t('error.updateFailed') });
+        setError(t('error.updateFailed'));
       }
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {errors.general && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          {errors.general}
+      {/* Error/Success Messages */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-600 text-sm">{error}</p>
+        </div>
+      )}
+      {success && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <p className="text-green-600 text-sm">{success}</p>
         </div>
       )}
 
       <ProductFormFields
-        formData={formData}
+        formData={{
+          code: formData.code ?? '',
+          name: formData.name ?? '',
+          description: formData.description ?? '',
+          price: formData.price ?? 0,
+          stock: formData.stock ?? 0,
+          categoryId: formData.categoryId ?? '',
+          isStarred: formData.isStarred ?? false,
+          badge: formData.badge ?? null,
+          tags: formData.tags,
+          metadata: {
+            weight: formData.metadata?.weight ?? 0,
+            dimensions: {
+              length: formData.metadata?.dimensions?.length ?? 0,
+              width: formData.metadata?.dimensions?.width ?? 0,
+              height: formData.metadata?.dimensions?.height ?? 0,
+            },
+            materials: formData.metadata?.materials ?? [],
+          },
+        }}
         onFormDataChange={setFormData}
         onStarToggle={handleStarToggle}
         categories={categories}
         loadingCategories={loadingCategories}
-        errors={errors}
+        errors={{}}
         translations={{
           fields: {
             code: `${t('fields.code')}`,
@@ -208,9 +337,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
         images={images}
         onImagesChange={setImages}
         productName={formData.name || 'Product'}
-        productId={product.id}
-        mode="edit"
-        maxImages={6}
         translations={{
           primaryImage: imagesT('primaryImage'),
           image: imagesT('image'),
@@ -245,7 +371,26 @@ export function EditProductForm({ product }: EditProductFormProps) {
       </div>
 
       <MetadataFields
-        formData={formData}
+        formData={{
+          code: formData.code ?? '',
+          name: formData.name ?? '',
+          description: formData.description ?? '',
+          price: formData.price ?? 0,
+          stock: formData.stock ?? 0,
+          categoryId: formData.categoryId ?? '',
+          isStarred: formData.isStarred ?? false,
+          badge: formData.badge ?? null,
+          tags: formData.tags,
+          metadata: {
+            weight: formData.metadata?.weight ?? 0,
+            dimensions: {
+              length: formData.metadata?.dimensions?.length ?? 0,
+              width: formData.metadata?.dimensions?.width ?? 0,
+              height: formData.metadata?.dimensions?.height ?? 0,
+            },
+            materials: formData.metadata?.materials ?? [],
+          },
+        }}
         onFormDataChange={setFormData}
         translations={{
           fields: {

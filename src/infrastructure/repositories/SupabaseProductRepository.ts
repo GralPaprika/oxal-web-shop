@@ -11,7 +11,9 @@ import type {
   ProductImage,
 } from '@/domain/product/product.entity';
 import type { ISupabaseService } from '@/infrastructure/supabase/supabase.interface';
+import type { DeleteFileUseCase } from '@/application/usecases/storage/FileUploadUseCase';
 import { products, productCategories, productImages, productsMetadata } from '@/infrastructure/supabase/schema';
+import { container } from '@/container/container.config';
 import { TYPES } from '@/types/container.types';
 
 const STATUS_MAP = { active: 1, inactive: 2, discontinued: 3 };
@@ -126,7 +128,11 @@ export class SupabaseProductRepository implements IProductRepository {
   async updateProduct(id: string, data: UpdateProductData): Promise<Product> {
     try {
       await this.upsertMetadata(id, data.metadata, data.tags);
-      await this.replaceImages(id, data.images);
+      
+      // Only update images if explicitly requested
+      if (data.shouldUpdateImages) {
+        await this.replaceImages(id, data.images);
+      }
       
       const updates: Record<string, number | string | boolean | null> = {};
       if (data.name !== undefined) updates.name = data.name;
@@ -152,6 +158,26 @@ export class SupabaseProductRepository implements IProductRepository {
 
   async deleteProduct(id: string): Promise<void> {
     try {
+      // Fetch and delete images from Firebase
+      const existingImages = await this.db.select().from(productImages).where(eq(productImages.productId, id));
+      
+      const deletionErrors: string[] = [];
+      for (const image of existingImages) {
+        try {
+          const deleteFileUseCase = container.get<DeleteFileUseCase>(TYPES.DeleteFileUseCase);
+          await deleteFileUseCase.execute(image.url);
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error);
+          console.error(`Error deleting image from Firebase: ${image.url}`, errorMsg);
+          deletionErrors.push(`Failed to delete ${image.url}: ${errorMsg}`);
+        }
+      }
+      
+      // Log any deletion errors but continue with database deletion
+      if (deletionErrors.length > 0) {
+        console.warn(`Firebase deletion completed with ${deletionErrors.length} error(s):`, deletionErrors);
+      }
+
       await this.db.delete(productImages).where(eq(productImages.productId, id));
       await this.db.delete(productsMetadata).where(eq(productsMetadata.productId, id));
       await this.db.delete(products).where(eq(products.id, id));
@@ -310,7 +336,34 @@ export class SupabaseProductRepository implements IProductRepository {
   }
 
   private async replaceImages(productId: string, images: Omit<ProductImage, 'id'>[] | undefined): Promise<void> {
-    // Always delete existing images first
+    // Fetch existing images
+    const existingImages = await this.db.select().from(productImages).where(eq(productImages.productId, productId));
+
+    // Create a set of new image URLs for efficient lookup
+    const newImageUrls = new Set((images || []).map(img => img.url));
+
+    // Only delete images that are NOT in the new images list (truly removed images)
+    const imagesToDelete = existingImages.filter(img => !newImageUrls.has(img.url));
+
+    // Delete only the removed images from Firebase Storage
+    const deletionErrors: string[] = [];
+    for (const image of imagesToDelete) {
+      try {
+        const deleteFileUseCase = container.get<DeleteFileUseCase>(TYPES.DeleteFileUseCase);
+        await deleteFileUseCase.execute(image.url);
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        console.error(`Error deleting image from Firebase: ${image.url}`, errorMsg);
+        deletionErrors.push(`Failed to delete ${image.url}: ${errorMsg}`);
+      }
+    }
+    
+    // Log any deletion errors but continue with database operations
+    if (deletionErrors.length > 0) {
+      console.warn(`Firebase deletion completed with ${deletionErrors.length} error(s):`, deletionErrors);
+    }
+
+    // Delete all old image records from database
     await this.db.delete(productImages).where(eq(productImages.productId, productId));
 
     // Insert new images if provided and not empty

@@ -64,16 +64,6 @@ export async function deleteProduct(productId: string): Promise<ApiResponse> {
   return Response.success();
 }
 
-// UPDATE PRODUCT IMAGES
-export async function updateProductImages(
-  productId: string,
-  images: UpdateProductData['images']
-): Promise<ApiSingleResponse<Product>> {
-  const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
-  const product = await updateProductUseCase.execute(productId, { images });
-  return Response.success(product);
-}
-
 // GET PAGINATED PRODUCTS
 export async function getPaginatedProducts(
   pageNumber: number = 1,

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { AUTH_CONFIG } from '@/config/auth.config';
 import { CreateProductData, ProductCategory } from '@/domain/product/product.entity';
-import { createProduct, getAllCategories, updateProductImages, validateCanStarProduct } from '@/lib/actions/product.actions';
+import { createProduct, getAllCategories, updateProduct, validateCanStarProduct } from '@/lib/actions/product.actions';
 import { uploadProductImage } from '@/lib/actions/storage.actions';
 import { Button } from '@/components/ui/Button';
 import { StringArrayInput } from '@/components/ui/StringArrayInput';
@@ -184,9 +184,12 @@ export function CreateProductForm() {
               }
             }
             
-            // Step 3: Update product with uploaded image URLs
+            // Step 3: Update product with uploaded image URLs if there are any
             if (uploadedImages.length > 0) {
-              await updateProductImages(result.data.id, uploadedImages);
+              await updateProduct(result.data.id, {
+                shouldUpdateImages: true,
+                images: uploadedImages,
+              });
             }
           }
           
@@ -257,7 +260,6 @@ export function CreateProductForm() {
         images={images}
         onImagesChange={setImages}
         productName={formData.name}
-        mode="create"
         translations={{
           primaryImage: t('form.primaryImage'),
           image: t('form.image'),

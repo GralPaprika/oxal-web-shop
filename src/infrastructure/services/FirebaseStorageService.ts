@@ -82,21 +82,30 @@ export class FirebaseStorageService implements IStorageService {
 
   async deleteFile(url: string): Promise<void> {
     try {
-      // Extract the path from the Firebase Storage URL
-      const urlParts = url.split('/');
-      const pathIndex = urlParts.findIndex(part => part.includes('o'));
-      if (pathIndex === -1) {
-        throw new Error('Invalid Firebase Storage URL');
+      // Firebase Storage URLs have format:
+      // https://firebasestorage.googleapis.com/v0/b/{bucket}/o/{path}?alt=media&token=...
+      // We need to extract the path after '/o/'
+      
+      const oIndex = url.indexOf('/o/');
+      if (oIndex === -1) {
+        throw new Error('Invalid Firebase Storage URL format');
       }
       
-      const encodedPath = urlParts[pathIndex + 1];
-      const path = decodeURIComponent(encodedPath.split('?')[0]);
+      // Extract path after '/o/' and before '?'
+      const pathStart = oIndex + 3; // Length of '/o/'
+      const queryIndex = url.indexOf('?', pathStart);
+      const encodedPath = queryIndex === -1 ? url.substring(pathStart) : url.substring(pathStart, queryIndex);
       
+      // Decode the path (Firebase URLs encode special characters)
+      const path = decodeURIComponent(encodedPath);
+      
+      console.log(`Deleting file from path: ${path}`);
       const storageRef = ref(this.storage, path);
       await deleteObject(storageRef);
+      console.log(`Successfully deleted file: ${path}`);
     } catch (error) {
-      console.error('Error deleting file:', error);
-      throw new Error('Failed to delete file');
+      console.error('Error deleting file from Firebase:', error);
+      throw new Error(`Failed to delete file: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

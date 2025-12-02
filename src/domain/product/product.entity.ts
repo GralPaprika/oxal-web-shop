@@ -53,6 +53,7 @@ export interface CreateProductData {
 }
 
 export interface UpdateProductData {
+  code?: string;
   name?: string;
   description?: string;
   price?: number;
@@ -61,6 +62,7 @@ export interface UpdateProductData {
   isStarred?: boolean;
   badge?: 'new' | 'sale' | null;
   images?: Omit<ProductImage, 'id'>[];
+  shouldUpdateImages?: boolean;
   status?: Product['status'];
   tags?: string[];
   metadata?: Product['metadata'];
