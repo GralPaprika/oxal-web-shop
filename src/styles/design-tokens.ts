@@ -1,4 +1,3 @@
-// Shared color palette and design tokens for the application
 export const colors = {
   primary: {
     50: '#f0f9ff',

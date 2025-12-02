@@ -47,7 +47,6 @@ export function UserCard({
   };
 
   const formatDate = (dateString: string) => {
-    // Use a more predictable date format to avoid hydration mismatches
     const date = new Date(dateString);
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -59,7 +58,6 @@ export function UserCard({
 
   return (
     <tr className="hover:bg-neutral-50 transition-colors">
-      {/* User Info */}
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
           {user.photoURL ? (
@@ -84,7 +82,6 @@ export function UserCard({
         </div>
       </td>
 
-      {/* Role */}
       {showRole && user.role && (
         <td className="px-6 py-4">
           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full border ${getRoleBadge(user.role)}`}>
@@ -93,28 +90,24 @@ export function UserCard({
         </td>
       )}
 
-      {/* Status */}
       <td className="px-6 py-4">
         <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full border ${getStatusBadge(user.status)}`}>
           {statusLabels[user.status] || user.status}
         </span>
       </td>
 
-      {/* Registered At */}
       {showRegisteredAt && user.createdAt && (
         <td className="px-6 py-4 text-sm text-text-secondary">
           {formatDate(user.createdAt)}
         </td>
       )}
 
-      {/* Orders */}
       {showOrders && user.metadata?.totalOrders !== undefined && (
         <td className="px-6 py-4 text-sm text-text-secondary">
           {user.metadata.totalOrders} {ordersLabel}
         </td>
       )}
 
-      {/* Actions */}
       <td className="px-6 py-4">
         <div className="flex items-center gap-2">
           {onEdit && (

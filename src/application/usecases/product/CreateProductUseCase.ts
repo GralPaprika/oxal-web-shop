@@ -10,7 +10,6 @@ export class CreateProductUseCase {
   ) {}
 
   async execute(data: CreateProductData): Promise<Product> {
-    // Validate required fields
     if (!data.code) {
       throw new Error('Product code is required');
     }
@@ -24,7 +23,6 @@ export class CreateProductUseCase {
       throw new Error('Product stock cannot be negative');
     }
 
-    // Check if code is unique
     const isUnique = await this.productRepository.isCodeUnique(data.code);
     if (!isUnique) {
       throw new Error(`Product code '${data.code}' already exists`);

@@ -32,10 +32,8 @@ export class SupabaseDatabase implements IDatabase {
    */
   async create<T>(collectionName: string, data: Omit<T, 'id'>): Promise<string> {
     try {
-      // Get the table schema dynamically
       const table = this.getTable(collectionName);
       
-      // Insert the data - UUID is generated automatically by database
       const result = await this.db.insert(table).values({
         ...data,
       }).returning({ id: table.id });

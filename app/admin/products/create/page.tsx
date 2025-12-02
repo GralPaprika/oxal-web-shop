@@ -15,15 +15,12 @@ async function CreateProductPage() {
 
   return (
     <div className="min-h-screen bg-background-secondary">
-      {/* Header */}
       <UsersHeader 
         breadcrumbs={breadcrumbs}
         showBackButton={true}
       />
 
-      {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Page Header */}
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-text-primary mb-2">
             {t('create.title')}
@@ -33,7 +30,6 @@ async function CreateProductPage() {
           </p>
         </div>
 
-        {/* Create Product Form */}
         <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-8">
           <CreateProductForm />
         </div>

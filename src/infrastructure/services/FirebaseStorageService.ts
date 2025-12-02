@@ -25,17 +25,14 @@ export class FirebaseStorageService implements IStorageService {
     onProgress?: UploadProgressCallback
   ): Promise<string> {
     try {
-      // Create a storage reference
       const storageRef: StorageReference = ref(this.storage, path);
       
-      // Upload file with progress tracking
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       return new Promise((resolve, reject) => {
         uploadTask.on(
           'state_changed',
           (snapshot: UploadTaskSnapshot) => {
-            // Progress callback
             if (onProgress) {
               const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
               onProgress({
@@ -45,7 +42,6 @@ export class FirebaseStorageService implements IStorageService {
             }
           },
           (error) => {
-            // Error callback
             console.error('Upload error:', error);
             if (onProgress) {
               onProgress({
@@ -57,7 +53,6 @@ export class FirebaseStorageService implements IStorageService {
             reject(new Error(`Upload failed: ${error.message}`));
           },
           async () => {
-            // Success callback
             try {
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
               if (onProgress) {
@@ -82,21 +77,15 @@ export class FirebaseStorageService implements IStorageService {
 
   async deleteFile(url: string): Promise<void> {
     try {
-      // Firebase Storage URLs have format:
-      // https://firebasestorage.googleapis.com/v0/b/{bucket}/o/{path}?alt=media&token=...
-      // We need to extract the path after '/o/'
-      
       const oIndex = url.indexOf('/o/');
       if (oIndex === -1) {
         throw new Error('Invalid Firebase Storage URL format');
       }
       
-      // Extract path after '/o/' and before '?'
       const pathStart = oIndex + 3; // Length of '/o/'
       const queryIndex = url.indexOf('?', pathStart);
       const encodedPath = queryIndex === -1 ? url.substring(pathStart) : url.substring(pathStart, queryIndex);
       
-      // Decode the path (Firebase URLs encode special characters)
       const path = decodeURIComponent(encodedPath);
       
       console.log(`Deleting file from path: ${path}`);

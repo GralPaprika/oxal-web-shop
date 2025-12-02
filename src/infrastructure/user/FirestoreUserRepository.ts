@@ -18,7 +18,6 @@ export class FirestoreUserRepository implements IUserRepository {
   }
 
   async createUser(userData: CreateUserData): Promise<User> {
-    // Use FirebaseUserService to create user with authentication
     return await this.firebaseUserService.createUserWithAuth(userData);
   }
 
@@ -47,7 +46,6 @@ export class FirestoreUserRepository implements IUserRepository {
     
     await this.database.update<User>(this.COLLECTION_NAME, id, updateData);
     
-    // Return the updated user
     const updatedUser = await this.getUserById(id);
     if (!updatedUser) {
       throw new Error('User not found after update');

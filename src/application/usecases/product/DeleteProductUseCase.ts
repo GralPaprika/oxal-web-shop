@@ -13,7 +13,6 @@ export class DeleteProductUseCase {
       throw new Error('Product ID is required');
     }
 
-    // Check if product exists
     const existingProduct = await this.productRepository.getProductById(id);
     if (!existingProduct) {
       throw new Error('Product not found');

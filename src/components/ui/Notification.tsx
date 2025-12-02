@@ -8,7 +8,7 @@ export interface NotificationConfig {
   type: 'error' | 'success' | 'info' | 'warning';
   title: string;
   message?: string;
-  duration?: number; // in ms, 0 = persistent
+  durationMs?: number;
 }
 
 interface NotificationProps extends NotificationConfig {
@@ -20,13 +20,12 @@ export function Notification({
   type,
   title,
   message,
-  duration = 3500,
+  durationMs: duration = 3500,
   onClose
 }: NotificationProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Trigger animation on mount
     const animationDelay = setTimeout(() => {
       setIsVisible(true);
     }, 10);
@@ -97,7 +96,6 @@ export function Notification({
       <div
         className={`${colors.bg} ${colors.border} border rounded-lg shadow-lg p-4 flex items-start gap-3 max-w-sm`}
       >
-        {/* Icon */}
         <div className={`flex-shrink-0 w-5 h-5 rounded-full ${colors.icon} flex items-center justify-center`}>
           {type === 'error' && (
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -121,13 +119,11 @@ export function Notification({
           )}
         </div>
 
-        {/* Content */}
         <div className="flex-1 min-w-0">
           <p className={`text-sm font-medium ${colors.title}`}>{title}</p>
           {message && <p className={`text-sm mt-1 ${colors.message}`}>{message}</p>}
         </div>
 
-        {/* Close Button */}
         <button
           onClick={() => {
             setIsVisible(false);

@@ -60,21 +60,18 @@ export function ProductFormFields({
   const handleStarClick = async () => {
     const newStarState = !formData.isStarred;
     
-    // If there's a validation callback, use it
     if (onStarToggle) {
       const isAllowed = await onStarToggle(newStarState);
       if (isAllowed) {
         onFormDataChange({ ...formData, isStarred: newStarState });
       }
     } else {
-      // No validation, just toggle
       onFormDataChange({ ...formData, isStarred: newStarState });
     }
   };
 
   return (
-    <div className="relative pt-12"> {/* Added top padding to make room for star */}
-      {/* Star Icon in Top Right Corner */}
+    <div className="relative pt-12">
       <button
         type="button"
         onClick={handleStarClick}
@@ -86,13 +83,11 @@ export function ProductFormFields({
         ) : (
           <StarIcon className="w-8 h-8 text-gray-300 group-hover:text-yellow-300 group-hover:scale-110 transition-all duration-300" />
         )}
-        {/* Subtle glow effect when starred */}
         {formData.isStarred && (
           <div className="absolute inset-0 w-8 h-8 bg-yellow-400 rounded-full opacity-20 blur-sm animate-ping"></div>
         )}
       </button>
 
-      {/* Code and Name */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="md:col-span-1">
           <Input
@@ -121,7 +116,6 @@ export function ProductFormFields({
         </div>
       </div>
 
-      {/* Description */}
       <TextArea
         label={translations.fields.description}
         id="description"
@@ -132,7 +126,6 @@ export function ProductFormFields({
         error={errors.description}
       />
 
-      {/* Price, Stock, Category */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Input
           label={translations.fields.price}
@@ -178,13 +171,11 @@ export function ProductFormFields({
         />
       </div>
 
-      {/* Badge Selection - Modern Toggle Design */}
       <div className="space-y-3 mt-8">
         <label className="block text-sm font-medium text-gray-700">
           {translations.fields.badge}
         </label>
         <div className="flex gap-3">
-          {/* New Badge Option */}
           <button
             type="button"
             onClick={() => onFormDataChange({ ...formData, badge: formData.badge === 'new' ? null : 'new' })}
@@ -200,7 +191,6 @@ export function ProductFormFields({
             {translations.badges.new}
           </button>
 
-          {/* Sale Badge Option */}
           <button
             type="button"
             onClick={() => onFormDataChange({ ...formData, badge: formData.badge === 'sale' ? null : 'sale' })}

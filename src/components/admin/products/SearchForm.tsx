@@ -44,7 +44,6 @@ export function SearchForm({
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
-  // Close filter dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
@@ -56,7 +55,6 @@ export function SearchForm({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Filter options configuration
   const filterOptions = [
     { key: 'starred' as const, label: translations.filterOptions.starred, icon: StarIcon, solidIcon: StarIconSolid, color: 'text-amber-500' },
     { key: 'new' as const, label: translations.filterOptions.new, icon: SparklesIcon, solidIcon: SparklesIconSolid, color: 'text-green-600' },
@@ -117,7 +115,6 @@ export function SearchForm({
             {translations.search}
           </button>
           
-          {/* Modern Filter Dropdown */}
           <div className="relative" ref={filterRef}>
             <button
               type="button"
@@ -138,7 +135,6 @@ export function SearchForm({
               <ChevronDownIcon className={`h-4 w-4 transition-transform ${isFilterOpen ? 'rotate-180' : ''}`} />
             </button>
 
-            {/* Filter Dropdown Menu */}
             {isFilterOpen && (
               <div className="absolute top-full mt-1 right-0 w-48 bg-white border border-neutral-200 rounded-lg shadow-lg z-50">
                 <div className="p-2">
@@ -173,7 +169,6 @@ export function SearchForm({
                     })}
                   </div>
                   
-                  {/* Clear Filters Button */}
                   {Object.values(localFilters).some(Boolean) && (
                     <div className="mt-3 pt-3 border-t border-neutral-200">
                       <button

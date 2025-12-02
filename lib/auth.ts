@@ -19,11 +19,10 @@ export async function loginAction(formData: FormData) {
     const loginUseCase = container.get<LoginUseCase>(TYPES.LoginUseCase);
     const result = await loginUseCase.execute({ email, password });
     
-    // Set secure HTTP-only cookie with the Firebase token
     const cookieStore = await cookies();
     cookieStore.set(AUTH_CONFIG.SESSION_COOKIE_NAME, result.token, {
       ...AUTH_CONFIG.COOKIE_SETTINGS,
-      maxAge: AUTH_CONFIG.COOKIE_MAX_AGE,
+      maxAge: AUTH_CONFIG.COOKIE_MAX_AGE_SECONDS,
     });
   } catch (error) {
     return { 
@@ -31,7 +30,6 @@ export async function loginAction(formData: FormData) {
     };
   }
 
-  // Redirect outside of try-catch to avoid catching NEXT_REDIRECT
   redirect(AUTH_CONFIG.ROUTES.DASHBOARD);
 }
 
@@ -40,11 +38,9 @@ export async function logoutAction() {
     const logoutUseCase = container.get<LogoutUseCase>(TYPES.LogoutUseCase);
     await logoutUseCase.execute();
   } catch (error) {
-    // Log the logout error but don't prevent redirect
     console.error('Logout use case error:', error);
   }
   
-  // Always clear the cookie and redirect, regardless of logout use case result
   const cookieStore = await cookies();
   cookieStore.delete(AUTH_CONFIG.SESSION_COOKIE_NAME);
   
@@ -64,14 +60,12 @@ export async function checkAuthStatus() {
     const user = await getCurrentUserUseCase.execute();
     return !!user;
   } catch {
-    // If there's an error getting the user, consider them not authenticated
     return false;
   }
 }
 
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    // First, get the basic auth user to get the UID
     const getCurrentUserUseCase = container.get<GetCurrentUserUseCase>(TYPES.GetCurrentUserUseCase);
     const authUser = await getCurrentUserUseCase.execute();
     
@@ -79,7 +73,6 @@ export async function getCurrentUser(): Promise<User | null> {
       return null;
     }
 
-    // Then, get the full user entity using the UID
     const getUserByIdUseCase = container.get<GetUserByIdUseCase>(TYPES.GetUserByIdUseCase);
     const fullUser = await getUserByIdUseCase.execute(authUser.uid);
     

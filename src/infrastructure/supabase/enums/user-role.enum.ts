@@ -1,8 +1,3 @@
-/**
- * User Role Types
- * Defines the different roles/user types in the system
- */
-
 export enum UserRoleType {
   ADMIN = 1,
   CASHIER = 2,

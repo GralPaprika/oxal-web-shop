@@ -21,7 +21,6 @@ const BADGE_MAP = { new: 1, sale: 2 };
 const REVERSE_STATUS_MAP: Record<number, 'active' | 'inactive' | 'discontinued'> = { 1: 'active', 2: 'inactive', 3: 'discontinued' };
 const REVERSE_BADGE_MAP: Record<number, 'new' | 'sale'> = { 1: 'new', 2: 'sale' };
 
-// Type for grouped product data from joins
 type ProductJoinResult = {
   product: typeof products.$inferSelect;
   category: typeof productCategories.$inferSelect | null;
@@ -29,10 +28,6 @@ type ProductJoinResult = {
   metadata: typeof productsMetadata.$inferSelect | null;
 };
 
-/**
- * SupabaseProductRepository
- * Implements IProductRepository using Drizzle ORM with Supabase PostgreSQL
- */
 @injectable()
 export class SupabaseProductRepository implements IProductRepository {
   private db: PostgresJsDatabase<Record<string, unknown>>;
@@ -129,7 +124,6 @@ export class SupabaseProductRepository implements IProductRepository {
     try {
       await this.upsertMetadata(id, data.metadata, data.tags);
       
-      // Only update images if explicitly requested
       if (data.shouldUpdateImages) {
         await this.replaceImages(id, data.images);
       }
@@ -158,7 +152,6 @@ export class SupabaseProductRepository implements IProductRepository {
 
   async deleteProduct(id: string): Promise<void> {
     try {
-      // Fetch and delete images from Firebase
       const existingImages = await this.db.select().from(productImages).where(eq(productImages.productId, id));
       
       const deletionErrors: string[] = [];
@@ -173,7 +166,6 @@ export class SupabaseProductRepository implements IProductRepository {
         }
       }
       
-      // Log any deletion errors but continue with database deletion
       if (deletionErrors.length > 0) {
         console.warn(`Firebase deletion completed with ${deletionErrors.length} error(s):`, deletionErrors);
       }
@@ -186,8 +178,6 @@ export class SupabaseProductRepository implements IProductRepository {
       throw new Error('Failed to delete product');
     }
   }
-
-  // ========== CATEGORY OPERATIONS ==========
 
   async getAllCategories(): Promise<ProductCategory[]> {
     try {
@@ -321,7 +311,6 @@ export class SupabaseProductRepository implements IProductRepository {
 
   private async upsertMetadata(productId: string, metadata: Product['metadata'] | undefined, tags: string[] = []): Promise<void> {
     if (!metadata || !this.hasMetadata(metadata)) {
-      // No metadata to save - optionally delete if exists
       return;
     }
 
@@ -336,16 +325,12 @@ export class SupabaseProductRepository implements IProductRepository {
   }
 
   private async replaceImages(productId: string, images: Omit<ProductImage, 'id'>[] | undefined): Promise<void> {
-    // Fetch existing images
     const existingImages = await this.db.select().from(productImages).where(eq(productImages.productId, productId));
 
-    // Create a set of new image URLs for efficient lookup
     const newImageUrls = new Set((images || []).map(img => img.url));
 
-    // Only delete images that are NOT in the new images list (truly removed images)
     const imagesToDelete = existingImages.filter(img => !newImageUrls.has(img.url));
 
-    // Delete only the removed images from Firebase Storage
     const deletionErrors: string[] = [];
     for (const image of imagesToDelete) {
       try {
@@ -358,15 +343,12 @@ export class SupabaseProductRepository implements IProductRepository {
       }
     }
     
-    // Log any deletion errors but continue with database operations
     if (deletionErrors.length > 0) {
       console.warn(`Firebase deletion completed with ${deletionErrors.length} error(s):`, deletionErrors);
     }
 
-    // Delete all old image records from database
     await this.db.delete(productImages).where(eq(productImages.productId, productId));
 
-    // Insert new images if provided and not empty
     if (images && images.length > 0) {
       await this.db.insert(productImages).values(this.buildImageValues(images, productId));
     }

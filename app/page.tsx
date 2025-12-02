@@ -12,7 +12,6 @@ import OxalLogo from '@/components/OxalLogo';
 import LocationMap from '@/components/LocationMap';
 import { getLocalBusinessSchema, getOrganizationSchema, getLogoSchema } from '@/lib/schema';
 
-// Revalidate every hour for better performance caching
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
@@ -83,7 +82,6 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(logoSchema).replace(/</g, '\\u003c') }}
       />
-      {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -104,13 +102,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
       <section id="about" className="py-20 bg-oxal-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            {/* <span className="inline-block bg-oxal-sandstone text-gray-900 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              {t('about.title')}
-            </span> */}
             <h3 className="text-4xl font-bold text-gray-900 mb-6">{t('about.title')}</h3>
             <p className="text-xl text-oxal-teak max-w-2xl mx-auto">
               {t('about.subtitle')}
@@ -170,7 +164,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Collections Section */}
       <section id="collections" className="py-20 bg-oxal-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -179,7 +172,6 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Jewelry */}
             <div className="group cursor-pointer relative">
               <div className="relative h-80 overflow-hidden rounded-lg mb-6 shadow-lg">
                 <Image
@@ -198,7 +190,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Clothing */}
             <div className="group cursor-pointer relative">
               <div className="relative h-80 overflow-hidden rounded-lg mb-6 shadow-lg">
                 <Image
@@ -220,7 +211,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Location Section */}
       <section className="py-20 bg-oxal-cream">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -256,7 +246,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
       <section id="contact" className="py-20 bg-oxal-cream">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -265,7 +254,6 @@ export default function Home() {
               {t('contact.subtitle')}
             </p>
 
-            {/* Contact Info */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 mb-2">{t('contact.location')}</h4>
@@ -305,7 +293,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-oxal-verdigris text-yellow-50 py-12">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 pb-8 border-b border-oxal-verdigris">

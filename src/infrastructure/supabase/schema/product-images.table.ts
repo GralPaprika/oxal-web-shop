@@ -1,10 +1,6 @@
 import { pgTable, uuid, varchar, text, integer, boolean, timestamp } from 'drizzle-orm/pg-core';
 import { products } from './products.table';
 
-/**
- * Product Images table
- * Manages product images with ordering and primary image designation
- */
 export const productImages = pgTable('product_images', {
   id: uuid('id').primaryKey().defaultRandom(),
   productId: uuid('product_id').notNull().references(() => products.id),

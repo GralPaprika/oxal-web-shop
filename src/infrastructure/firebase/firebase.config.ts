@@ -23,7 +23,6 @@ export class FirebaseService implements IFirebaseService {
       measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
     };
 
-    // Initialize Firebase only if it hasn't been initialized already
     this.app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     this.firestore = getFirestore(this.app);
     this.auth = getAuth(this.app);

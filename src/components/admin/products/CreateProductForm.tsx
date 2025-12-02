@@ -67,7 +67,6 @@ export function CreateProductForm() {
 
     for (const validation of validations) {
       if (validation.condition) {
-        // ✅ Now we return the message, handleSubmit will show it via notification
         showError(t('validation.title'), validation.message);
         return false;
       }
@@ -76,7 +75,6 @@ export function CreateProductForm() {
   };
 
   const uploadImage = async (image: ProductImage, index: number, productId: string): Promise<{ url: string; alt?: string; order: number; isPrimary: boolean } | null> => {
-    // Only process data URLs (local uploads)
     if (!image.url.startsWith('data:image')) {
       return null;
     }
@@ -107,13 +105,10 @@ export function CreateProductForm() {
   };
 
   const handleStarToggle = async (newStarState: boolean): Promise<boolean> => {
-    // Only validate if trying to star (newStarState === true)
     if (!newStarState) {
-      // Unstarring, always allowed
       return true;
     }
 
-    // Trying to star, validate the limit
     const validationResult = await validateCanStarProduct('');
     
     if (!validationResult.success) {
@@ -127,7 +122,6 @@ export function CreateProductForm() {
     return true;
   };
 
-  // Fetch categories on component mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -150,14 +144,12 @@ export function CreateProductForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation using helper - if validation fails, it shows error via notification
     if (!validateForm()) {
       return;
     }
 
     startTransition(async () => {
       try {
-        // Step 1: Create product with current data
         const productData: CreateProductData = {
           ...formData,
           tags,
@@ -170,7 +162,6 @@ export function CreateProductForm() {
         const result = await createProduct(productData);
         
         if (result.success && result.data) {
-          // Step 2: Upload images to Firebase Storage and update product
           if (images.length > 0) {
             const uploadedImages: Array<{ url: string; alt?: string; order: number; isPrimary: boolean }> = [];
             
@@ -181,7 +172,6 @@ export function CreateProductForm() {
               }
             }
             
-            // Step 3: Update product with uploaded image URLs if there are any
             if (uploadedImages.length > 0) {
               await updateProduct(result.data.id, {
                 shouldUpdateImages: true,
@@ -190,7 +180,6 @@ export function CreateProductForm() {
             }
           }
           
-          // ✅ Use notification system instead of state + div
           showSuccess(t('success.created'), t('success.createdMessage'));
           setTimeout(() => {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
@@ -208,8 +197,6 @@ export function CreateProductForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* All messages now use NotificationContainer - no inline divs */}
-
       <ProductFormFields
         formData={formData}
         onFormDataChange={setFormData}
@@ -244,7 +231,6 @@ export function CreateProductForm() {
         categoriesTranslations={categoriesT}
       />
 
-      {/* Images */}
       <ImageUploadGrid
         images={images}
         onImagesChange={setImages}
@@ -263,7 +249,6 @@ export function CreateProductForm() {
         }}
       />
 
-      {/* Additional Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StringArrayInput
           label={t('form.tags')}
@@ -301,7 +286,6 @@ export function CreateProductForm() {
         }}
       />
 
-      {/* Form Actions */}
       <div className="flex justify-end gap-4 pt-6 border-t border-neutral-200">
         <Button
           type="button"

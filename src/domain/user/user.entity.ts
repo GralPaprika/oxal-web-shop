@@ -1,6 +1,6 @@
 export interface User {
-  id: string; // Firestore document ID (same as Firebase Auth UID)
-  uid: string; // Firebase Auth UID
+  id: string;
+  uid: string;
   email: string;
   displayName?: string;
   photoURL?: string;

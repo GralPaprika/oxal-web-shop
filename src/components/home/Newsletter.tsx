@@ -8,19 +8,16 @@ export function Newsletter() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically handle the newsletter subscription
     console.log('Newsletter subscription:', email);
     setIsSubmitted(true);
     setEmail('');
     
-    // Reset after 3 seconds
     setTimeout(() => setIsSubmitted(false), 3000);
   };
 
   return (
     <section className="py-16 bg-gradient-to-br from-primary-600 to-secondary-600">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Content */}
         <div className="mb-8">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
             Mantente al día
@@ -31,7 +28,6 @@ export function Newsletter() {
           </p>
         </div>
 
-        {/* Newsletter form */}
         <div className="max-w-md mx-auto">
           {isSubmitted ? (
             <div className="bg-white/20 text-white p-4 rounded-full">
@@ -57,7 +53,6 @@ export function Newsletter() {
           )}
         </div>
 
-        {/* Benefits */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 text-white">
           <div className="flex flex-col items-center">
             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mb-3">
@@ -84,7 +79,6 @@ export function Newsletter() {
           </div>
         </div>
 
-        {/* Privacy note */}
         <p className="text-sm text-primary-200 mt-8">
           No compartimos tu información con terceros. Puedes darte de baja en cualquier momento.
         </p>

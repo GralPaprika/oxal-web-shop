@@ -15,7 +15,6 @@ interface UserManagementSectionProps {
   userColumns: Array<{ key: string; label: string; className?: string }>;
   roleLabels: Record<string, string>;
   statusLabels: Record<string, string>;
-  // Instead of passing the function, pass the translated strings we need
   translations: {
     noUsersFound: string;
     unableToLoad: string;
@@ -52,7 +51,6 @@ export function UserManagementSection({
     const result = await updateUser(userData);
     
     if (result.success && result.data) {
-      // Update local state with the updated user
       setLocalUsers(prevUsers => 
         prevUsers.map(user => 
           user.id === userData.id ? result.data! : user

@@ -12,14 +12,6 @@ import type { Product, ProductListOptions, CreateProductData, UpdateProductData,
 import type { ApiSingleResponse, ApiListResponse, ApiPaginatedResponse, ApiResponse } from '@/lib/api-response';
 import { ApiResponse as Response } from '@/lib/api-response';
 
-/**
- * Product Server Actions
- * 
- * Auth is handled by middleware (auth.middleware.ts protects /admin/* routes)
- * These actions assume the caller is already authenticated and admin
- */
-
-// GET PRODUCTS
 export async function getAllProducts(options?: ProductListOptions): Promise<ApiListResponse<Product>> {
   const getAllProductsUseCase = container.get<GetAllProductsUseCase>(TYPES.GetAllProductsUseCase);
   const products = await getAllProductsUseCase.execute(options);
@@ -43,28 +35,24 @@ export async function getProductCount(options?: ProductListOptions): Promise<Api
   return Response.success(count);
 }
 
-// CREATE PRODUCT
 export async function createProduct(productData: CreateProductData): Promise<ApiSingleResponse<Product>> {
   const createProductUseCase = container.get<CreateProductUseCase>(TYPES.CreateProductUseCase);
   const product = await createProductUseCase.execute(productData);
   return Response.success(product);
 }
 
-// UPDATE PRODUCT
 export async function updateProduct(productId: string, productData: UpdateProductData): Promise<ApiSingleResponse<Product>> {
   const updateProductUseCase = container.get<UpdateProductUseCase>(TYPES.UpdateProductUseCase);
   const product = await updateProductUseCase.execute(productId, productData);
   return Response.success(product);
 }
 
-// DELETE PRODUCT
 export async function deleteProduct(productId: string): Promise<ApiResponse> {
   const deleteProductUseCase = container.get<DeleteProductUseCase>(TYPES.DeleteProductUseCase);
   await deleteProductUseCase.execute(productId);
   return Response.success();
 }
 
-// GET PAGINATED PRODUCTS
 export async function getPaginatedProducts(
   pageNumber: number = 1,
   pageSize: number = 25,
@@ -73,10 +61,8 @@ export async function getPaginatedProducts(
   const getAllProductsUseCase = container.get<GetAllProductsUseCase>(TYPES.GetAllProductsUseCase);
   const getProductCountUseCase = container.get<GetProductCountUseCase>(TYPES.GetProductCountUseCase);
   
-  // Calculate offset based on page number and page size
   const offset = (pageNumber - 1) * pageSize;
   
-  // Fetch only the required page of products with server-side pagination
   const paginatedOptions: ProductListOptions = {
     ...options,
     limit: pageSize,
@@ -89,7 +75,6 @@ export async function getPaginatedProducts(
   return Response.success({ items: products, total, page: pageNumber, pageSize });
 }
 
-// VALIDATE CAN STAR PRODUCT
 export async function validateCanStarProduct(productId: string): Promise<ApiResponse<{ canStar: boolean; currentStarredCount: number; maxAllowed: number; message?: string }>> {
   const validateCanStarUseCase = container.get<ValidateCanStarProductUseCase>(TYPES.ValidateCanStarProductUseCase);
   const validationResult = await validateCanStarUseCase.execute(productId);
@@ -105,7 +90,6 @@ export async function validateCanStarProduct(productId: string): Promise<ApiResp
   });
 }
 
-// GET ALL CATEGORIES
 export async function getAllCategories(): Promise<ApiListResponse<ProductCategory>> {
   try {
     const getCategoriesUseCase = container.get<GetCategoriesUseCase>(TYPES.GetCategoriesUseCase);

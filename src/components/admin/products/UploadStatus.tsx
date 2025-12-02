@@ -27,7 +27,6 @@ export function UploadStatus({
 
   return (
     <div className="mt-4 space-y-2">
-      {/* Current upload progress */}
       {uploadProgress && (
         <div className="bg-background-tertiary border border-primary-200 rounded-lg p-3">
           {uploadProgress.isUploading ? (
@@ -55,7 +54,6 @@ export function UploadStatus({
         </div>
       )}
 
-      {/* Multiple file uploads */}
       {uploadingFiles.size > 0 && (
         <div className="bg-primary-50 border border-primary-200 rounded-lg p-3">
           <p className="text-sm text-primary-700 font-medium">
@@ -64,7 +62,6 @@ export function UploadStatus({
         </div>
       )}
 
-      {/* Upload errors */}
       {Object.keys(uploadErrors).length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-3">
           {Object.entries(uploadErrors).map(([fileKey, error]) => (

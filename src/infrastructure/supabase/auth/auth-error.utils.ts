@@ -1,8 +1,3 @@
-/**
- * Supabase Authentication Error Utilities
- * Handles authentication error translation and logging
- */
-
 export class AuthError extends Error {
   constructor(
     public code: string,

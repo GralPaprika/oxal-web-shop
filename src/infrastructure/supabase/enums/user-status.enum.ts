@@ -1,8 +1,3 @@
-/**
- * User Status Types
- * Defines the possible states for a user account
- */
-
 export enum UserStatusType {
   ACTIVE = 1,
   INACTIVE = 2,

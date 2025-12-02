@@ -11,21 +11,16 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default async function AdminSettings() {
-  // No authentication check needed - handled by middleware
-  
   const t = await getTranslations('admin.settings');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
   
-  // Initialize empty array for users
   let users: User[] = [];
   let hasErrors = false;
   let errorMessage = '';
 
   try {
-    // Fetch all users from Firebase
     const allUsersResult = await getAllUsers();
 
-    // Handle all users result
     if (allUsersResult.success) {
       users = allUsersResult.data?.items || [];
     } else {
@@ -44,7 +39,6 @@ export default async function AdminSettings() {
     { label: breadcrumbsT('settings'), current: true }
   ];
 
-  // Define table columns (keep the admin columns structure)
   const userColumns = [
     { key: 'user', label: t('userManagement.table.user') },
     { key: 'role', label: t('userManagement.table.role') },
@@ -52,7 +46,6 @@ export default async function AdminSettings() {
     { key: 'actions', label: t('userManagement.table.actions') }
   ];
 
-  // Role and status labels
   const roleLabels = {
     admin: t('roles.admin'),
     cashier: t('roles.cashier')

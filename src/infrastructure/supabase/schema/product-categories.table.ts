@@ -1,9 +1,5 @@
 import { pgTable, serial, varchar, text, timestamp } from 'drizzle-orm/pg-core';
 
-/**
- * Product Categories table
- * Stores product categories
- */
 export const productCategories = pgTable('product_categories', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull().unique(),

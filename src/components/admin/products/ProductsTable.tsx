@@ -132,14 +132,12 @@ export function ProductsTable({
     async (pageToLoad: number) => {
       const cacheKey = getCacheKey(searchTerm, selectedCategory, selectedFilters, pageToLoad, pageSize);
 
-      // Check cache first
       const cachedData = cacheRef.current.get(cacheKey);
       if (cachedData) {
         fetchAndSetProducts(cachedData.items, cachedData.total);
         return;
       }
 
-      // Cache miss - make API call
       const params = buildQueryParams(pageToLoad, pageSize);
 
       try {
@@ -153,7 +151,6 @@ export function ProductsTable({
           const items = data.data.items || [];
           const total = data.data.total || 0;
 
-          // Cache the result
           cacheRef.current.set(cacheKey, { items, total });
           fetchAndSetProducts(items, total);
         } else {
@@ -167,24 +164,20 @@ export function ProductsTable({
     [getCacheKey, searchTerm, selectedCategory, selectedFilters, pageSize, fetchAndSetProducts, buildQueryParams, showError, t.notifications]
   );
 
-  // Load paginated data when page or pageSize changes
   useEffect(() => {
     const searchChanged = prevSearchRef.current !== searchTerm;
     const categoryChanged = prevCategoryRef.current !== selectedCategory;
     const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(selectedFilters);
 
-    // Update refs
     prevSearchRef.current = searchTerm;
     prevCategoryRef.current = selectedCategory;
     prevFiltersRef.current = selectedFilters;
 
     startTransition(async () => {
-      // If search, category, or filters changed, start from page 1
       const pageToLoad = (searchChanged || categoryChanged || filtersChanged) ? 1 : currentPage;
 
       await loadProductsData(pageToLoad);
 
-      // If we loaded page 1 due to filter change, update currentPage state
       if (searchChanged || categoryChanged || filtersChanged) {
         setCurrentPage(1);
       }
@@ -209,7 +202,6 @@ export function ProductsTable({
 
   const handleToggleStar = async (product: Product) => {
     try {
-      // Only validate if trying to star, not unstar
       if (!product.isStarred) {
         const validationResult = await validateCanStarProduct(product.id);
         
@@ -227,7 +219,6 @@ export function ProductsTable({
       });
       
       if (result.success) {
-        // Update the local paginated products array
         const updatedProducts = paginatedProducts.map(p => 
           p.id === product.id ? { ...p, isStarred: !p.isStarred } : p
         );
@@ -253,7 +244,6 @@ export function ProductsTable({
     return t.categories[key] || categoryKey;
   };
 
-  // Pagination calculations
   const totalPages = Math.ceil(totalProducts / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalProducts);
@@ -264,7 +254,7 @@ export function ProductsTable({
 
   const handlePageSizeChange = (newSize: number) => {
     setPageSize(newSize);
-    setCurrentPage(1); // Reset to first page
+    setCurrentPage(1);
   };
 
   return (
@@ -295,7 +285,6 @@ export function ProductsTable({
           </thead>
           <tbody className="divide-y divide-neutral-200">
             {isPending ? (
-              // Loading skeleton
               Array.from({ length: pageSize }, (_, index) => (
                 <tr key={`skeleton-${index}`} className="animate-pulse">
                   <td className="px-6 py-4">

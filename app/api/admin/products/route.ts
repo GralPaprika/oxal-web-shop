@@ -7,21 +7,6 @@ import { ApiResponse } from '@/lib/api-response';
 import { logError } from '@/lib/error-handler';
 import { parseQueryParams } from '@/lib/utils/queryParams';
 
-/**
- * GET /api/admin/products - Get paginated products with search and filters
- *
- * Query parameters:
- * - page: Page number (default: 1)
- * - pageSize: Items per page (default: 10)
- * - search: Search term for product name, code, description, category, tags
- * - category: Filter by category ID
- * - status: Filter by product status
- * - minPrice: Minimum price filter
- * - maxPrice: Maximum price filter
- * - inStock: Filter by stock availability (true/false)
- * - sortField: Field to sort by
- * - sortOrder: Sort order ('asc' | 'desc')
- */
 const productQueryParamDefs = {
   page: { type: 'number' as const, defaultValue: 1, min: 1 },
   pageSize: { type: 'number' as const, defaultValue: 10, min: 1, max: 100 },
@@ -41,7 +26,6 @@ const productQueryParamDefs = {
 
 export const GET = async (request: NextRequest) => {
   try {
-    // Parse and validate query parameters
     const paramResult = parseQueryParams(request, productQueryParamDefs);
 
     if (!paramResult.success) {
@@ -53,7 +37,6 @@ export const GET = async (request: NextRequest) => {
 
     const { page, pageSize, search, category, status, minPrice, maxPrice, inStock, starred, new: isNew, sale, lowStock, sortField, sortOrder } = paramResult.data;
 
-    // Build options object
     const filters: Record<string, unknown> = {};
     if (search) filters.search = search;
     if (category) filters.category = category;
@@ -76,7 +59,6 @@ export const GET = async (request: NextRequest) => {
       }
     };
 
-    // Get paginated products and total count
     const getAllProductsUseCase = container.get<GetAllProductsUseCase>(TYPES.GetAllProductsUseCase);
     const getProductCountUseCase = container.get<GetProductCountUseCase>(TYPES.GetProductCountUseCase);
 
@@ -85,7 +67,6 @@ export const GET = async (request: NextRequest) => {
       getProductCountUseCase.execute(options.filters ? { filters: options.filters } : undefined)
     ]);
 
-    // Calculate pagination metadata
     const totalPages = Math.ceil(total / pageSize);
     const hasNextPage = page < totalPages;
     const hasPreviousPage = page > 1;

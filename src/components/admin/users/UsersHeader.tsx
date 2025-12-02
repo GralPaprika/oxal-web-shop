@@ -57,7 +57,6 @@ export function UsersHeader({
             </nav>
           </div>
           
-          {/* Right side content - flexible area for each page */}
           {rightContent && (
             <div className="flex items-center space-x-4">
               {rightContent}

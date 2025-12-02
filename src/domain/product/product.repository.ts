@@ -7,7 +7,6 @@ import type {
 } from './product.entity';
 
 export interface IProductRepository {
-  // Product CRUD operations
   getAllProducts(options?: ProductListOptions): Promise<Product[]>;
   getProductById(id: string): Promise<Product | null>;
   getProductByCode(code: string): Promise<Product | null>;
@@ -15,14 +14,12 @@ export interface IProductRepository {
   updateProduct(id: string, data: UpdateProductData): Promise<Product>;
   deleteProduct(id: string): Promise<void>;
   
-  // Category operations
   getAllCategories(): Promise<ProductCategory[]>;
   getCategoryById(id: string): Promise<ProductCategory | null>;
   createCategory(data: Omit<ProductCategory, 'id'>): Promise<ProductCategory>;
   updateCategory(id: string, data: Partial<ProductCategory>): Promise<ProductCategory>;
   deleteCategory(id: string): Promise<void>;
   
-  // Utility operations
   getProductCount(options?: ProductListOptions): Promise<number>;
   isCodeUnique(code: string, excludeId?: string): Promise<boolean>;
   updateStock(id: string, quantity: number): Promise<void>;

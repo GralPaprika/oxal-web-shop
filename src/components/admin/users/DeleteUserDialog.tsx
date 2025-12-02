@@ -30,7 +30,6 @@ export function DeleteUserDialog({ user, onDelete, trigger }: DeleteUserDialogPr
       if (result.success) {
         setOpen(false);
         onDelete?.();
-        // Refresh the page to update the user list
         window.location.reload();
       } else {
         setError(result.error || 'Failed to delete user');
@@ -51,7 +50,6 @@ export function DeleteUserDialog({ user, onDelete, trigger }: DeleteUserDialogPr
 
   return (
     <>
-      {/* Trigger Button */}
       {trigger ? (
         <div onClick={() => setOpen(true)} className="cursor-pointer">
           {trigger}
@@ -67,14 +65,12 @@ export function DeleteUserDialog({ user, onDelete, trigger }: DeleteUserDialogPr
         </Button>
       )}
 
-      {/* Modal */}
       {open && (
         <div
           className="fixed inset-0 bg-black/75 flex items-center justify-center z-50"
           onClick={handleClickOutside}
         >
           <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div className="flex items-center space-x-3">
                 <div className="flex-shrink-0 w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
@@ -99,7 +95,6 @@ export function DeleteUserDialog({ user, onDelete, trigger }: DeleteUserDialogPr
               </Button>
             </div>
 
-            {/* Content */}
             <div className="p-6">
               <div className="mb-4">
                 <p className="text-gray-700">
@@ -112,7 +107,6 @@ export function DeleteUserDialog({ user, onDelete, trigger }: DeleteUserDialogPr
                 </p>
               </div>
 
-              {/* User Info Card */}
               <div className="bg-gray-50 rounded-lg p-4 mb-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
@@ -142,7 +136,6 @@ export function DeleteUserDialog({ user, onDelete, trigger }: DeleteUserDialogPr
                 </div>
               </div>
 
-              {/* Error Display */}
               {error && (
                 <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
                   <p className="text-sm text-red-600">{error}</p>

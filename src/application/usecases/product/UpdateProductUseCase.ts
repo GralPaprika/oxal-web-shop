@@ -14,17 +14,14 @@ export class UpdateProductUseCase {
       throw new Error('Product ID is required');
     }
 
-    // Validate price if provided
     if (data.price !== undefined && data.price <= 0) {
       throw new Error('Product price must be greater than 0');
     }
 
-    // Validate stock if provided
     if (data.stock !== undefined && data.stock < 0) {
       throw new Error('Product stock cannot be negative');
     }
 
-    // Check if product exists
     const existingProduct = await this.productRepository.getProductById(id);
     if (!existingProduct) {
       throw new Error('Product not found');

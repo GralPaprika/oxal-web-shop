@@ -10,13 +10,6 @@ import type { User } from '@/domain/user/user.entity';
 import type { ApiListResponse, ApiSingleResponse } from '@/lib/api-response';
 import { ApiResponse as Response } from '@/lib/api-response';
 
-/**
- * User Server Actions
- *
- * Auth is handled by middleware (auth.middleware.ts protects /admin/* routes)
- * These actions assume the caller is already authenticated and admin
- */
-
 export async function getAllUsers(): Promise<ApiListResponse<User>> {
   const getAllUsersUseCase = container.get<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase);
   const users = await getAllUsersUseCase.execute();
@@ -56,7 +49,6 @@ export async function updateUser(userData: {
 }
 
 export async function createUser(userData: CreateUserRequest): Promise<ApiSingleResponse<User>> {
-  // Note: Authentication is handled by auth.middleware.ts
   const createUserUseCase = container.get<CreateUserUseCase>(TYPES.CreateUserUseCase);
   const result = await createUserUseCase.execute(userData);
   
@@ -68,8 +60,6 @@ export async function createUser(userData: CreateUserRequest): Promise<ApiSingle
 }
 
 export async function deleteUser(userId: string): Promise<ApiSingleResponse<{ deleted: boolean }>> {
-  // Note: Authentication is handled by auth.middleware.ts
-
   const getUsersByRoleUseCase = container.get<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase);
   const admins = await getUsersByRoleUseCase.execute('admin');
   

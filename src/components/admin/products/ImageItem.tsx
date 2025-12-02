@@ -39,12 +39,10 @@ export function ImageItem({
       onDragOver={onDragOver}
       onDrop={() => onDrop(index)}
     >
-      {/* Drag handle */}
       <div className="absolute top-2 left-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
         <Bars3Icon className="h-5 w-5 text-gray-600 bg-white rounded p-1 shadow-sm" />
       </div>
 
-      {/* Remove button */}
       <button
         onClick={() => onRemove(index)}
         className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full p-1"
@@ -53,7 +51,6 @@ export function ImageItem({
         <XMarkIcon className="h-4 w-4" />
       </button>
 
-      {/* Image */}
       <Image
         src={image.url}
         alt={image.alt || `${translations.image} ${index + 1}`}
@@ -62,7 +59,6 @@ export function ImageItem({
         sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
       />
 
-      {/* Primary image badge */}
       {image.isPrimary && (
         <div className="absolute bottom-2 left-2 z-20">
           <div className="bg-amber-600 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg border border-white">

@@ -33,7 +33,6 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Reset form when user changes
   useEffect(() => {
     if (user) {
       setFormData({
@@ -53,7 +52,6 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
     setError(null);
 
     try {
-      // Only include changed fields
       const updates: {
         displayName?: string;
         email?: string;
@@ -65,7 +63,6 @@ export function EditUserModal({ user, isOpen, onClose, onSave }: EditUserModalPr
       if (formData.role !== user.role) updates.role = formData.role;
       if (formData.status !== user.status) updates.status = formData.status;
 
-      // Only proceed if there are actual changes
       if (Object.keys(updates).length === 0) {
         onClose();
         return;

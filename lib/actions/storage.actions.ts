@@ -7,14 +7,6 @@ import { handleAndRespond } from '@/lib/error-handler';
 import type { ApiResponse } from '@/lib/api-response';
 import { ApiResponse as Response } from '@/lib/api-response';
 
-/**
- * Storage Server Actions
- *
- * Auth is handled by middleware (auth.middleware.ts protects /admin/* routes)
- * These actions assume the caller is already authenticated and admin
- */
-
-// UPLOAD PRODUCT IMAGE
 export async function uploadProductImage(
   formData: FormData
 ): Promise<ApiResponse<{ url: string; path: string }>> {
@@ -47,7 +39,6 @@ export async function uploadProductImage(
   );
 }
 
-// DELETE PRODUCT IMAGE
 export async function deleteProductImage(
   url: string
 ): Promise<ApiResponse> {

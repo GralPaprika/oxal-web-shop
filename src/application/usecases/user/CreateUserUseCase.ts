@@ -24,7 +24,6 @@ export class CreateUserUseCase {
 
   async execute(request: CreateUserRequest): Promise<CreateUserResponse> {
     try {
-      // Validate input
       if (!request.email || !request.password || !request.displayName) {
         return {
           success: false,
@@ -39,7 +38,6 @@ export class CreateUserUseCase {
         };
       }
 
-      // Create user (this will handle both Firebase Auth and Firestore)
       const user = await this.userRepository.createUser({
         email: request.email,
         password: request.password,
@@ -54,7 +52,6 @@ export class CreateUserUseCase {
     } catch (error) {
       console.error('Error creating user:', error);
       
-      // Handle specific Firebase errors
       if (error instanceof Error) {
         if (error.message.includes('email-already-in-use')) {
           return {

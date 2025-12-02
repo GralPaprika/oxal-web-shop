@@ -10,7 +10,7 @@ export interface UploadProgress {
 export interface UseFileUploadOptions {
   onUploadComplete?: (url: string) => void;
   onUploadError?: (error: string) => void;
-  maxFileSize?: number; // in bytes
+  maxFileSizeBytes?: number; // in bytes
   allowedTypes?: string[];
 }
 
@@ -20,7 +20,7 @@ export function useFileUpload(options: UseFileUploadOptions = {}) {
   const {
     onUploadComplete,
     onUploadError,
-    maxFileSize = 5 * 1024 * 1024, // 5MB default
+    maxFileSizeBytes: maxFileSize = 5 * 1024 * 1024, // 5MB default
     allowedTypes = ['image/jpeg', 'image/png', 'image/webp']
   } = options;
 

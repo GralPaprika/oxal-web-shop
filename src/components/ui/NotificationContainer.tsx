@@ -14,10 +14,10 @@ export function useNotification() {
     title: string,
     type: 'error' | 'success' | 'info' | 'warning' = 'info',
     message?: string,
-    duration: number = 5000
+    durationMs: number = 5000
   ) => {
     const id = Date.now().toString();
-    setNotifications(prev => [...prev, { id, type, title, message, duration }]);
+    setNotifications(prev => [...prev, { id, type, title, message, durationMs }]);
     return id;
   }, []);
 

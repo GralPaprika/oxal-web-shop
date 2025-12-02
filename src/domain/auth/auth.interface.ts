@@ -1,4 +1,3 @@
-// Domain layer - Authentication entities and interfaces
 export interface User {
   uid: string;
   email: string;
@@ -18,7 +17,6 @@ export interface AuthResult {
   token: string;
 }
 
-// Domain repository interface (to be implemented by infrastructure layer)
 export interface IAuthRepository {
   signIn(credentials: LoginCredentials): Promise<AuthResult>;
   signOut(): Promise<void>;

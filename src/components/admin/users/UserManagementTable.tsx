@@ -34,7 +34,6 @@ export function UserManagementTable({
     if (onEdit) {
       onEdit(user);
     } else {
-      // Default behavior - TODO: Implement edit functionality
       console.log('Edit user:', user);
     }
   };
@@ -43,7 +42,6 @@ export function UserManagementTable({
     if (onDelete) {
       onDelete(user);
     } else {
-      // Default behavior - TODO: Implement delete functionality
       console.log('Delete user:', user);
     }
   };

@@ -104,7 +104,6 @@ export function ProductsTableClient({
 
   return (
     <>
-      {/* Filters and Search */}
       <SearchForm
         searchTerm={searchTerm}
         selectedCategory={selectedCategory}
@@ -121,7 +120,6 @@ export function ProductsTableClient({
         }}
       />
 
-      {/* Products Table with Pagination */}
       <ProductsTable
         searchTerm={searchTerm}
         selectedCategory={selectedCategory}

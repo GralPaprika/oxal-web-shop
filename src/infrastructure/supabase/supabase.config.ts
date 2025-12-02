@@ -21,17 +21,12 @@ export class SupabaseService implements ISupabaseService {
       throw new Error('DATABASE_URL environment variable is not set');
     }
 
-    // Create PostgreSQL client
     this.client = postgres(databaseUrl, {
-      // Connection pool settings
       max: 10,
-      // Prepare statements
       prepare: true,
-      // Debug mode (set to false in production)
       debug: process.env.NODE_ENV === 'development',
     });
 
-    // Initialize Drizzle ORM
     this.db = drizzle(this.client);
   }
 

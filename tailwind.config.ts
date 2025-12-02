@@ -10,15 +10,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Oxal Brand Colors
         oxal: {
-          cream: '#f4f0ea',      // Porcelain Mist - Main background
-          sandstone: '#cbb8a3',  // Soft Sandstone - Light accent
-          teak: '#b29167',       // Teak - Secondary accent
-          verdigris: '#525934',  // Verdigris - Primary accent
-          desert: '#9f691e',     // Desert - Alternative accent
+          cream: '#f4f0ea',
+          sandstone: '#cbb8a3',
+          teak: '#b29167',
+          verdigris: '#525934',
+          desert: '#9f691e',
         },
-        // Semantic color aliases
         primary: {
           50: '#f4f0ea',
           100: '#f4f0ea',

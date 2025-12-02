@@ -60,7 +60,6 @@ export default function Links() {
   return (
     <div className="min-h-screen bg-oxal-cream py-12 px-4">
       <div className="max-w-xl mx-auto overflow-hidden bg-oxal-sandstone rounded-3xl shadow-lg">
-        {/* Profile Header */}
         <div className="pt-8 pb-6 px-8 text-center bg-gradient-to-b from-oxal-verdigris to-oxal-desert">
           <div className="mb-6">
             <div className="w-64 h-64 mx-auto flex items-center justify-center overflow-hidden">
@@ -72,13 +71,11 @@ export default function Links() {
             {t('tagline')}
           </p>
 
-          {/* Description */}
           <p className="text-oxal-accent leading-relaxed">
             {t('description')}
           </p>
         </div>
 
-        {/* Links Section */}
         <div className="px-8 py-8 bg-oxal-sandstone">
           <div className="space-y-3">
             {links.map((link) => (
@@ -118,7 +115,6 @@ export default function Links() {
             <LocationMap height="h-80" ariaLabel={t('location.mapAriaLabel')} />
           </div>
 
-          {/* Social Icons Footer */}
           <div className="mt-8 pt-6 border-t border-oxal-accent flex justify-center gap-6">
             <a
               href="https://www.instagram.com/shop.oxal/"
@@ -140,14 +136,12 @@ export default function Links() {
             </a>
           </div>
 
-          {/* Footer */}
           <div className="mt-6 text-center text-sm text-oxal-accent">
             <p>{t('copyright')}</p>
           </div>
         </div>
       </div>
 
-      {/* QR Code - Bottom Right Corner */}
       <div className="hidden lg:flex fixed bottom-6 right-6 flex-col items-center">
         <p className="text-xs text-oxal-primary font-semibold mb-2">{t('viewInMobile')}</p>
         <div className="w-40 h-40 bg-oxal-cream rounded-lg p-2 flex items-center justify-center">

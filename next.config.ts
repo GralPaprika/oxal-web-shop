@@ -4,16 +4,12 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
   
-  // Enable compression
   compress: true,
   
-  // Disable source maps in production for better performance
   productionBrowserSourceMaps: false,
   
-  // Enable experimental optimizations
   experimental: {
     optimizePackageImports: ["react-icons"],
     scrollRestoration: true,
@@ -60,7 +56,6 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
-  // Performance headers
   async headers() {
     return [
       {
@@ -113,7 +108,6 @@ const nextConfig: NextConfig = {
     ]
   },
   
-  // SEO redirects
   async redirects() {
     return [
       {

@@ -1,13 +1,5 @@
-/**
- * API query parameter parsing and validation utilities
- * Provides type-safe parameter extraction and validation for API routes
- */
-
 import { NextRequest } from 'next/server';
 
-/**
- * Parameter definition for query parsing
- */
 export interface QueryParamDef<T = unknown> {
   type: 'string' | 'number' | 'boolean' | 'enum';
   required?: boolean;
@@ -18,9 +10,6 @@ export interface QueryParamDef<T = unknown> {
   transform?: (value: unknown) => T;
 }
 
-/**
- * Parsed query parameters result
- */
 export interface ParsedQueryParams<T extends Record<string, unknown>> {
   success: true;
   data: T;
@@ -37,23 +26,6 @@ export type QueryParseResult<T extends Record<string, unknown>> =
   | ParsedQueryParams<T>
   | QueryParseError;
 
-/**
- * Parse and validate query parameters from a NextRequest
- *
- * @example
- * const result = parseQueryParams(request, {
- *   page: { type: 'number', defaultValue: 1, min: 1 },
- *   pageSize: { type: 'number', defaultValue: 10, min: 1, max: 100 },
- *   search: { type: 'string' },
- *   status: { type: 'enum', enumValues: ['active', 'inactive', 'discontinued'] as const }
- * });
- *
- * if (result.success) {
- *   // result.data has type-safe parameters
- * } else {
- *   return NextResponse.json(ApiResponse.error(result.errors.join(', ')), { status: 400 });
- * }
- */
 export function parseQueryParams<T extends Record<string, unknown>>(
   request: NextRequest,
   paramDefs: { [K in keyof T]: QueryParamDef<T[K]> }
@@ -66,19 +38,16 @@ export function parseQueryParams<T extends Record<string, unknown>>(
     const stringValue = searchParams.get(paramName as string);
     const hasValue = stringValue !== null && stringValue !== '';
 
-    // Check required parameters
     if (def.required && !hasValue) {
       errors.push(`Missing required parameter: ${String(paramName)}`);
       continue;
     }
 
-    // Use default value if no value provided and not required
     if (!hasValue && def.defaultValue !== undefined) {
       result[paramName] = def.defaultValue as T[keyof T];
       continue;
     }
 
-    // Skip optional parameters with no value
     if (!hasValue && !def.required) {
       continue;
     }
@@ -86,7 +55,6 @@ export function parseQueryParams<T extends Record<string, unknown>>(
     try {
       let parsedValue: unknown = stringValue;
 
-      // Parse based on type
       switch (def.type) {
         case 'number':
           const numValue = parseFloat(stringValue!);
@@ -122,7 +90,6 @@ export function parseQueryParams<T extends Record<string, unknown>>(
           break;
 
         case 'string':
-          // String values are already parsed
           break;
 
         default:
@@ -130,7 +97,6 @@ export function parseQueryParams<T extends Record<string, unknown>>(
           continue;
       }
 
-      // Apply custom transform if provided
       if (def.transform) {
         parsedValue = def.transform(parsedValue);
       }
@@ -149,9 +115,6 @@ export function parseQueryParams<T extends Record<string, unknown>>(
   return { success: true, data: result };
 }
 
-/**
- * Common parameter definitions for reuse
- */
 export const commonParamDefs = {
   pagination: {
     page: { type: 'number' as const, defaultValue: 1, min: 1 },

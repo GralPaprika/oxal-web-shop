@@ -36,7 +36,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
   
-  // Form data - mirrors CreateProductForm but with optional fields
   const [formData, setFormData] = useState<UpdateProductData>({
     code: product.code,
     name: product.name,
@@ -70,7 +69,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const [tags, setTags] = useState<string[]>(product.tags || []);
   const [materials, setMaterials] = useState<string[]>(product.metadata?.materials || []);
 
-  // Helper to detect if images have changed
   const hasImagesChanged = (): boolean => {
     const originalImages = product.images?.map((img, index) => ({
       url: img.url,
@@ -79,19 +77,16 @@ export function EditProductForm({ product }: EditProductFormProps) {
       isPrimary: img.isPrimary || index === 0
     })) || [];
 
-    // Different length means changed
     if (images.length !== originalImages.length) {
       return true;
     }
 
-    // Check if any image details changed
     return images.some((img, index) => {
       const orig = originalImages[index];
       return img.url !== orig.url || img.alt !== orig.alt || img.isPrimary !== orig.isPrimary;
     });
   };
 
-  // Validation helper - consolidates field checks
   const validateForm = (): boolean => {
     const validations = [
       { condition: !formData.code?.trim(), message: t('validation.codeRequired') },
@@ -110,9 +105,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
     return true;
   };
 
-  // Image upload helper - extracts upload logic
   const uploadImage = async (image: ProductImage, index: number, productId: string): Promise<{ url: string; alt?: string; order: number; isPrimary: boolean } | null> => {
-    // Only process data URLs (local uploads)
     if (!image.url.startsWith('data:image')) {
       return null;
     }
@@ -143,18 +136,14 @@ export function EditProductForm({ product }: EditProductFormProps) {
   };
 
   const handleStarToggle = async (newStarState: boolean): Promise<boolean> => {
-    // Only validate if trying to star (newStarState === true)
     if (!newStarState) {
-      // Unstarring, always allowed
       return true;
     }
 
-    // If product is already starred, allow changing other fields without validation
     if (product.isStarred) {
       return true;
     }
 
-    // Trying to star a product, validate the limit
     const validationResult = await validateCanStarProduct(product.id);
     
     if (!validationResult.success) {
@@ -168,7 +157,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
     return true;
   };
 
-  // Load categories
   useEffect(() => {
     async function loadCategories() {
       try {
@@ -189,17 +177,14 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation using helper - if validation fails, it shows error via notification
     if (!validateForm()) {
       return;
     }
 
     startTransition(async () => {
       try {
-        // Check if images have changed
         const imagesChanged = hasImagesChanged();
 
-        // Step 1: Update product with current form data
         const updateData: UpdateProductData = {
           code: formData.code,
           name: formData.name,
@@ -222,17 +207,14 @@ export function EditProductForm({ product }: EditProductFormProps) {
           shouldUpdateImages: imagesChanged,
         };
 
-        // Step 2: If images changed, collect all images (new and existing)
         if (imagesChanged) {
           const finalImages: Array<{ url: string; alt?: string; order: number; isPrimary: boolean }> = [];
           
           for (let i = 0; i < images.length; i++) {
             const uploadedImage = await uploadImage(images[i], i, product.id);
-            // If upload happened (new image), use the uploaded result
             if (uploadedImage) {
               finalImages.push(uploadedImage);
             } else {
-              // If no upload (existing image), keep the original
               finalImages.push({
                 url: images[i].url,
                 alt: images[i].alt,
@@ -247,7 +229,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
         const result = await updateProduct(product.id, updateData);
 
         if (result.success) {
-          // ✅ Use notification system instead of state + div
           showSuccess(t('success.updated'), t('success.updatedMessage'));
           setTimeout(() => {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
@@ -265,8 +246,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* All messages now use NotificationContainer - no inline divs */}
-
       <ProductFormFields
         formData={{
           code: formData.code ?? '',
@@ -319,8 +298,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
         }}
         categoriesTranslations={categoriesT}
       />
-
-      {/* Images - Full Width Section */}
       <ImageUploadGrid
         images={images}
         onImagesChange={setImages}
@@ -338,8 +315,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
           slot: imagesT('slot'),
         }}
       />
-
-      {/* Additional Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StringArrayInput
           label={t('fields.tags')}
@@ -395,8 +370,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
           },
         }}
       />
-
-      {/* Actions */}
       <div className="flex justify-end gap-4 pt-8 border-t border-neutral-200">
         <Button
           type="button"

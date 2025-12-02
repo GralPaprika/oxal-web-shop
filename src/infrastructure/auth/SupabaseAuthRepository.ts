@@ -61,8 +61,6 @@ export class SupabaseAuthRepository implements IAuthRepository {
    * Note: Supabase handles this differently, this is a placeholder
    */
   onAuthStateChanged(): () => void {
-    // Supabase doesn't support traditional observers in server context
-    // This would be implemented in the client layer
     console.warn('onAuthStateChanged not implemented for Supabase server context');
     return () => {};
   }

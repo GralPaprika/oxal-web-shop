@@ -1,8 +1,3 @@
-/**
- * Product Badge Types
- * Used to mark products with promotional badges
- */
-
 export enum ProductBadgeType {
   NEW = 1,
   SALE = 2,

@@ -30,7 +30,6 @@ export class ValidateCanStarProductUseCase {
   }
 
   async execute(productId: string): Promise<ValidationResult> {
-    // For new products (empty productId), just check the limit
     if (!productId) {
       const allProducts = await this.productRepository.getAllProducts();
       const starredCount = allProducts.filter(p => p.isStarred).length;
@@ -47,7 +46,6 @@ export class ValidateCanStarProductUseCase {
       };
     }
 
-    // Check if product exists
     const product = await this.productRepository.getProductById(productId);
     if (!product) {
       return {
@@ -58,7 +56,6 @@ export class ValidateCanStarProductUseCase {
       };
     }
 
-    // If product is already starred, allow unstarring
     if (product.isStarred) {
       return {
         canStar: true,
@@ -67,7 +64,6 @@ export class ValidateCanStarProductUseCase {
       };
     }
 
-    // Get count of starred products
     const allProducts = await this.productRepository.getAllProducts();
     const starredCount = allProducts.filter(p => p.isStarred).length;
 

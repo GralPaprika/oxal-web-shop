@@ -9,7 +9,6 @@ export class LoginUseCase {
   ) {}
 
   async execute(credentials: LoginCredentials): Promise<AuthResult> {
-    // Business logic validation
     this.validateCredentials(credentials);
     
     try {

@@ -1,7 +1,5 @@
-// Theme configuration for easy color palette changes
 export const theme = {
   colors: {
-    // Primary brand colors
     primary: {
       50: 'rgb(var(--color-primary-50) / <alpha-value>)',
       100: 'rgb(var(--color-primary-100) / <alpha-value>)',
@@ -15,7 +13,6 @@ export const theme = {
       900: 'rgb(var(--color-primary-900) / <alpha-value>)',
       950: 'rgb(var(--color-primary-950) / <alpha-value>)',
     },
-    // Secondary accent colors
     secondary: {
       50: 'rgb(var(--color-secondary-50) / <alpha-value>)',
       100: 'rgb(var(--color-secondary-100) / <alpha-value>)',
@@ -29,13 +26,11 @@ export const theme = {
       900: 'rgb(var(--color-secondary-900) / <alpha-value>)',
       950: 'rgb(var(--color-secondary-950) / <alpha-value>)',
     },
-    // Background colors
     background: {
       primary: 'rgb(var(--color-bg-primary) / <alpha-value>)',
       secondary: 'rgb(var(--color-bg-secondary) / <alpha-value>)',
       tertiary: 'rgb(var(--color-bg-tertiary) / <alpha-value>)',
     },
-    // Text colors
     text: {
       primary: 'rgb(var(--color-text-primary) / <alpha-value>)',
       secondary: 'rgb(var(--color-text-secondary) / <alpha-value>)',

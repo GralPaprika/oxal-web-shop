@@ -1,5 +1,3 @@
-// Structured Data (JSON-LD) schemas for SEO
-
 export const getLocalBusinessSchema = () => ({
   "@context": "https://schema.org",
   "@type": "LocalBusiness",

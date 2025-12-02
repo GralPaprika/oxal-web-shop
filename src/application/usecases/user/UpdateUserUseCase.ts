@@ -25,10 +25,8 @@ export class UpdateUserUseCase {
 
   async execute(request: UpdateUserRequest): Promise<UpdateUserResponse> {
     try {
-      // Business logic validation
       this.validateUpdateRequest(request);
 
-      // Get current user to merge with updates
       const currentUser = await this.userRepository.getUserById(request.id);
       if (!currentUser) {
         return {
@@ -37,7 +35,6 @@ export class UpdateUserUseCase {
         };
       }
 
-      // Create updated user data
       const updateData: Partial<User> = {
         ...(request.displayName && { displayName: request.displayName }),
         ...(request.email && { email: request.email }),
@@ -46,7 +43,6 @@ export class UpdateUserUseCase {
         updatedAt: new Date().toISOString()
       };
 
-      // Update user in repository
       const result = await this.userRepository.updateUser(request.id, updateData);
       
       return {
@@ -66,17 +62,14 @@ export class UpdateUserUseCase {
       throw new Error('User ID is required');
     }
 
-    // Validate email format if provided
     if (request.email && !this.isValidEmail(request.email)) {
       throw new Error('Invalid email format');
     }
 
-    // Validate role if provided
     if (request.role && !['admin', 'cashier'].includes(request.role)) {
       throw new Error('Invalid role. Must be admin or cashier');
     }
 
-    // Validate status if provided
     if (request.status && !['active', 'inactive', 'suspended'].includes(request.status)) {
       throw new Error('Invalid status. Must be active, inactive, or suspended');
     }

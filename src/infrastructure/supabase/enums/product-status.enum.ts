@@ -1,8 +1,3 @@
-/**
- * Product Status Types
- * Defines the possible states for a product
- */
-
 export enum ProductStatusType {
   ACTIVE = 1,
   INACTIVE = 2,

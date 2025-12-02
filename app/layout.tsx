@@ -44,17 +44,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Providing all messages to the client side is the easiest way to get started
   const messages = await getMessages();
 
   return (
     <html lang="es">
       <head>
-        {/* Preconnect to Google Fonts CDN - establish connection before fonts needed */}
         <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* DNS prefetch and preconnect to Vercel CDN for faster asset delivery */}
         <link rel="dns-prefetch" href="https://www.oxal.shop" />
         <link rel="preconnect" href="https://www.oxal.shop" crossOrigin="anonymous" />
       </head>

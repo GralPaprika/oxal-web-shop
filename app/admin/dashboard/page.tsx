@@ -18,11 +18,9 @@ export default async function AdminDashboard() {
   const t = await getTranslations('auth.dashboard');
   const breadcrumbsT = await getTranslations('admin.common.breadcrumbs');
   
-  // Get product count from database
   const productCountResult = await getProductCount();
   const totalProducts = productCountResult.success ? (productCountResult.data || 0) : 0;
   
-  // Create admin modules with dynamic stats
   const adminModules = [
     {
       titleKey: 'modules.products.title',
@@ -88,15 +86,12 @@ export default async function AdminDashboard() {
   
   return (
     <div className="min-h-screen bg-background-secondary">
-      {/* Header */}
       <UsersHeader 
         breadcrumbs={breadcrumbs}
         rightContent={rightContent}
       />
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
         <div className="mb-8">    
           <h2 className="text-3xl font-bold text-text-primary mb-2">
             {t('welcomeBack')}
@@ -106,7 +101,6 @@ export default async function AdminDashboard() {
           </p>
         </div>
 
-        {/* Stats Overview */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-xl shadow-sm border border-neutral-200 p-6">
             <div className="flex items-center">
@@ -157,7 +151,6 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* Admin Modules Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {adminModules.map((module) => {
             const IconComponent = module.icon;

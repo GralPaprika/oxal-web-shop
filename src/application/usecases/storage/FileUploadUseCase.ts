@@ -24,17 +24,13 @@ export class UploadFileUseCase {
     data: FileUploadData,
     onProgress?: UploadProgressCallback
   ): Promise<FileUploadResult> {
-    // Validate file
     this.validateFile(data.file);
 
-    // Generate unique file name with timestamp if not provided
     const fileName = data.fileName || this.generateFileName(data.file);
     
-    // Create storage path
     const path = `${data.folder}/${fileName}`;
 
     try {
-      // Upload file to storage
       const url = await this.storageService.uploadFile(data.file, path, onProgress);
       
       return {
@@ -48,13 +44,11 @@ export class UploadFileUseCase {
   }
 
   private validateFile(file: File): void {
-    // File size validation (max 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
       throw new Error('File size must be less than 5MB');
     }
 
-    // File type validation (images only)
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       throw new Error('Only JPEG, PNG, and WebP images are allowed');

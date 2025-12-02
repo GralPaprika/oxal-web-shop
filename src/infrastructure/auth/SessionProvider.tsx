@@ -1,12 +1,3 @@
-/**
- * Session Provider Component
- * 
- * Simplified for SSR approach:
- * - Admin pages are server components (middleware handles protection)
- * - SessionProvider only manages client-side login UI state
- * - No token injection logic (server handles auth)
- */
-
 'use client';
 
 import { ReactNode, useCallback, useState } from 'react';
@@ -24,8 +15,6 @@ export function SessionProvider({ children }: SessionProviderProps) {
   const handleSignOut = useCallback(async () => {
     try {
       setIsLoading(true);
-      // Call server action to handle logout
-      // You should create a server action for this
       setUser(null);
     } catch (error) {
       console.error('Sign out failed:', error);

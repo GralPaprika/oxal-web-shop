@@ -16,7 +16,6 @@ export function SectionActions({
 }: SectionActionsProps) {
   
   const handleAdd = () => {
-    // TODO: Implement add functionality
     console.log('Add clicked for:', label);
   };
 

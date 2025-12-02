@@ -18,7 +18,6 @@ export class FirebaseUserService {
   private db;
 
   constructor() {
-    // Initialize Firebase if not already initialized
     const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
     this.auth = getAuth(app);
     this.db = getFirestore(app);
@@ -29,7 +28,6 @@ export class FirebaseUserService {
    */
   async createUserWithAuth(data: CreateUserData): Promise<User> {
     try {
-      // Create user in Firebase Authentication
       const userCredential = await createUserWithEmailAndPassword(
         this.auth,
         data.email,
@@ -39,7 +37,6 @@ export class FirebaseUserService {
       const firebaseUser = userCredential.user;
       const now = new Date();
 
-      // Create user document in Firestore
       const userData: User = {
         id: firebaseUser.uid,
         uid: firebaseUser.uid,
@@ -56,7 +53,6 @@ export class FirebaseUserService {
         }
       };
 
-      // Save to Firestore
       await setDoc(doc(this.db, 'users', firebaseUser.uid), userData);
 
       return userData;
