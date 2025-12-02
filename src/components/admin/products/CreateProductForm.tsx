@@ -26,7 +26,7 @@ export function CreateProductForm() {
   const categoriesT = useTranslations('admin.products.categories');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const { notifications, removeNotification, showError } = useNotification();
+  const { notifications, removeNotification, showError, showSuccess } = useNotification();
   
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -55,8 +55,6 @@ export function CreateProductForm() {
   const [images, setImages] = useState<ProductImage[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [materials, setMaterials] = useState<string[]>([]);
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<string>('');
 
   const validateForm = (): boolean => {
     const validations = [
@@ -69,7 +67,8 @@ export function CreateProductForm() {
 
     for (const validation of validations) {
       if (validation.condition) {
-        setError(validation.message);
+        // ✅ Now we return the message, handleSubmit will show it via notification
+        showError(t('validation.title'), validation.message);
         return false;
       }
     }
@@ -136,24 +135,22 @@ export function CreateProductForm() {
         if (result.success && result.data?.items) {
           setCategories(result.data.items);
         } else {
-          setError(t('error.categoriesLoad'));
+          showError(t('error.title'), t('error.categoriesLoad'));
         }
       } catch {
-        setError(t('error.categoriesLoad'));
+        showError(t('error.title'), t('error.categoriesLoad'));
       } finally {
         setLoadingCategories(false);
       }
     };
 
     fetchCategories();
-  }, [t]);
+  }, [t, showError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
 
-    // Validation using helper
+    // Validation using helper - if validation fails, it shows error via notification
     if (!validateForm()) {
       return;
     }
@@ -193,33 +190,25 @@ export function CreateProductForm() {
             }
           }
           
-          setSuccess(t('success.created'));
+          // ✅ Use notification system instead of state + div
+          showSuccess(t('success.created'), t('success.createdMessage'));
           setTimeout(() => {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
           }, 1500);
         } else {
-          setError('error' in result ? String(result.error) : t('error.failed'));
+          const errorMsg = 'error' in result ? String(result.error) : t('error.failed');
+          showError(t('error.title'), errorMsg);
         }
       } catch (error) {
         console.error('Error creating product:', error);
-        setError(t('error.failed'));
+        showError(t('error.title'), t('error.failed'));
       }
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Error/Success Messages */}
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600 text-sm">{error}</p>
-        </div>
-      )}
-      {success && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <p className="text-green-600 text-sm">{success}</p>
-        </div>
-      )}
+      {/* All messages now use NotificationContainer - no inline divs */}
 
       <ProductFormFields
         formData={formData}

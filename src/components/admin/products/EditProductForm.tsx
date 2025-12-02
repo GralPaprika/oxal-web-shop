@@ -31,7 +31,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
   const imagesT = useTranslations('admin.products.images');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const { notifications, removeNotification, showError } = useNotification();
+  const { notifications, removeNotification, showError, showSuccess } = useNotification();
   
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -69,8 +69,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
   
   const [tags, setTags] = useState<string[]>(product.tags || []);
   const [materials, setMaterials] = useState<string[]>(product.metadata?.materials || []);
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<string>('');
 
   // Helper to detect if images have changed
   const hasImagesChanged = (): boolean => {
@@ -105,7 +103,7 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
     for (const validation of validations) {
       if (validation.condition) {
-        setError(validation.message);
+        showError(t('validation.title'), validation.message);
         return false;
       }
     }
@@ -190,10 +188,8 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
 
-    // Validation using helper
+    // Validation using helper - if validation fails, it shows error via notification
     if (!validateForm()) {
       return;
     }
@@ -251,33 +247,25 @@ export function EditProductForm({ product }: EditProductFormProps) {
         const result = await updateProduct(product.id, updateData);
 
         if (result.success) {
-          setSuccess(t('success.updated'));
+          // ✅ Use notification system instead of state + div
+          showSuccess(t('success.updated'), t('success.updatedMessage'));
           setTimeout(() => {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
           }, 1500);
         } else {
-          setError(result.error || t('error.updateFailed'));
+          const errorMsg = result.error || t('error.updateFailed');
+          showError(t('error.title'), errorMsg);
         }
       } catch (error) {
         console.error('Error updating product:', error);
-        setError(t('error.updateFailed'));
+        showError(t('error.title'), t('error.updateFailed'));
       }
     });
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Error/Success Messages */}
-      {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-red-600 text-sm">{error}</p>
-        </div>
-      )}
-      {success && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <p className="text-green-600 text-sm">{success}</p>
-        </div>
-      )}
+      {/* All messages now use NotificationContainer - no inline divs */}
 
       <ProductFormFields
         formData={{

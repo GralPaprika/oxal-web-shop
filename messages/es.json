@@ -289,14 +289,17 @@
           "codeRequired": "El código del producto es obligatorio",
           "priceRequired": "El precio debe ser mayor a 0",
           "stockRequired": "La cantidad en stock no puede ser negativa",
-          "categoryRequired": "Debes seleccionar una categoría"
+          "categoryRequired": "Debes seleccionar una categoría",
+          "title": "Error de validación"
         },
         "success": {
-          "created": "Producto creado exitosamente"
+          "created": "!Éxito!",
+          "createdMessage": "Tu producto ha sido agregado al catálogo"
         },
         "error": {
           "failed": "Error al crear el producto. Inténtalo de nuevo.",
-          "categoriesLoad": "Error al cargar las categorías. Inténtalo de nuevo."
+          "categoriesLoad": "Error al cargar las categorías. Inténtalo de nuevo.",
+          "title": "Error"
         }
       },
       "edit": {
@@ -353,10 +356,16 @@
           "descriptionRequired": "La descripción del producto es obligatoria",
           "priceRequired": "El precio debe ser mayor a 0",
           "stockRequired": "La cantidad en stock no puede ser negativa",
-          "categoryRequired": "Debes seleccionar una categoría"
+          "categoryRequired": "Debes seleccionar una categoría",
+          "title": "Error de validación"
+        },
+        "success": {
+          "updated": "!Éxito!",
+          "updatedMessage": "Los cambios en tu producto han sido guardados"
         },
         "error": {
-          "updateFailed": "Error al actualizar el producto. Inténtalo de nuevo."
+          "updateFailed": "Error al actualizar el producto. Inténtalo de nuevo.",
+          "title": "Error"
         }
       },
       "images": {
