@@ -6,6 +6,7 @@ import { ProductsTableClient } from '@/components/admin/products';
 import { getAllCategories } from '@/lib/actions/product.actions';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
+import type { ProductCategory } from '@/domain/product/product.entity';
 
 async function AdminProductsPage({
   searchParams
@@ -26,8 +27,16 @@ async function AdminProductsPage({
     lowStock: params.lowStock === 'true',
   };
 
-  const categoriesResult = await getAllCategories();
-  const categories = categoriesResult.success ? categoriesResult.data?.items || [] : [];
+  // Fetch categories with error handling - don't crash the page if DB is down
+  let categories: ProductCategory[] = [];
+  try {
+    const categoriesResult = await getAllCategories();
+    categories = categoriesResult.success ? categoriesResult.data?.items || [] : [];
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    // Return empty array and let the client-side handle the error
+    categories = [];
+  }
 
   const breadcrumbs = [
     { label: breadcrumbsT('dashboard'), href: AUTH_CONFIG.ROUTES.DASHBOARD },
@@ -114,6 +123,14 @@ async function AdminProductsPage({
               deleting: t('deleteDialog.deleting'),
               success: t('deleteDialog.success'),
               error: t('deleteDialog.error'),
+            },
+            notifications: {
+              loadError: t('notifications.loadError'),
+              loadErrorMessage: t('notifications.loadErrorMessage'),
+              limitReached: t('notifications.limitReached'),
+              limitReachedMessage: t('notifications.limitReachedMessage'),
+              updateError: t('notifications.updateError'),
+              updateErrorMessage: t('notifications.updateErrorMessage'),
             },
             pagination: {
               showing: t('pagination.showing'),

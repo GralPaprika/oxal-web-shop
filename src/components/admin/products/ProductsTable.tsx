@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useTransition, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
 import { PencilIcon, TrashIcon, StarIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { DeleteProductDialog } from './DeleteProductDialog';
@@ -55,6 +54,14 @@ interface ProductsTableProps {
       success: string;
       error: string;
     };
+    notifications: {
+      loadError: string;
+      loadErrorMessage: string;
+      limitReached: string;
+      limitReachedMessage: string;
+      updateError: string;
+      updateErrorMessage: string;
+    };
   };
   onEditProduct?: (product: Product) => void;
   onProductCountChange?: (count: number) => void;
@@ -77,12 +84,8 @@ export function ProductsTable({
   onEditProduct,
   onProductCountChange
 }: ProductsTableProps) {
-  const translations = useTranslations();
   const [isPending, startTransition] = useTransition();
-  const [paginatedProducts, setPaginatedProducts] = useState<Product[]>(() => {
-    // Initialize with empty array - data will be loaded via API
-    return [];
-  });
+  const [paginatedProducts, setPaginatedProducts] = useState<Product[]>(() => []);
   const [deleteProduct, setDeleteProduct] = useState<Product | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -93,16 +96,19 @@ export function ProductsTable({
   const prevCategoryRef = useRef<string | undefined>(selectedCategory);
   const prevFiltersRef = useRef<{ starred: boolean; new: boolean; sale: boolean; lowStock: boolean } | undefined>(selectedFilters);
 
-  // Cache for storing API responses
   const cacheRef = useRef<Map<string, { items: Product[]; total: number }>>(new Map());
 
-  // Generate cache key
-  const getCacheKey = (search: string | undefined, category: string | undefined, filters: { starred: boolean; new: boolean; sale: boolean; lowStock: boolean } | undefined, page: number, pageSize: number) => {
+  const getCacheKey = useCallback((
+    search: string | undefined,
+    category: string | undefined,
+    filters: { starred: boolean; new: boolean; sale: boolean; lowStock: boolean } | undefined,
+    page: number,
+    size: number
+  ) => {
     const filterStr = filters ? `${filters.starred}|${filters.new}|${filters.sale}|${filters.lowStock}` : '||||';
-    return `${search || ''}|${category || ''}|${filterStr}|${page}|${pageSize}`;
-  };
+    return `${search || ''}|${category || ''}|${filterStr}|${page}|${size}`;
+  }, []);
 
-  // Build query parameters for API
   const buildQueryParams = useCallback((page: number, size: number) => {
     const params = new URLSearchParams();
     if (searchTerm) params.set('search', searchTerm);
@@ -116,41 +122,20 @@ export function ProductsTable({
     return params;
   }, [searchTerm, selectedCategory, selectedFilters]);
 
-  // Fetch products from API and update state
   const fetchAndSetProducts = useCallback((items: Product[], total: number) => {
     setPaginatedProducts(items);
     setTotalProducts(total);
     onProductCountChange?.(total);
   }, [onProductCountChange]);
 
-  // Load paginated data when page or pageSize changes
-  useEffect(() => {
-    const searchChanged = prevSearchRef.current !== searchTerm;
-    const categoryChanged = prevCategoryRef.current !== selectedCategory;
-    const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(selectedFilters);
-
-    // Update refs
-    prevSearchRef.current = searchTerm;
-    prevCategoryRef.current = selectedCategory;
-    prevFiltersRef.current = selectedFilters;
-
-    startTransition(async () => {
-      // If search, category, or filters changed, start from page 1
-      const pageToLoad = (searchChanged || categoryChanged || filtersChanged) ? 1 : currentPage;
-
-      // Generate cache key
+  const loadProductsData = useCallback(
+    async (pageToLoad: number) => {
       const cacheKey = getCacheKey(searchTerm, selectedCategory, selectedFilters, pageToLoad, pageSize);
 
       // Check cache first
       const cachedData = cacheRef.current.get(cacheKey);
       if (cachedData) {
-        // Use cached data
         fetchAndSetProducts(cachedData.items, cachedData.total);
-
-        // If we loaded page 1 due to filter change, update currentPage state
-        if (searchChanged || categoryChanged || filtersChanged) {
-          setCurrentPage(1);
-        }
         return;
       }
 
@@ -169,26 +154,42 @@ export function ProductsTable({
           const total = data.data.total || 0;
 
           // Cache the result
-          cacheRef.current.set(cacheKey, {
-            items,
-            total
-          });
-
+          cacheRef.current.set(cacheKey, { items, total });
           fetchAndSetProducts(items, total);
         } else {
-          throw new Error(data.error || 'Failed to load products');
-        }
-
-        // If we loaded page 1 due to filter change, update currentPage state
-        if (searchChanged || categoryChanged || filtersChanged) {
-          setCurrentPage(1);
+          throw new Error('api_error');
         }
       } catch (error) {
         console.error('Error loading products:', error);
-        showError('Error', 'Failed to load products');
+        showError(t.notifications.loadError, t.notifications.loadErrorMessage);
+      }
+    },
+    [getCacheKey, searchTerm, selectedCategory, selectedFilters, pageSize, fetchAndSetProducts, buildQueryParams, showError, t.notifications]
+  );
+
+  // Load paginated data when page or pageSize changes
+  useEffect(() => {
+    const searchChanged = prevSearchRef.current !== searchTerm;
+    const categoryChanged = prevCategoryRef.current !== selectedCategory;
+    const filtersChanged = JSON.stringify(prevFiltersRef.current) !== JSON.stringify(selectedFilters);
+
+    // Update refs
+    prevSearchRef.current = searchTerm;
+    prevCategoryRef.current = selectedCategory;
+    prevFiltersRef.current = selectedFilters;
+
+    startTransition(async () => {
+      // If search, category, or filters changed, start from page 1
+      const pageToLoad = (searchChanged || categoryChanged || filtersChanged) ? 1 : currentPage;
+
+      await loadProductsData(pageToLoad);
+
+      // If we loaded page 1 due to filter change, update currentPage state
+      if (searchChanged || categoryChanged || filtersChanged) {
+        setCurrentPage(1);
       }
     });
-  }, [currentPage, pageSize, searchTerm, selectedCategory, selectedFilters, translations, onProductCountChange, showError, buildQueryParams, fetchAndSetProducts]);
+  }, [currentPage, pageSize, searchTerm, selectedCategory, selectedFilters, loadProductsData]);
 
   const handleDeleteProduct = (product: Product) => {
     setDeleteProduct(product);
@@ -196,27 +197,8 @@ export function ProductsTable({
   };
 
   const handleProductDeleted = () => {
-    // Refresh the paginated data after deletion
     startTransition(async () => {
-      // Call the API endpoint
-      const params = buildQueryParams(currentPage, pageSize);
-
-      try {
-        const response = await fetch(`/api/admin/products?${params.toString()}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch products');
-        }
-
-        const data = await response.json();
-        if (data.success && data.data) {
-          fetchAndSetProducts(data.data.items || [], data.data.total || 0);
-        } else {
-          throw new Error(data.error || 'Failed to load products');
-        }
-      } catch (error) {
-        console.error('Error loading products:', error);
-        showError('Error', 'Failed to load products');
-      }
+      await loadProductsData(currentPage);
     });
   };
 
@@ -233,8 +215,8 @@ export function ProductsTable({
         
         if (!validationResult.success) {
           showError(
-            translations('admin.products.notifications.limitReached'),
-            translations('admin.products.notifications.limitReachedMessage')
+            t.notifications.limitReached,
+            t.notifications.limitReachedMessage
           );
           return;
         }
@@ -254,8 +236,8 @@ export function ProductsTable({
     } catch (error) {
       console.error('Error toggling star:', error);
       showError(
-        translations('admin.products.notifications.updateError'),
-        translations('admin.products.notifications.updateErrorMessage')
+        t.notifications.updateError,
+        t.notifications.updateErrorMessage
       );
     }
   };

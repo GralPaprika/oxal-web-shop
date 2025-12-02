@@ -62,6 +62,14 @@ interface ProductsTableClientProps {
       success: string;
       error: string;
     };
+    notifications: {
+      loadError: string;
+      loadErrorMessage: string;
+      limitReached: string;
+      limitReachedMessage: string;
+      updateError: string;
+      updateErrorMessage: string;
+    };
     pagination: {
       showing: string;
       of: string;
@@ -126,6 +134,7 @@ export function ProductsTableClient({
           categories: translations.categories,
           empty: translations.empty,
           deleteDialog: translations.deleteDialog,
+          notifications: translations.notifications,
         }}
         paginationTranslations={translations.pagination}
         onEditProduct={handleEditProduct}

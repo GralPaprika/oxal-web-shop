@@ -384,7 +384,9 @@
         "limitReached": "Límite alcanzado",
         "limitReachedMessage": "No puedes destacar más de 4 productos.",
         "updateError": "Error",
-        "updateErrorMessage": "No se pudo actualizar el producto. Intenta de nuevo."
+        "updateErrorMessage": "No se pudo actualizar el producto. Intenta de nuevo.",
+        "loadError": "Error al cargar",
+        "loadErrorMessage": "No se pudieron cargar los productos. Verifica tu conexión a internet e intenta de nuevo."
       }
     },
     "settings": {
