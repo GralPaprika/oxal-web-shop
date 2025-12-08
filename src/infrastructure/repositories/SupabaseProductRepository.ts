@@ -10,7 +10,7 @@ import type {
   ProductCategory,
   ProductImage,
 } from '@/domain/product/product.entity';
-import type { ISupabaseService } from '@/infrastructure/supabase/supabase.interface';
+import type { IDrizzleService } from '@/src/infrastructure/supabase/drizzle.interface';
 import type { DeleteFileUseCase } from '@/application/usecases/storage/FileUploadUseCase';
 import { products, productCategories, productImages, productsMetadata } from '@/infrastructure/supabase/schema';
 import { container } from '@/container/container.config';
@@ -33,9 +33,9 @@ export class SupabaseProductRepository implements IProductRepository {
   private db: PostgresJsDatabase<Record<string, unknown>>;
 
   constructor(
-    @inject(TYPES.SupabaseService) private supabaseService: ISupabaseService
+    @inject(TYPES.DrizzleService) private drizzleService: IDrizzleService
   ) {
-    this.db = this.supabaseService.getDrizzleInstance();
+    this.db = this.drizzleService.getDrizzleInstance();
   }
 
   async getAllProducts(options?: ProductListOptions): Promise<Product[]> {

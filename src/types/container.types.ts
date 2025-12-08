@@ -1,7 +1,7 @@
 export const TYPES = {
   Database: Symbol.for('Database'),
   FirebaseService: Symbol.for('FirebaseService'),
-  SupabaseService: Symbol.for('SupabaseService'),
+  DrizzleService: Symbol.for('DrizzleService'),
   
   AuthRepository: Symbol.for('AuthRepository'),
   SupabaseAuth: Symbol.for('SupabaseAuth'),

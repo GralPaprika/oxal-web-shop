@@ -3,10 +3,8 @@ import 'server-only';
 import 'reflect-metadata';
 import { Container } from 'inversify';
 import { TYPES } from '@/types/container.types';
-import { IDatabase } from '@/infrastructure/firebase/database.interface';
-import { FirestoreDatabase } from '@/infrastructure/firebase/firestore.database';
-import { IFirebaseService } from '@/infrastructure/firebase/firebase.interface';
-import { FirebaseService } from '@/infrastructure/firebase/firebase.config';
+import { IFirebaseService } from '@/src/infrastructure/firebase.interface';
+import { FirebaseService } from '@/src/infrastructure/firebase.config';
 import type { IAuthRepository } from '@/domain/auth/auth.interface';
 import { SupabaseAuthRepository } from '@/infrastructure/auth/SupabaseAuthRepository';
 import type { ISupabaseAuth } from '@/infrastructure/supabase/auth';
@@ -20,7 +18,7 @@ import { FirebaseStorageService } from '@/infrastructure/services/FirebaseStorag
 import { UploadFileUseCase, DeleteFileUseCase } from '@/application/usecases/storage/FileUploadUseCase';
 
 import type { IUserRepository } from '@/domain/user/user.repository';
-import { FirestoreUserRepository } from '@/infrastructure/user/FirestoreUserRepository';
+import { SupabaseUserRepository } from '@/infrastructure/repositories/SupabaseUserRepository';
 import { GetAllUsersUseCase, GetUsersByRoleUseCase, GetUserByIdUseCase } from '@/application/usecases/user/GetUsersUseCase';
 import { CreateUserUseCase } from '@/application/usecases/user/CreateUserUseCase';
 import { UpdateUserUseCase } from '@/application/usecases/user/UpdateUserUseCase';
@@ -28,8 +26,8 @@ import { DeleteUserUseCase } from '@/application/usecases/user/DeleteUserUseCase
 
 import type { IProductRepository } from '@/domain/product/product.repository';
 import { SupabaseProductRepository } from '@/infrastructure/repositories/SupabaseProductRepository';
-import type { ISupabaseService } from '@/infrastructure/supabase/supabase.interface';
-import { SupabaseService } from '@/infrastructure/supabase/supabase.config';
+import type { IDrizzleService } from '@/src/infrastructure/supabase/drizzle.interface';
+import { DrizzleService } from '@/src/infrastructure/supabase/drizzle.service';
 import { GetAllProductsUseCase, GetProductByIdUseCase, GetProductByCodeUseCase, GetProductCountUseCase } from '@/application/usecases/product/GetProductsUseCase';
 import { CreateProductUseCase } from '@/application/usecases/product/CreateProductUseCase';
 import { UpdateProductUseCase } from '@/application/usecases/product/UpdateProductUseCase';
@@ -42,9 +40,7 @@ export const serverContainer = new Container();
 
 serverContainer.bind<IFirebaseService>(TYPES.FirebaseService).to(FirebaseService).inSingletonScope();
 
-serverContainer.bind<IDatabase>(TYPES.Database).to(FirestoreDatabase).inSingletonScope();
-
-serverContainer.bind<ISupabaseService>(TYPES.SupabaseService).to(SupabaseService).inSingletonScope();
+serverContainer.bind<IDrizzleService>(TYPES.DrizzleService).to(DrizzleService).inSingletonScope();
 
 serverContainer.bind<IStorageService>(TYPES.StorageService).to(FirebaseStorageService).inSingletonScope();
 
@@ -56,7 +52,7 @@ serverContainer.bind<LoginUseCase>(TYPES.LoginUseCase).to(LoginUseCase);
 serverContainer.bind<LogoutUseCase>(TYPES.LogoutUseCase).to(LogoutUseCase);
 serverContainer.bind<GetCurrentUserUseCase>(TYPES.GetCurrentUserUseCase).to(GetCurrentUserUseCase);
 
-serverContainer.bind<IUserRepository>(TYPES.UserRepository).to(FirestoreUserRepository).inSingletonScope();
+serverContainer.bind<IUserRepository>(TYPES.UserRepository).to(SupabaseUserRepository).inSingletonScope();
 serverContainer.bind<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase).to(GetAllUsersUseCase);
 serverContainer.bind<GetUsersByRoleUseCase>(TYPES.GetUsersByRoleUseCase).to(GetUsersByRoleUseCase);
 serverContainer.bind<GetUserByIdUseCase>(TYPES.GetUserByIdUseCase).to(GetUserByIdUseCase);
