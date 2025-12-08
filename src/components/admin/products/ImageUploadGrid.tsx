@@ -29,7 +29,6 @@ interface ImageUploadGridProps {
 export function ImageUploadGrid({
   images,
   onImagesChange,
-  productName, // eslint-disable-line @typescript-eslint/no-unused-vars
   translations,
   maxImages = imageUtils.DEFAULT_MAX_IMAGES
 }: ImageUploadGridProps) {
@@ -96,7 +95,7 @@ export function ImageUploadGrid({
         className="relative grid grid-cols-3 gap-4 p-4 border-2 border-dashed border-gray-300 rounded-lg"
         style={{ minHeight: '320px' }}
       >
-        {Array.from({ length: 6 }, (_, index) => {
+        {Array.from({ length: maxImages }, (_, index) => {
           const image = images[index];
           
           if (image) {

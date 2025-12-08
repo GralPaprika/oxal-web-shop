@@ -22,8 +22,7 @@ interface ProductImage {
 }
 
 export function CreateProductForm() {
-  const t = useTranslations('admin.products.create');
-  const categoriesT = useTranslations('admin.products.categories');
+  const t = useTranslations('admin.products');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { notifications, removeNotification, showError, showSuccess } = useNotification();
@@ -58,16 +57,16 @@ export function CreateProductForm() {
 
   const validateForm = (): boolean => {
     const validations = [
-      { condition: !formData.name.trim(), message: t('validation.nameRequired') },
-      { condition: !formData.code.trim(), message: t('validation.codeRequired') },
-      { condition: formData.price <= 0, message: t('validation.priceRequired') },
-      { condition: formData.stock < 0, message: t('validation.stockRequired') },
-      { condition: !formData.categoryId, message: t('validation.categoryRequired') },
+      { condition: !formData.name.trim(), message: t('form.validation.nameRequired') },
+      { condition: !formData.code.trim(), message: t('form.validation.codeRequired') },
+      { condition: formData.price <= 0, message: t('form.validation.priceRequired') },
+      { condition: formData.stock < 0, message: t('form.validation.stockRequired') },
+      { condition: !formData.categoryId, message: t('form.validation.categoryRequired') },
     ];
 
     for (const validation of validations) {
       if (validation.condition) {
-        showError(t('validation.title'), validation.message);
+        showError(t('create.validation.title'), validation.message);
         return false;
       }
     }
@@ -129,10 +128,10 @@ export function CreateProductForm() {
         if (result.success && result.data?.items) {
           setCategories(result.data.items);
         } else {
-          showError(t('error.title'), t('error.categoriesLoad'));
+          showError(t('create.error.title'), t('create.error.categoriesLoad'));
         }
       } catch {
-        showError(t('error.title'), t('error.categoriesLoad'));
+        showError(t('create.error.title'), t('create.error.categoriesLoad'));
       } finally {
         setLoadingCategories(false);
       }
@@ -180,17 +179,17 @@ export function CreateProductForm() {
             }
           }
           
-          showSuccess(t('success.created'), t('success.createdMessage'));
+          showSuccess(t('create.success.created'), t('create.success.createdMessage'));
           setTimeout(() => {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
           }, 1500);
         } else {
-          const errorMsg = 'error' in result ? String(result.error) : t('error.failed');
-          showError(t('error.title'), errorMsg);
+          const errorMsg = 'error' in result ? String(result.error) : t('create.error.failed');
+          showError(t('create.error.title'), errorMsg);
         }
       } catch (error) {
         console.error('Error creating product:', error);
-        showError(t('error.title'), t('error.failed'));
+        showError(t('create.error.title'), t('create.error.failed'));
       }
     });
   };
@@ -205,30 +204,10 @@ export function CreateProductForm() {
         loadingCategories={loadingCategories}
         errors={{}}
         translations={{
-          fields: {
-            code: `${t('form.code')}`,
-            name: `${t('form.name')}`,
-            description: t('form.description'),
-            price: `${t('form.price')}`,
-            stock: `${t('form.stock')}`,
-            category: `${t('form.category')}`,
-            isStarred: t('form.isStarred') ?? 'Featured Product',
-            badge: t('form.badge') ?? 'Badge',
-          },
-          placeholders: {
-            code: t('form.codePlaceholder'),
-            name: t('form.namePlaceholder'),
-            description: t('form.descriptionPlaceholder'),
-          },
-          badges: {
-            none: t('form.badges.none') ?? 'None',
-            new: t('form.badges.new') ?? 'New',
-            sale: t('form.badges.sale') ?? 'Sale',
-          },
           selectCategory: t('form.selectCategory'),
-          loading: t('form.loadingCategories'),
+          loading: t('form.loading'),
         }}
-        categoriesTranslations={categoriesT}
+        categoriesTranslations={(key) => t(`categories.${key}`)}
       />
 
       <ImageUploadGrid
@@ -236,31 +215,31 @@ export function CreateProductForm() {
         onImagesChange={setImages}
         productName={formData.name}
         translations={{
-          primaryImage: t('form.primaryImage'),
-          image: t('form.image'),
-          dragDropHint: t('form.dragDropHint'),
-          reorderHint: t('form.reorderHint'),
-          clickToUpload: t('form.clickToUpload'),
-          uploading: t('form.uploading'),
-          uploadError: t('form.uploadError'),
-          file: t('form.file'),
-          files: t('form.files'),
-          slot: t('form.slot'),
+          primaryImage: t('form.fields.images.primaryImage'),
+          image: t('form.fields.images.image'),
+          dragDropHint: t('form.fields.images.dragDropHint'),
+          reorderHint: t('form.fields.images.reorderHint'),
+          clickToUpload: t('form.fields.images.clickToUpload'),
+          uploading: t('form.fields.images.uploading'),
+          uploadError: t('form.fields.images.uploadError'),
+          file: t('form.fields.images.file'),
+          files: t('form.fields.images.files'),
+          slot: t('form.fields.images.slot'),
         }}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StringArrayInput
-          label={t('form.tags')}
-          placeholder={t('form.tagPlaceholder')}
+          label={t('form.fields.tags')}
+          placeholder={t('form.placeholders.tags')}
           items={tags}
           onItemsChange={setTags}
           id="tags"
         />
         
         <StringArrayInput
-          label={t('form.materials')}
-          placeholder={t('form.materialPlaceholder')}
+          label={t('form.fields.materials')}
+          placeholder={t('form.placeholders.materials')}
           items={materials}
           onItemsChange={setMaterials}
           id="materials"
@@ -270,20 +249,6 @@ export function CreateProductForm() {
       <MetadataFields
         formData={formData}
         onFormDataChange={setFormData}
-        translations={{
-          fields: {
-            weight: t('form.weight'),
-            dimensions: `${t('form.length')} x ${t('form.width')} x ${t('form.height')}`,
-          },
-          placeholders: {
-            length: t('form.length'),
-            width: t('form.width'),
-            height: t('form.height'),
-          },
-          helpers: {
-            dimensions: 'Dimensiones en centímetros (largo x ancho x alto)',
-          },
-        }}
       />
 
       <div className="flex justify-end gap-4 pt-6 border-t border-neutral-200">
@@ -293,14 +258,14 @@ export function CreateProductForm() {
           onClick={() => router.push(AUTH_CONFIG.ROUTES.PRODUCTS)}
           disabled={isPending}
         >
-          {t('form.cancel')}
+          {t('form.buttons.cancel')}
         </Button>
         <Button
           type="submit"
           disabled={isPending}
           className="flex items-center gap-2"
         >
-          {isPending ? t('form.creating') : t('form.createProduct')}
+          {isPending ? t('form.buttons.creating') : t('form.buttons.createProduct')}
         </Button>
       </div>
 

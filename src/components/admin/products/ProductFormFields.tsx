@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Input, TextArea } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Select';
 import { StarIcon } from '@heroicons/react/24/outline';
@@ -12,29 +13,9 @@ interface ProductFormFieldsProps {
   categories: ProductCategory[];
   loadingCategories: boolean;
   errors: Record<string, string>;
-  translations: {
-    fields: {
-      code: string;
-      name: string;
-      description: string;
-      price: string;
-      stock: string;
-      category: string;
-      isStarred: string;
-      badge: string;
-    };
-    placeholders: {
-      code: string;
-      name: string;
-      description: string;
-    };
-    badges: {
-      none: string;
-      new: string;
-      sale: string;
-    };
-    selectCategory: string;
-    loading: string;
+  translations?: {
+    selectCategory?: string;
+    loading?: string;
   };
   categoriesTranslations: (key: string) => string;
   onStarToggle?: (newStarState: boolean) => Promise<boolean>;
@@ -50,6 +31,8 @@ export function ProductFormFields({
   categoriesTranslations,
   onStarToggle,
 }: ProductFormFieldsProps) {
+  const t = useTranslations('admin.products');
+
   const handleInputChange = (field: keyof CreateProductData) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
@@ -76,7 +59,7 @@ export function ProductFormFields({
         type="button"
         onClick={handleStarClick}
         className="absolute top-2 right-2 z-10 p-2 transition-all duration-300 transform hover:scale-110 group"
-        title={formData.isStarred ? "Quitar de destacados" : "Marcar como destacado"}
+        title={formData.isStarred ? t('form.starButton.remove') : t('form.starButton.add')}
       >
         {formData.isStarred ? (
           <StarIconSolid className="w-8 h-8 text-yellow-500 drop-shadow-lg transition-all duration-500 transform hover:rotate-12 animate-pulse" />
@@ -91,12 +74,12 @@ export function ProductFormFields({
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="md:col-span-1">
           <Input
-            label={translations.fields.code}
+            label={t('form.fields.code')}
             type="text"
             id="code"
             value={formData.code}
             onChange={handleInputChange('code')}
-            placeholder={translations.placeholders.code}
+            placeholder={t('form.placeholders.code')}
             error={errors.code}
             required
           />
@@ -104,12 +87,12 @@ export function ProductFormFields({
 
         <div className="md:col-span-3">
           <Input
-            label={translations.fields.name}
+            label={t('form.fields.name')}
             type="text"
             id="name"
             value={formData.name}
             onChange={handleInputChange('name')}
-            placeholder={translations.placeholders.name}
+            placeholder={t('form.placeholders.name')}
             error={errors.name}
             required
           />
@@ -117,18 +100,18 @@ export function ProductFormFields({
       </div>
 
       <TextArea
-        label={translations.fields.description}
+        label={t('form.fields.description')}
         id="description"
         rows={3}
         value={formData.description || ''}
         onChange={handleInputChange('description')}
-        placeholder={translations.placeholders.description}
+        placeholder={t('form.placeholders.description')}
         error={errors.description}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Input
-          label={translations.fields.price}
+          label={t('form.fields.price')}
           type="number"
           id="price"
           min="0"
@@ -142,7 +125,7 @@ export function ProductFormFields({
         />
 
         <Input
-          label={translations.fields.stock}
+          label={t('form.fields.stock')}
           type="number"
           id="stock"
           min="0"
@@ -154,7 +137,7 @@ export function ProductFormFields({
         />
 
         <Select
-          label={translations.fields.category}
+          label={t('form.fields.category')}
           id="category"
           value={formData.categoryId}
           onChange={handleInputChange('categoryId')}
@@ -162,7 +145,7 @@ export function ProductFormFields({
           error={errors.categoryId}
           required
           options={[
-            { label: loadingCategories ? translations.loading : translations.selectCategory, value: '', disabled: true },
+            { label: loadingCategories ? t('form.loading') : (translations?.selectCategory ?? t('form.selectCategory')), value: '', disabled: true },
             ...categories.map((category) => ({
               label: categoriesTranslations(category.key),
               value: category.id,
@@ -173,7 +156,7 @@ export function ProductFormFields({
 
       <div className="space-y-3 mt-8">
         <label className="block text-sm font-medium text-gray-700">
-          {translations.fields.badge}
+          {t('form.fields.badge')}
         </label>
         <div className="flex gap-3">
           <button
@@ -188,7 +171,7 @@ export function ProductFormFields({
             <div className={`w-2 h-2 rounded-full ${
               formData.badge === 'new' ? 'bg-white' : 'bg-green-500'
             }`}></div>
-            {translations.badges.new}
+            {t('form.badges.new')}
           </button>
 
           <button
@@ -203,12 +186,12 @@ export function ProductFormFields({
             <div className={`w-2 h-2 rounded-full ${
               formData.badge === 'sale' ? 'bg-white' : 'bg-red-500'
             }`}></div>
-            {translations.badges.sale}
+            {t('form.badges.sale')}
           </button>
         </div>
         {formData.badge && (
           <p className="text-xs text-gray-500 italic">
-            Haz clic en la etiqueta seleccionada para quitarla
+            {t('form.badgeHint')}
           </p>
         )}
       </div>

@@ -1,28 +1,16 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Input } from '@/components/ui/Input';
 import type { CreateProductData } from '@/domain/product/product.entity';
 
 interface MetadataFieldsProps {
   formData: CreateProductData;
   onFormDataChange: (data: CreateProductData) => void;
-  translations: {
-    fields: {
-      weight: string;
-      dimensions: string;
-    };
-    placeholders: {
-      length: string;
-      width: string;
-      height: string;
-    };
-    helpers: {
-      dimensions: string;
-    };
-  };
 }
 
-export function MetadataFields({ formData, onFormDataChange, translations }: MetadataFieldsProps) {
+export function MetadataFields({ formData, onFormDataChange }: MetadataFieldsProps) {
+  const t = useTranslations('admin.products');
   const handleMetadataChange = (field: string) => (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -60,7 +48,7 @@ export function MetadataFields({ formData, onFormDataChange, translations }: Met
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <Input
-        label={translations.fields.weight}
+        label={t('form.metadata.fields.weight')}
         type="number"
         id="weight"
         min="0"
@@ -73,7 +61,7 @@ export function MetadataFields({ formData, onFormDataChange, translations }: Met
 
       <div>
         <label className="block text-sm font-medium text-text-primary mb-2">
-          {translations.fields.dimensions}
+          {t('form.metadata.fields.dimensions')}
         </label>
         <div className="grid grid-cols-3 gap-2">
           <Input
@@ -82,7 +70,7 @@ export function MetadataFields({ formData, onFormDataChange, translations }: Met
             step="0.01"
             value={formData.metadata?.dimensions?.length || ''}
             onChange={handleDimensionChange('length')}
-            placeholder={translations.placeholders.length}
+            placeholder={t('form.metadata.placeholders.length')}
             variant="small"
           />
           <Input
@@ -91,7 +79,7 @@ export function MetadataFields({ formData, onFormDataChange, translations }: Met
             step="0.01"
             value={formData.metadata?.dimensions?.width || ''}
             onChange={handleDimensionChange('width')}
-            placeholder={translations.placeholders.width}
+            placeholder={t('form.metadata.placeholders.width')}
             variant="small"
           />
           <Input
@@ -100,11 +88,11 @@ export function MetadataFields({ formData, onFormDataChange, translations }: Met
             step="0.01"
             value={formData.metadata?.dimensions?.height || ''}
             onChange={handleDimensionChange('height')}
-            placeholder={translations.placeholders.height}
+            placeholder={t('form.metadata.placeholders.height')}
             variant="small"
           />
         </div>
-        <p className="text-xs text-text-muted mt-1">{translations.helpers.dimensions}</p>
+        <p className="text-xs text-text-muted mt-1">{t('form.metadata.helpers.dimensions')}</p>
       </div>
     </div>
   );

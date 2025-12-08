@@ -26,9 +26,7 @@ interface EditProductFormProps {
 }
 
 export function EditProductForm({ product }: EditProductFormProps) {
-  const t = useTranslations('admin.products.edit');
-  const categoriesT = useTranslations('admin.products.categories');
-  const imagesT = useTranslations('admin.products.images');
+  const t = useTranslations('admin.products');
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { notifications, removeNotification, showError, showSuccess } = useNotification();
@@ -89,16 +87,16 @@ export function EditProductForm({ product }: EditProductFormProps) {
 
   const validateForm = (): boolean => {
     const validations = [
-      { condition: !formData.code?.trim(), message: t('validation.codeRequired') },
-      { condition: !formData.name?.trim(), message: t('validation.nameRequired') },
-      { condition: formData.price! <= 0, message: t('validation.priceRequired') },
-      { condition: formData.stock! < 0, message: t('validation.stockRequired') },
-      { condition: !formData.categoryId, message: t('validation.categoryRequired') },
+      { condition: !formData.code?.trim(), message: t('form.validation.codeRequired') },
+      { condition: !formData.name?.trim(), message: t('form.validation.nameRequired') },
+      { condition: formData.price! <= 0, message: t('form.validation.priceRequired') },
+      { condition: formData.stock! < 0, message: t('form.validation.stockRequired') },
+      { condition: !formData.categoryId, message: t('form.validation.categoryRequired') },
     ];
 
     for (const validation of validations) {
       if (validation.condition) {
-        showError(t('validation.title'), validation.message);
+        showError(t('edit.validation.title'), validation.message);
         return false;
       }
     }
@@ -229,17 +227,17 @@ export function EditProductForm({ product }: EditProductFormProps) {
         const result = await updateProduct(product.id, updateData);
 
         if (result.success) {
-          showSuccess(t('success.updated'), t('success.updatedMessage'));
+          showSuccess(t('edit.success.updated'), t('edit.success.updatedMessage'));
           setTimeout(() => {
             router.push(AUTH_CONFIG.ROUTES.PRODUCTS);
           }, 1500);
         } else {
-          const errorMsg = result.error || t('error.updateFailed');
-          showError(t('error.title'), errorMsg);
+          const errorMsg = result.error || t('edit.error.updateFailed');
+          showError(t('edit.error.title'), errorMsg);
         }
       } catch (error) {
         console.error('Error updating product:', error);
-        showError(t('error.title'), t('error.updateFailed'));
+        showError(t('edit.error.title'), t('edit.error.updateFailed'));
       }
     });
   };
@@ -273,60 +271,40 @@ export function EditProductForm({ product }: EditProductFormProps) {
         loadingCategories={loadingCategories}
         errors={{}}
         translations={{
-          fields: {
-            code: `${t('fields.code')}`,
-            name: `${t('fields.name')}`,
-            description: `${t('fields.description')}`,
-            price: `${t('fields.price')}`,
-            stock: `${t('fields.stock')}`,
-            category: `${t('fields.category')}`,
-            isStarred: t('fields.isStarred') ?? 'Featured Product',
-            badge: t('fields.badge') ?? 'Badge',
-          },
-          placeholders: {
-            code: t('placeholders.code'),
-            name: t('placeholders.name'),
-            description: t('placeholders.description'),
-          },
-          badges: {
-            none: t('badges.none') ?? 'None',
-            new: t('badges.new') ?? 'New',
-            sale: t('badges.sale') ?? 'Sale',
-          },
-          selectCategory: t('selectCategory'),
-          loading: t('loading'),
+          selectCategory: t('form.selectCategory'),
+          loading: t('form.loading'),
         }}
-        categoriesTranslations={categoriesT}
+        categoriesTranslations={(key) => t(`categories.${key}`)}
       />
       <ImageUploadGrid
         images={images}
         onImagesChange={setImages}
         productName={formData.name || 'Product'}
         translations={{
-          primaryImage: imagesT('primaryImage'),
-          image: imagesT('image'),
-          dragDropHint: imagesT('dragDropHint'),
-          reorderHint: imagesT('reorderHint'),
-          clickToUpload: imagesT('clickToUpload'),
-          uploading: imagesT('uploading'),
-          uploadError: imagesT('uploadError'),
-          file: imagesT('file'),
-          files: imagesT('files'),
-          slot: imagesT('slot'),
+          primaryImage: t('form.fields.images.primaryImage'),
+          image: t('form.fields.images.image'),
+          dragDropHint: t('form.fields.images.dragDropHint'),
+          reorderHint: t('form.fields.images.reorderHint'),
+          clickToUpload: t('form.fields.images.clickToUpload'),
+          uploading: t('form.fields.images.uploading'),
+          uploadError: t('form.fields.images.uploadError'),
+          file: t('form.fields.images.file'),
+          files: t('form.fields.images.files'),
+          slot: t('form.fields.images.slot'),
         }}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <StringArrayInput
-          label={t('fields.tags')}
-          placeholder={t('placeholders.tags')}
+          label={t('form.fields.tags')}
+          placeholder={t('form.placeholders.tags')}
           items={tags}
           onItemsChange={setTags}
           id="tags"
         />
         
         <StringArrayInput
-          label={t('fields.materials')}
-          placeholder={t('placeholders.materials')}
+          label={t('form.fields.materials')}
+          placeholder={t('form.placeholders.materials')}
           items={materials}
           onItemsChange={setMaterials}
           id="materials"
@@ -355,20 +333,6 @@ export function EditProductForm({ product }: EditProductFormProps) {
           },
         }}
         onFormDataChange={setFormData}
-        translations={{
-          fields: {
-            weight: t('fields.weight'),
-            dimensions: t('fields.dimensions'),
-          },
-          placeholders: {
-            length: t('placeholders.length'),
-            width: t('placeholders.width'),
-            height: t('placeholders.height'),
-          },
-          helpers: {
-            dimensions: t('helpers.dimensions'),
-          },
-        }}
       />
       <div className="flex justify-end gap-4 pt-8 border-t border-neutral-200">
         <Button
@@ -377,13 +341,13 @@ export function EditProductForm({ product }: EditProductFormProps) {
           onClick={() => router.push(AUTH_CONFIG.ROUTES.PRODUCTS)}
           disabled={isPending}
         >
-          {t('actions.cancel')}
+          {t('form.buttons.cancel')}
         </Button>
         <Button
           type="submit"
           disabled={isPending}
         >
-          {isPending ? t('actions.updating') : t('actions.update')}
+          {isPending ? t('form.buttons.updating') : t('form.buttons.update')}
         </Button>
       </div>
 

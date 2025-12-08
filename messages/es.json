@@ -236,53 +236,30 @@
         "title": "No se encontraron productos",
         "subtitle": "Comienza agregando tu primer producto"
       },
-      "create": {
-        "title": "Crear Nuevo Producto",
-        "subtitle": "Agrega un nuevo producto artesanal a tu catálogo",
-        "form": {
+      "form": {
+        "fields": {
           "code": "Código del Producto",
-          "codePlaceholder": "Ej: COL001",
           "name": "Nombre del Producto",
-          "namePlaceholder": "Ej: Collar Artesanal de Plata",
           "description": "Descripción",
-          "descriptionPlaceholder": "Describe las características del producto...",
           "price": "Precio",
           "stock": "Cantidad en Stock",
           "category": "Categoría",
           "isStarred": "Producto Destacado",
           "badge": "Etiqueta Promocional",
-          "selectCategory": "Seleccionar categoría",
-          "loadingCategories": "Cargando categorías...",
-          "badges": {
-            "none": "Sin etiqueta",
-            "new": "Nuevo",
-            "sale": "Oferta"
-          },
-          "images": "Imágenes del Producto",
-          "primaryImage": "Imagen Principal",
-          "image": "Imagen",
-          "dragDropHint": "Agrega hasta 6 imágenes. La primera será la imagen principal.",
-          "reorderHint": "Arrastra las imágenes para reordenarlas. La primera imagen será la principal.",
-          "clickToUpload": "Click para subir",
-          "uploading": "Subiendo...",
-          "uploadError": "Error al subir imagen",
-          "file": "archivo",
-          "files": "archivos",
-          "slot": "Espacio",
           "tags": "Etiquetas",
-          "tagPlaceholder": "Ej: artesanal, hecho a mano",
-          "addTag": "Agregar Etiqueta",
-          "metadata": "Información Adicional",
-          "weight": "Peso",
-          "length": "Largo",
-          "width": "Ancho",
-          "height": "Alto",
           "materials": "Materiales",
-          "materialPlaceholder": "Ej: plata, cuero, piedras",
-          "addMaterial": "Agregar Material",
-          "createProduct": "Crear Producto",
-          "creating": "Creando...",
-          "cancel": "Cancelar"
+          "images": {
+            "image": "Imagen",
+            "primaryImage": "Imagen Principal",
+            "reorderHint": "Arrastra las imágenes para reordenarlas. La primera imagen será la principal.",
+            "dragDropHint": "Agrega hasta 6 imágenes. La primera será la imagen principal.",
+            "clickToUpload": "Click para subir",
+            "uploading": "Subiendo...",
+            "uploadError": "Error al subir imagen",
+            "file": "archivo",
+            "files": "archivos",
+            "slot": "Espacio"
+          }
         },
         "validation": {
           "nameRequired": "El nombre del producto es obligatorio",
@@ -292,6 +269,50 @@
           "categoryRequired": "Debes seleccionar una categoría",
           "title": "Error de validación"
         },
+        "placeholders": {
+          "code": "Ej: COL001",
+          "name": "Ej: Collar Artesanal de Plata",
+          "tags": "Ej: artesanal, hecho a mano",
+          "materials": "Ej: plata, cuero, piedras",
+          "description": "Describe las características del producto..."
+        },
+        "badges": {
+          "none": "Sin etiqueta",
+          "new": "Nuevo",
+          "sale": "Oferta"
+        },
+        "badgeHint": "Haz clic en la etiqueta seleccionada para quitarla",
+        "starButton": {
+          "add": "Marcar como destacado",
+          "remove": "Quitar de destacados"
+        },
+        "selectCategory": "Seleccionar categoría",
+        "loading": "Cargando...",
+        "metadata": {
+          "fields": {
+            "weight": "Peso",
+            "dimensions": "Dimensiones"
+          },
+          "placeholders": {
+            "length": "Largo",
+            "width": "Ancho",
+            "height": "Alto"
+          },
+          "helpers": {
+            "dimensions": "Dimensiones en centímetros (largo x ancho x alto)"
+          }
+        },
+        "buttons": {
+          "cancel": "Cancelar",
+          "createProduct": "Crear Producto",
+          "creating": "Creando...",
+          "update": "Actualizar Producto",
+          "updating": "Actualizando..."
+        }
+      },
+      "create": {
+        "title": "Crear Nuevo Producto",
+        "subtitle": "Agrega un nuevo producto artesanal a tu catálogo",
         "success": {
           "created": "!Éxito!",
           "createdMessage": "Tu producto ha sido agregado al catálogo"
@@ -305,60 +326,6 @@
       "edit": {
         "title": "Editar Producto",
         "subtitle": "Modifica los detalles de tu producto artesanal",
-        "sections": {
-          "basicInfo": "Información Básica",
-          "images": "Imágenes del Producto",
-          "additionalInfo": "Información Adicional",
-          "metadata": "Información Técnica"
-        },
-        "fields": {
-          "code": "Código del Producto",
-          "name": "Nombre del Producto",
-          "description": "Descripción",
-          "price": "Precio",
-          "stock": "Cantidad en Stock",
-          "category": "Categoría",
-          "isStarred": "Producto Destacado",
-          "badge": "Etiqueta Promocional",
-          "tags": "Etiquetas",
-          "materials": "Materiales",
-          "weight": "Peso",
-          "dimensions": "Dimensiones"
-        },
-        "placeholders": {
-          "code": "Ej: COL001",
-          "name": "Ej: Collar Artesanal de Plata",
-          "description": "Describe las características del producto...",
-          "tags": "Ej: artesanal, hecho a mano",
-          "materials": "Ej: plata, cuero, piedras",
-          "length": "Largo",
-          "width": "Ancho",
-          "height": "Alto"
-        },
-        "selectCategory": "Seleccionar categoría",
-        "loading": "Cargando...",
-        "badges": {
-          "none": "Sin etiqueta",
-          "new": "Nuevo",
-          "sale": "Oferta"
-        },
-        "helpers": {
-          "dimensions": "Dimensiones en centímetros (largo x ancho x alto)"
-        },
-        "actions": {
-          "update": "Actualizar Producto",
-          "updating": "Actualizando...",
-          "cancel": "Cancelar"
-        },
-        "validation": {
-          "nameRequired": "El nombre del producto es obligatorio",
-          "codeRequired": "El código del producto es obligatorio",
-          "descriptionRequired": "La descripción del producto es obligatoria",
-          "priceRequired": "El precio debe ser mayor a 0",
-          "stockRequired": "La cantidad en stock no puede ser negativa",
-          "categoryRequired": "Debes seleccionar una categoría",
-          "title": "Error de validación"
-        },
         "success": {
           "updated": "!Éxito!",
           "updatedMessage": "Los cambios en tu producto han sido guardados"
@@ -367,18 +334,6 @@
           "updateFailed": "Error al actualizar el producto. Inténtalo de nuevo.",
           "title": "Error"
         }
-      },
-      "images": {
-        "primaryImage": "Imagen Principal",
-        "image": "Imagen",
-        "dragDropHint": "Agrega hasta 6 imágenes. La primera será la imagen principal.",
-        "reorderHint": "Arrastra las imágenes para reordenarlas. La primera imagen será la principal.",
-        "clickToUpload": "Click para subir",
-        "uploading": "Subiendo...",
-        "uploadError": "Error al subir imagen",
-        "file": "archivo",
-        "files": "archivos",
-        "slot": "Espacio"
       },
       "deleteDialog": {
         "title": "Eliminar Producto",
